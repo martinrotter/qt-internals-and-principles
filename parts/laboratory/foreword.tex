@@ -1,0 +1,344 @@
+\fdocabbrevdeclare{KDE}{KDE}{K Desktop Environment}
+\stdsection{Foreword}
+Qt framework is one of the greatest libraries ever made. You probably use it and you don't even know about it. If you use Skype\index{Skype} (for online communication) or \fdocabbrevref{KDE}\index{KDE}, then you use Qt too, because those applications are based on Qt.
+
+Skype uses just graphical interface made in Qt but \fdocabbrevref{KDE} is totally based on Qt as it uses not just graphical interface from Qt but other components too.
+
+Qt penetrated the world of interactive applications and now it can be found even in devices, where it's not generally expected. First public version of Qt was released in 1995 and huge progress was achieved since that time.
+
+In a flow of time, Qt began to be perceived as very dynamic library which is particularly great for graphical interface design. There was very good reason for such an opinions because \fdocabbrevref{KDE} was released in 1996, invoking quite a sensation. In short, its desktop environment looked great and overpowered other major environments in this aspect. Qt was pushed forward by those events and became massively popular. The only goal of Qt was to be a good library for anyone who does desktop programming.
+
+As years passed by, Qt was more and more robust, \fdocabbrevref{KDE} made its progress through version 3 and 4, and things have changed. Presently, desktop\index{desktop} does not mean everything for application developer. Today cyber-world needs to be interconnected and people want to be mobile. You can't do that with desktop environment running on personal computer. You need cell-phone. Cell-phone with (possibly) good-looking environment and fancy applications. Unfortunately, Qt 4 was not able to offer this kind of functionality to its users - programmers, so they looked at the competition and chose Android\index{Android} as their platform, leaving Qt behind.
+
+Luckily, Qt 5 appeared, bringing us some new exciting features, giving itself a chance to compete its opponents in category of mobile development toolkits. If we add rock-solid desktop features, we have versatile and stable base to build on.
+
+\subsection{What is Qt?}
+As said previously, Qt is framework, toolkit or, simply, set of libraries. It has very roots in Norway. Original creators are Haavard Nord\index{Haavard Nord} and Eirik Chambe-Eng\index{Eirik Chambe-Eng}. Basically Qt framework consists of:
+\begin{itemize}
+\item set of libraries written in \cpp
+\item meta-object compiler\index{meta-object compiler}
+\item QtScript interpreter\index{QtScript}
+\item tools for internationalization\index{internationalization} and \fdocabbrevref{GUI} design
+\item scripts for various build systems like CMake\index{CMake}
+\item other tools, \eg integrated development environment, examples or documentation browser
+\end{itemize}
+
+So as you see, Qt is not just collection of header/source files. It's completed with a variety of other stuff. You will learn more about Qt structure in \autoref{section:qtstructure}.
+
+\subsection{Companies behind Qt}
+Qt lives for more than two decades and its owners changed accordingly. Haavard Nord and Eirik Chambe-Eng assembled themselves in a team and called it Quasar Technologies. Later company was renamed to Trolltech. This company led Qt development for period of 12 exciting years, preffering desktop development.
+
+\fdocabbrevdeclare{POSIX}{POSIX}{Portable Operating System Interface}
+
+But as we know, things have changed and smartphones became massively popular lately. That's why Trolltech was acquired by Nokia. It was obvious that Nokia can bring something new to Qt as it is leading company in smartphones world production. Nokia promised that they would keep Qt open-souce and made it available via public Git\footnote{Git is revision control system originally created to support Linux kernel development. Founding author is well-know Linus Torvalds\index{Linus Torvalds}. Git is multi-platform and runs on Windows, Linux or Mac OS X. It's \fdocabbrevref{POSIX}-compatible.}\index{Git} repository. But Nokia somehow was not able to utilize potential of Qt and sold it to another company called Digia.
+
+\subsubsection{Licensing}
+Qt uses two separate licenses:
+\begin{enumerate}
+\item \textbf{Commercial license}, which provides you (as indie developer) with possibility to produce \textit{closed-source} (proprietary) or \textit{open-source} applications, you can do whatever you want with your copy of Qt. This kind of license is usually sold per particular platform and it is generally rather expensive. It may cost around several thousands US dollars and this price may get even higher if you buy license for more platforms or if you have bigger development team. This license is usually bought by developers who want to sell their software for money and/or stay closed-source, otherwise open-source license is much better choice.
+
+Commercial license grants you even more rights. You can link Qt statically to your application and/or include other proprietary software in it. Technical support is available for commercial users.
+
+\item \textbf{Open-source} license, which provides you (and your users) with much more freedom but forcing you to share source code of your application with the community and allowing anyone to change your application and redistribute it under the same terms. Used license is GNU LGPL\index{licenses!GNU LGPL} license in version 2.1, allowing you to use GNU GPL\index{licenses!GNU GPL}\citep{stallman:gnugpl} for your projects.
+\end{enumerate}
+
+Licenses have always been quite a problem for Qt framework. Commercial license was fine. But non-commercial was not. Qt used its own license before GNU GPL was chosen as the primary one. Problem was that Q Public License\index{Q Public License} wasn't GPL compatible. This problem became much more obvious when \fdocabbrevref{KDE} established itself as one the most favored desktop environments, gaining milions of users. They were naturally afraid of KDE becoming the piece of proprietary software, which was more or less possible with Q Public License.
+
+Luckily this problem got solved by releasing Qt under GNU GPL.
+
+\fdocabbrevdeclare{OOP}{OOP}{Object-oriented programming}
+\subsection{C plus plus as base stone}\label{subsection:cpp}
+\cpp is known as general-purpose programming language, based on famous C. It was created around 1979 by Bjarne Stroustrup\index{Bjarne Stroustrup}, bringing in many \fdocabbrevref{OOP} features such as implementation of classes, polymorphism, entity overloading or inheritance. You can find very tiny example of basic techniques in \autoref{listing:sampleoop}.
+
+\begin{fdoccode}{cpp}{listing:sampleoop}{Basic \fdocabbrevref{OOP} techniques in \cpp}
+/* Base class declaration */
+class BaseClass {
+    public:
+		BaseClass();
+
+		void whoAmI() const;
+};
+
+/*
+ * Class declaration
+ * This class inherits BaseClass.
+ */
+class InheritingClass : public BaseClass {
+	public:
+		InheritingClass();
+
+		void whoAmI() const;
+};
+
+/* Example usage of BaseClass and InheritingClass classes. */
+int main() {
+    BaseClass class_1;
+    InheritingClass class_2;
+    class_1.whoAmI();
+    class_2.whoAmI();
+
+    BaseClass *class_3 = &class_2;
+    class_3->whoAmI();
+
+    ((InheritingClass*) class_3)->whoAmI();
+
+    return 0;
+}
+\end{fdoccode}
+
+\begin{fdoccode}{text}{}{Output of application from \autoref{listing:sampleoop}}
+BaseClass instance constructed.
+BaseClass instance constructed.
+InheritingClass instance constructed.
+I am BaseClass.
+I am InheritingClass.
+I am BaseClass.
+I am InheritingClass.
+\end{fdoccode}
+
+\cpp has many characteristics -- some are bad while other ones may be great. Let's compare usefulness of its abilities.
+
+\begin{description}
+\item[SYNTAX$^{\text{\textcolor{red}{bad}}}$]\hfill \\
+\cpp is known to have some oddities rooted in its syntax. \Eg we can be confused by rife usages of\fdocinlinecode{cpp}{!}{const} keyword. One\fdocinlinecode{cpp}{!}{const} marks methods which can operate only with constant objects and another distinguishes constant variables from non-constant ones. Even the greatest fan of \cpp has to admit bizarre usage of this keyword. You can read about this topic in \citep[p.~90-92, p.~537]{prata:cprimer}.
+
+\item[POINTERS vs. REFERENCES$^{\text{\textcolor{red}{bad}}}$]\hfill \\
+This could be one of conventions-related issues. Programmers are not entirely sure whether to use pointers\index{pointer} or references\index{reference} for passing values to functions. Generally, terms of references and pointers usage are not strictly set.
+
+\item[MEMORY MANAGEMENT$^{\text{\textcolor{red}{bad}, \textcolor{ultragreen}{good}}}$]\hfill \\
+This is very discussed topic these years as many programmers transitioned to programming languages, which produce
+\emph{managed code}\index{managed code}. Nowadays programmers heavily depend on managed code and they have troubles with manual
+object deletion and other related actions.
+
+\cpp is considered to be a fairly low-level programming language. Its \enquote{\textit{low-levelness}} applies to the way the memory is managed. In this case, no automatic memory management is implemented, yielding responsibility to the programmer. He (or perhaps she) has to take care of memory allocation and deallocation. There is certainly quite big pronenes to errors in this approach. Programmers simply forgets to free allocated memory space and memory leak\index{memory leak} occurs.
+
+In the other, manual management of allocated objects gives programmer bigger power to control application memory consumption and that's perfect on devices with limited system memory. Manual control of object life can be also much faster than automatic resource management provided by \textit{garbage collectors}\index{garbage collector}.
+
+Neither virtual machine nor complex runtime environment supports execution of \cpp application, thus \enquote{nobody} supervises actions of your application, except operating system. Your application is left alone with its segment of primary memory and your application is entrusted with everything, including memory management.
+
+\begin{fdocextra}
+Term \textit{managed code} means that all resources (usually called \emph{objects} in the object-oriented programming) generated by code execution are maintained and managed by an external entity. This entity is often called \emph{a virtual machine}\index{virtual machine} and usually includes sophisticated garbage collector, which is responsible for freeing needless resources from memory.
+\end{fdocextra}
+
+\item[THREADING$^{\text{\textcolor{red}{bad}}}$]\hfill \\
+\cpp doesn't contain unified interface for threading.\footnote{Threading is supported in new \cpp11 standard. You can read about threading\index{threading} inclusion in \citep[p.~1114-1160]{various:cppstandard}.} That could make pure \cpp poorly usable for developing more complex applications if no \nth{3}-party threading library is not available.
+
+\item[FAST CODE EXECUTION$^{\text{\textcolor{YellowOrange}{great}}}$]\hfill \\
+\cpp code execution is amazingly fast compated to other modern programming languages. Direct compilation (see more in \autoref{section:compilation})  into machine code is the cause here. Other favorite languages are compiled into bytecode, thus they have to be compiled just-in-time by virtual machine and that is time consuming job, thus making application execution slow.
+
+\fdocabbrevdeclare{IL}{IL}{Intermediate Language}
+Let's make a little test and compare \cpp with \csharp. \csharp code is known to be compiled into \fdocabbrevref{IL}, which is bytecode, and ran by special runtime.
+
+One of the simplest tasks to compare these two languages could be simple integer array sorting. Quicksort algorithm will do that. Consider implementations in \cpp (\autoref{listing:quickcpp}) and \csharp(\autoref{listing:quickcsharp}). Furthermore, we can use try to maximally optimize \csharp code execution speed by  allowing \enquote{unsafe code} and using pointers instead of references. This approach is shown in \autoref{listing:quickcsharp-unsafe}.
+
+Series of sample sortings was made with each implementation. Subject of sorting was array filled with descendingly-valued integers. Such an array can be denoted as $Array = \left\{ x, x-1, x-2, \ldots, 0 \right\}$. Series contains 20 these arrays. Results of comparison are display in \autoref{table:comparison}.
+
+\begin{fdoccode}{cpp}{listing:quickcpp}{Quicksort implementation in \cpp}
+void QuickSort::quickSort(int *array, int p, int r) {
+    int q;
+    if (p < r) {
+		q = partition(array, p, r);
+		quickSort(array, p, q - 1);
+		quickSort(array, q + 1, r);
+    }
+}
+
+int QuickSort::partition(int *array, int p, int r) {
+    int x = array[r];
+    int i = p - 1;
+    int j;
+    for (j = p; j < r; j++) {
+		if (array[j] <= x) {
+	    	i += 1;
+	    	swap(&array[i], &array[j]);
+		}
+    }
+    swap(&array[i + 1], &array[r]);
+    return i + 1;
+}
+
+void QuickSort::swap(int *lhs, int *rhs) {
+    int temp = *lhs;
+    *lhs = *rhs;
+    *rhs = temp;
+}
+\end{fdoccode}
+
+\begin{fdoccode}{csharp}{listing:quickcsharp}{Quicksort implementation in \csharp}
+static void quickSort(int[] array, int p, int r) {
+	int q;
+	if (p < r) {
+		q = partition(array, p, r);
+		quickSort(array, p, q - 1);
+		quickSort(array, q + 1, r);
+	}
+}
+
+static int partition(int[] array, int p, int r) {
+	int x = array[r];
+	int i = p - 1;
+	int j;
+	for (j = p; j < r; j++) {
+		if (array[j] <= x) {
+			i += 1;
+			swap(ref array[i], ref array[j]);
+		}
+	}
+	swap(ref array[i + 1], ref array[r]);
+	return i + 1;
+}
+
+static void swap(ref int lhs, ref int rhs) {
+	int temp = lhs;
+	lhs = rhs;
+	rhs = temp;
+}
+\end{fdoccode}
+
+\begin{fdoccode}{csharp}{listing:quickcsharp-unsafe}{Quicksort implementation in \enquote{unsafe} \csharp}
+static unsafe void quickSort(int* array, int p, int r) {
+	int q;
+	if (p < r) {
+		q = partition(array, p, r);
+		quickSort(array, p, q - 1);
+		quickSort(array, q + 1, r);
+	}
+}
+
+static unsafe int partition(int* array, int p, int r) {
+	int x = array[r];
+	int i = p - 1;
+	int j;
+	for (j = p; j < r; j++) {
+		if (array[j] <= x) {
+			i += 1;
+			swap(&array[i], &array[j]);
+		}
+	}
+	swap(&array[i + 1], &array[r]);
+	return i + 1;
+}
+
+static unsafe void swap(int* lhs, int* rhs) {
+	int* temp = lhs;
+	lhs = rhs;
+	rhs = temp;
+}
+\end{fdoccode}
+
+\begin{table}[ht]
+\caption{Results of \cpp vs. \csharp comparison}\label{table:comparison}
+\begin{subtable}[t]{0.3\textwidth}
+\centering
+\caption{\cpp}
+\begin{tabular}{c | c }
+array size & final time \\
+\hline
+800 & 0.001 \\
+1600 & 0.002 \\
+2400 & 0.004 \\
+3200 & 0.008 \\
+4000 & 0.011 \\
+4800 & 0.016 \\
+5600 & 0.022 \\
+6400 & 0.027 \\
+7200 & 0.034 \\
+8000 & 0.043 \\
+8800 & 0.05 \\
+9600 & 0.06 \\
+10400 & 0.071 \\
+11200 & 0.082 \\
+12000 & 0.094 \\
+12800 & 0.107 \\
+13600 & 0.122 \\
+14400 & 0.134 \\
+15200 & 0.15
+\end{tabular}
+\end{subtable}
+~
+\begin{subtable}[t]{0.3\textwidth}
+\centering
+\caption{\csharp}
+\begin{tabular}{c | c}
+array size & final time \\
+\hline
+800 & 0.3 \\
+1600 & 0.5 \\
+2400 & 0.12 \\
+3200 & 0.20 \\
+4000 & 0.31 \\
+4800 & 0.45 \\
+5600 & 0.66 \\
+6400 & 0.80 \\
+7200 & 0.101 \\
+8000 & 0.124 \\
+8800 & 0.152 \\
+9600 & 0.180 \\
+10400 & 0.215 \\
+11200 & 0.245 \\
+12000 & 0.283 \\
+12800 & 0.324 \\
+13600 & 0.364 \\
+14400 & 0.409 \\
+15200 & 0.456
+\end{tabular}
+\end{subtable}
+~
+\begin{subtable}[t]{0.3\textwidth}
+\centering
+\caption{\enquote{Unsafe} \csharp}
+\begin{tabular}{c | c}
+array size & final time \\
+\hline
+800 & 0.2 \\
+1600 & 0.2 \\
+2400 & 0.4 \\
+3200 & 0.8 \\
+4000 & 0.14 \\
+4800 & 0.19 \\
+5600 & 0.25 \\
+6400 & 0.31 \\
+7200 & 0.40 \\
+8000 & 0.49 \\
+8800 & 0.60 \\
+9600 & 0.72 \\
+10400 & 0.87 \\
+11200 & 0.99 \\
+12000 & 0.113 \\
+12800 & 0.129 \\
+13600 & 0.147 \\
+14400 & 0.164 \\
+15200 & 0.184
+\end{tabular}
+\end{subtable}
+\end{table}
+
+We see that \cpp outperformed classic \csharp implementation, while being a\-round 3 times faster. even \enquote{unsafe} \csharp implementation got beaten, although the difference was tiny. So we can state that \cpp is faster than \csharp even in fairly simple task. You may think about performance difference if hugely complex computation (perhaps some 3D graphical computation) is needed to be done.
+
+\item[HUGE COMMUNITY$^{\text{\textcolor{YellowOrange}{great}}}$]\hfill \\
+Plenty of world-renowned software is written using \cpp, including many 3D games, almost each program from Adobe and Chromium web browser. Many \cpp books are available, making it easier to learn.
+
+\fdocabbrevdeclare{JRE}{JRE}{Java Runtime Environment}
+\item[MEMORY CONSUMPTION$^{\text{\textcolor{YellowOrange}{good}}}$]\hfill \\
+\cpp applications, as stated, need no virtual machine for their execution. They load just base \cpp library and extra libraries if needed. Such approach makes significant opposite to robust and greedy (as for memory) runtime environments of certain high-level languages. We can mention primarily .NET Framework and \fdocabbrevref{JRE}.
+
+\item[CODE PORTABILITY$^{\text{\textcolor{red}{bad}}}$]\hfill \\
+When it comes to code portability (same as multi-platformity), \cpp leaves its audience uncertain. Users can be sure about portability of \cpp standard library but that's all. Standard library is not trully packed with stunning features, forcing you to use \nth{3}-party libraries for advanced functionality. Those libraries don't have to be multi-platform, however, which can result in pain rooted from hypothetical need to port your application to another platform.
+\end{description}
+
+\subsubsection{Version 11 and its enhancements}
+\cpp programming language was for the first time standardized in 1998. This version is known as \cpp98. 
+
+\subsection{Qt components}
+
+\subsubsection{Supported platforms}
+
+\subsubsection{Qt 5 additions}
+
+\subsection{Getting and installing Qt}
+
+\subsubsection{Installing on Windows}
+
+\subsubsection{Installing on Linux}
+
+\subsubsection{Compilling Qt}

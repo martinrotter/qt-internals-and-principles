@@ -1,0 +1,67 @@
+\section*{Acknowledgements}
+Firstly, I would like to thank to my bachelor thesis leader Mgr.~Tomáš Kühr. Special praise goes to my closest friends, especially to my family and to people who let me know that love can be wonderful.
+
+\clearpage
+
+\section*{Preface}
+
+\subsection*{Whom this book is for?}
+This book is for anyone who is interested in creating dynamic and multi-platform applications using Qt framework. It does not matter if you are hugely experienced software engineer or self-taught enthusiast. Information included in this book will be useful either way.
+
+\subsection*{What is covered by this book?}
+Covering all compoments of Qt framework in one book is impossible task because of massive complexity of those libraries. It's better to focus on certain aspects only. Each Qt-related books begins with graphical interfaces. Probably, that's not the best approach because graphical interfaces form very complex science. You need to be able to manage easy Qt-related tasks first in order be able to master harder ones.
+
+That's why this book starts with very fundamental topics, therefore pushing graphical-interfaces-related topics back to further chapters. You will learn the Qt framework versioning system, compilation process or Qt classes structure within the framework. Meta-object system will follow. Understanding meta-object system is the key for next progress and is the main precondition for building solid Qt-based applications. Graphical interfaces will be explored deeply too.
+
+After managing basics of Qt libraries usage, we can advance to other needed topics, such as networking, relational dabases and threading.
+
+Finally, you will apply your newly gained knowledge to build applications, which can be easily maintainable, compilable and easy to package and ship to your customers.
+
+This books equippes you primarily with principles. Facts (which are unknown to you and are not included in this book) can be found in \citep{various:qtdoc}.
+
+Note that in this paper, we discuss relatively new (as of January, 2013) Qt 5. You will learn more about Qt 5 new features later.
+
+\fdocabbrevdeclare{QML}{QML}{Qt Meta Language}
+\fdocabbrevdeclare{GUI}{GUI}{Graphical User Interface}
+
+\subsection*{What is not covered by this book?}
+As said earlier, it's not possible to cover all nooks of Qt libraries in one book. We will omit some hugely admired Qt features, so that we can concentrate on other ones. \fdocabbrevref{QML} will be ignored completely, along with whole QtQuick and other stuff for cell-phones or tablet devices. 2D and 3D painting features won't be described too but you will clap on them from time to time as they are needed for advanced \fdocabbrevref{GUI} tweaking.
+
+Some other parts of Qt are ignored too. You will be informed about some of them throughout the book.
+
+\subsection*{How this book is structured?}
+As we said earlier, there are basically two main stories told by this book. First one lets you know something about Qt and its features. Analogy to this story is called \nameref{part:lab} and it is the first part of the book.
+
+Then, you will learn to use your Qt-related skills in a part called \nameref{part:real} and that's the second (and more exciting) story.
+
+\subsection*{Are there any prerequisities?}
+Of course there are. Qt itself is based on the \cpp programming language and thus \cpp knowledge is main prerequisite. One could argue that Qt has bindings into many better programming languages and I would respond: \enquote{It's true.} But \cpp is core language for Qt and for you, as future Qt developer, using Qt in its native programming language is important.
+
+\cpp went through massive update recently and we face its eleventh version. So we will use \cpp 11 in this book. You can learn more about \cpp 11 in \citep{various:cppstandard} or in section \ref{subsection:cpp}.
+
+\subsection*{Text formatting}
+This book is riddled with pictures, tables and other fancy elements. There are also source code fragments included as seen in \autoref{list:sample}.
+
+\begin{fdoccode}{C++}{list:sample}{Sample code fragment}
+int main(int argc, char *argv[]) {
+	return EXIT_SUCCESS;
+}
+\end{fdoccode}
+
+Note that sometimes it is needed to highlight \emph{portion of text} or even make it \textbf{really visible}. In some cases, there is a need of providing some extra remark to discussed topic. Typical remark looks similar to one below.
+
+\begin{fdocextra}
+This is very interesting text here\ldots
+\end{fdocextra}
+
+\subsection*{Source code}
+Topics of this book are supplemented sample applications to describe the matter. You can find source code in \textit{sources} subdirectory.
+
+\subsection*{Licensing}
+This work is licensed under the Creative Commons Attribution-NonComme\-/rcial-NoDerivs 3.0 Unported License. To view a copy of this license, visit \href{http://www.creativecommons.org/licenses/by-nc-nd/3.0}{www.\-/crea\-/tive-commons.org/licenses/by-nc-nd/3.0} or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
+
+Embedded \cpp source code is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+You should have received a copy of the GNU General Public License along with this program. If not, see \href{http://www.gnu.org/licenses}{www.gnu.org/licenses}.
+
+All other registered names and logos are property of their respective owners.

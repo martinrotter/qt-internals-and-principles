@@ -1,0 +1,93 @@
+\documentclass[a4paper,12pt,twoside]{article}
+
+%% Package kvoptions-patch is needed if you pass unicode strings as parameters to fancydoc packages.
+\usepackage{kvoptions-patch}
+
+%% Load fancydoc package.
+\usepackage[
+	final=false,
+	joinlists=false,
+	figures=true,
+	tables=true,
+	listings=true,
+	abbreviations=true,
+	theorems=false,
+	language=english,
+	bibfile=bibliography.bib,
+	bibencoding=utf8,
+	bibstyle=philosophy-modern,
+	encoding=utf8,
+	titlelistings=List of Listings,
+	namelistings=Listing,
+	titleabbrev=List of Abbreviations,
+	titletheorems=List of Theorems,
+	custompicture=graphics/logos/qt.png,
+	titleanot=Abstract,
+	titlebookmarktitlepage=Titlepage,
+	titlelists=Lists
+]{fdocbook}
+
+\usepackage{caption}
+\usepackage[list=true]{subcaption}
+\usepackage{placeins}
+\usepackage[shortcuts]{extdash}
+\usepackage[super]{nth}
+
+\fdoctitle{Qt: Internals and Principles}
+\fdocsubtitle{Get to Grips with Qt}
+\fdocyear{\today}
+\fdocauthor{Martin Rotter}
+\fdocanot{Qt is one of the best-known and the mightiest general-purpose libraries available. Its functionality covers each and every thinkable programming area, including threading, graphical interfaces, relational databases, networks, 2D/3D painting and many more. This text aims at one modest task - providing the solid base for learning and understanding Qt by revealing its internals and principles.}
+
+\pagestyle{fancy}
+
+% start parts and sections on odd page
+\let\stdsection\section
+\renewcommand*\section{\cleardoublepage\stdsection}
+
+\let\originalpart=\part
+\renewcommand*\part{\cleardoublepage\originalpart}
+
+\newcommand{\ie}{i.\,e. }
+\newcommand{\Ie}{I.\,e. }
+\newcommand{\eg}{e.\,g. }
+\newcommand{\Eg}{E.\,g. }
+
+\begin{document}
+
+% vytiskne titulní stranu
+\fdoctitlesimple
+
+% vytiskne anotaci (abstrakt)
+\fdocabstract
+
+\input{frontback/preface}
+
+% tiskne obsah
+\fdoctableofcontents
+
+\part{Laboratory Qt}\label{part:lab}
+\input{parts/laboratory/foreword}
+\input{parts/laboratory/qtstructure}
+\input{parts/laboratory/usingqt}
+\input{parts/laboratory/compilation}
+
+\part{Real-world Qt}\label{part:real}
+
+%\upendoftreatise
+%\fdocendofmainmatter
+%\fdocappendix
+%\section{First cute appendix}
+%Whatever\ldots
+
+
+\upendoftreatise
+
+\upprintlists
+
+\fdocendofmainmatter
+
+\fdocprintbibliography
+\fdocprintindex
+
+\end{document}
