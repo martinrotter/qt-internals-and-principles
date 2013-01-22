@@ -39,12 +39,10 @@ Qt uses two separate licenses:
 
 Commercial license grants you even more rights. You can link Qt statically to your application and/or include other proprietary software in it. Technical support is available for commercial users.
 
-\item \textbf{Open-source} license, which provides you (and your users) with much more freedom but forcing you to share source code of your application with the community and allowing anyone to change your application and redistribute it under the same terms. Used license is GNU LGPL\index{licenses!GNU LGPL} license in version 2.1, allowing you to use GNU GPL\index{licenses!GNU GPL}\citep{stallman:gnugpl} for your projects.
+\item \textbf{Open-source} license, which provides you (and your users) with much more freedom but forcing you to share source code of your application with the community and allowing anyone to change your application and redistribute it under the same terms. Used license is GNU LGPL\index{licenses!GNU LGPL} license, in version 2.1, and GNU GPL\index{licenses!GNU GPL} (see \citep{stallman:gnugpl}) for your projects.
 \end{enumerate}
 
-Licenses have always been quite a problem for Qt framework. Commercial license was fine. But non-commercial was not. Qt used its own license before GNU GPL was chosen as the primary one. Problem was that Q Public License\index{Q Public License} wasn't GPL compatible. This problem became much more obvious when \fdocabbrevref{KDE} established itself as one the most favored desktop environments, gaining milions of users. They were naturally afraid of KDE becoming the piece of proprietary software, which was more or less possible with Q Public License.
-
-Luckily this problem got solved by releasing Qt under GNU GPL.
+Licenses have always been quite a problem for Qt framework. Commercial license was fine. But non-commercial was not. Qt used its own license before GNU LGPL and GNU GPL were chosen as primary ones. Problem was that Q Public License\index{Q Public License} wasn't GPL compatible. This problem became much more obvious when \fdocabbrevref{KDE} established itself as one the most favored desktop environments, gaining milions of users. They were naturally afraid of KDE becoming the piece of proprietary software, which was more or less possible with Q Public License. Luckily this problem got solved by releasing Qt under GNU GPL.
 
 \fdocabbrevdeclare{OOP}{OOP}{Object-oriented programming}
 \subsection{C plus plus as base stone}\label{subsection:cpp}
@@ -106,7 +104,7 @@ I am InheritingClass.
 This could be one of conventions-related issues. Programmers are not entirely sure whether to use pointers\index{pointer} or references\index{reference} for passing values to functions. Generally, terms of references and pointers usage are not strictly set.
 
 \item[MEMORY MANAGEMENT\ts{\textcolor{red}{bad}, \textcolor{ultragreen}{good}}]\hfill \\
-This is very discussed topic these years as many programmers transitioned to programming languages, which produce
+This is very discussed topic these years as many programmers transitioned to programming languages which produce
 \emph{managed code}\index{managed code}. Nowadays programmers heavily depend on managed code and they have troubles with manual
 object deletion and other related actions.
 
@@ -124,7 +122,7 @@ Term \textit{managed code} means that all resources (usually called \emph{object
 \cpp doesn't contain unified interface for threading.\footnote{Threading is supported in new \cpp11 standard. You can read about threading\index{threading} inclusion in \citep[p.~1114-1160]{various:cppstandard}.} That could make pure \cpp poorly usable for developing more complex applications if no \nth{3}-party threading library is not available.
 
 \item[FAST CODE EXECUTION\ts{\textcolor{YellowOrange}{great}}]\hfill \\
-\cpp code execution is amazingly fast compated to other modern programming languages. Direct compilation (see more in \autoref{section:compilation})  into machine code is the cause here. Other favorite languages are compiled into bytecode, thus they have to be compiled just-in-time by virtual machine and that is time consuming job, thus making application execution slow.
+\cpp code execution is amazingly fast compared to other modern programming languages. Direct compilation (see more in \autoref{section:compilation})  into machine code is the cause here. Other favorite languages are compiled into bytecode, thus they have to be compiled just-in-time by virtual machine and that is time consuming job, thus making application execution slow.
 
 \fdocabbrevdeclare{IL}{IL}{Intermediate Language}
 Let's make a little test and compare \cpp with \csharp. \csharp code is known to be compiled into \fdocabbrevref{IL}, which is bytecode, and ran by special runtime.
@@ -227,21 +225,21 @@ static unsafe void swap(int* lhs, int* rhs) {
 \end{fdoccode}
 
 \begin{figure}[ht]
-\caption{Results of \cpp vs. \csharp comparison}\label{figure:comparison}
 \centering\includegraphics[width=9cm,angle=-90]{graphics/laboratory/00-langcomparison.pdf}
+\caption{Results of \cpp vs. \csharp comparison}\label{figure:comparison}
 \end{figure}
 
 We see that \cpp outperformed classic \csharp implementation, while being a\-round 3 times faster. Even \enquote{unsafe} \csharp implementation got beaten, although the difference was tiny. So we can state that \cpp is faster than \csharp even in fairly simple task. You may think about performance difference if hugely complex computation (perhaps some 3D graphical computation) is needed to be done.
 
 \item[HUGE COMMUNITY\ts{\textcolor{YellowOrange}{great}}]\hfill \\
-Plenty of world-renowned software is written using \cpp, including many 3D games, almost each program from Adobe and Chromium web browser. Many \cpp books are available, making it easier to learn.
+Plenty of world-renowned software is written using \cpp{}, including many 3D games, almost each program from Adobe and Chromium web browser. Many \cpp books are available, making it easier to learn.
 
 \fdocabbrevdeclare{JRE}{JRE}{Java Runtime Environment}
 \item[MEMORY CONSUMPTION\ts{\textcolor{ultragreen}{good}}]\hfill \\
 \cpp applications, as stated, need no virtual machine for their execution. They load just base \cpp library and extra libraries if needed. Such approach makes significant opposite to robust and greedy (as for memory) runtime environments of certain high-level languages. We can mention primarily .NET Framework and \fdocabbrevref{JRE}.
 
 \item[CODE PORTABILITY\ts{\textcolor{red}{bad}}]\hfill \\
-When it comes to code portability (same as multi-platformity), \cpp leaves its audience uncertain. Users can be sure about portability of \cpp standard library but that's all. Standard library is not trully packed with stunning features, forcing you to use \nth{3}-party libraries for advanced functionality. Those libraries don't have to be multi-platform, however, which can result in pain rooted from hypothetical need to port your application to another platform.
+When it comes to code portability (same as multi-platformity), \cpp leaves its audience uncertain. Users can be sure about portability of \cpp standard library but that's all. Standard library is not trully packed with stunning features, forcing you to use \nth{3}-party libraries for advanced functionality. Those libraries don't have to be multi-platform, however, which can result in pain rooting from hypothetical need to port your application to another platform.
 
 \item[MISSING CONSTRUCTS\ts{\textcolor{red}{bad}}]\hfill \\
 Indeed, \cpp might be missing some very useful language constructs, which are quite common in other (\eg functional, logic or perhaps declarative) programming paradigms. Many features emerged in \cpp11 revision, however.
@@ -404,7 +402,7 @@ Finally, threading was introduced within the standard library. This threading su
 \subparagraph*{Tuples (pairs)}\index{tuple}
 Good bonus for every \cpp programmer. No need to use \nth{3} party tuples implementations. More classes are new in the standard library, look at \citep{various:cppstandard} for more.
 
-\subsection{Qt components}
+\subsection{Qt components}\label{section:components}
 Qt consists of libraries, tools and other supplemental software. You have already seen very brief list of Qt components in \autoref{section:what}. Libraries themselves are divided into so-called \textit{modules}\index{modules}.\footnote{You are not familiar with modules yet. Module is simply collection of related classes.} You can learn more about modules in \autoref{section:qtstructure}. Let's look into Qt library collection more thoroughly. Qt library collection contains these main components:
 \begin{enumerate}
 \item Tools for \fdocabbrevref{GUI} design and implementation consisting of user interface designer (QtDesiger) and user interface classes (known as QtWidgets and QtGui).
@@ -466,8 +464,8 @@ New multi-platform user interface style called Fusion is available (\autoref{fig
 \end{itemize}
 
 \begin{figure}[ht]
-\caption{Qt Fusion style example}\label{figure:fusion}
 \centering\includegraphics{graphics/laboratory/01-fusion.png}
+\caption{Qt Fusion style example}\label{figure:fusion}
 \end{figure}
 
 \subsection{Getting and installing Qt}
