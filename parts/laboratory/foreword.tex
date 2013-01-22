@@ -482,11 +482,64 @@ Qt can be downloaded as executable installer file which containes binaries preco
 
 Qt framework versions gets released precompiled for certain compilers only. Linux releases are meant to work with \fdocabbrevref{GCC}, Windows releases are usually precompiled by \fdocabbrevref{MSVC}. Qt framework with MinGW support is released from time to time too.
 
-\subsubsection{Installing on Windows}
+\subsubsection{Installing Qt on Windows}
 %% instalace na windows a linuxu
+Qt installation on Windows is fairly straightforward if binaries are available. All you need to do is obtain the setup executable file and follow instructions. Some troubles might occur, though.
+
+Let's assume that Qt was installed in\fdocinlinecode{text}{!}{c:\\Qt\\Qt5.0.0\\}.
+
+You need to tweak your PATH environment variable in order to be able to run Qt tools from command line. Qt Creator will work even without proper PATH because it does all necessary settings for itself automatically. You can setup PATH variable in Windows 7 as follows:
+\begin{enumerate}
+\item From the desktop, right-click (by mouse) \enquote{My Computer} and then click \enquote{Properties}.
+\item Choose \enquote{Advanced System Settings} from the list.
+\item In the \enquote{System Properties} window, hit the \enquote{Environment Variables} button.
+\item Locate \enquote{System variables} group, select PATH variable and hit \enquote{Edit} button.
+\item Move to the end of the string and add folowing paths:
+\begin{lstlisting}[firstnumber=1,language=text]
+c:\Qt\Qt5.0.0\5.0.0\msvc2010\bin\
+c:\Qt\Qt5.0.0\Tools\QtCreator\bin\ (If Qt Creator is installed too.)
+\end{lstlisting}
+Paths within the PATH variable are separated by semicolons. Typical content of PATH variable may look like the one in \autoref{listing:pathwindows}.
+\begin{fdoccode}{text}{listing:pathwindows}{Setting PATH environment variable for Qt on Windows}
+%SystemRoot%\system32;%SystemRoot%;c:\Qt\Qt5.0.0\5.0.0\msvc2010\bin\;c:\Qt\Qt5.0.0\Tools\QtCreator\bin\
+\end{fdoccode}
+\end{enumerate}
+
+\subsubsection{Installing Qt on Linux}
+As stated, Qt can be installed on Linux in two ways:
+\begin{enumerate}
+\item Linux distribution \textit{package manager}\index{package manager} offers it as the package. This is the case for many major distributions, \eg Ubuntu, Archlinux, Fedora, Debian or Mint.
+\item Classical installation via executable file:
+\begin{enumerate}
+\item Obtain installation file from \href{http://www.qt-project.org/}{www.qt-pro\-/ject.org}.
+\item Open terminal\index{terminal} and navigate to folder containing obtained installation file.
+\item Change permissions on the file:
+\begin{lstlisting}[firstnumber=1,language=text]
+sudo chmod +x ./qt-5-installation-file.run
+\end{lstlisting}
+You need to run\fdocinlinecode{text}{!}{chmod} as superuser\index{superuser} (root\index{root}) if you want to install Qt into system-wide location.
+
+\item Install Qt by executing\fdocinlinecode{text}{!}{./qt-5-installation-file.run}, follow on-screen instructions. It's good to install Qt into separate folder structure to keep system structure clean. Using\fdocinlinecode{text}{!}{/opt/qt5} as base installation directory is generally good idea.
+
+\item There is no need of editing PATH environment variable if you use Qt Creator for development. Otherwise, make sure you set correct values to environment variables (see \autoref{listing:pathlinux}).
+\begin{fdoccode}{text}{listing:pathlinux}{Setting environment variables for Qt on Linux}
+QTDIR=/opt/qt5/5.0.0/gcc
+PATH=$PATH:$QTDIR/bin
+QMAKESPEC=$QTDIR/mkspecs/linux-g++
+\end{fdoccode}
+\fdocinlinecode{text}{!}{QTDIR} variable contains path to root qt directory. This is the directory which contains subdirectories\fdocinlinecode{text}{!}{bin},\fdocinlinecode{text}{!}{include},\fdocinlinecode{text}{!}{lib}, \ldots
+\end{enumerate}
+\end{enumerate}
 
 
-\subsubsection{Installing on Linux}
+\subsubsection{Compilling Qt}\index{compilation}
+Sometimes, you may need to compile Qt on your own. Compilation allows you to throw away features you do not like, resulting in smaller dynamic (and static too) libraries sizes.
 
-\subsubsection{Compilling Qt}
-%% kompilace
+Qt sources are always contained within compressed file. All you need to do is to have correctly installed \cpp compiler (\fdocabbrevref{GCC} or \fdocabbrevref{MSVC} are recommended). Basic compilation steps are quite similar for each operating system:
+\begin{enumerate}
+\item Decompress source package and navigate to its root folder using terminal (command prompt).
+\item Run\fdocinlinecode{text}{!}{./configure -opensource -nomake examples -nomake tests}.
+\item Now, run\fdocinlinecode{text}{!}{make} (on Linux),\fdocinlinecode{text}{!}{nmake} (on Windows with Visual Studio) or\fdocinlinecode{text}{!}{mingw32-make} (on Windows with MinGW).
+\end{enumerate}
+
+Compilation process can be long and painful, as many problems can occur. See \citep{various:qtdoc} for more information.

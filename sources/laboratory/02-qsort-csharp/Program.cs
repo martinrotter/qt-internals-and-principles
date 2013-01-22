@@ -23,7 +23,7 @@ namespace _02_qsort_csharp {
 				quickSort(array, 0, no_of_elements - 1);
 				TimeSpan s = DateTime.Now - t;
 
-				Console.WriteLine("Sort of {0} elements took {1}.{2} seconds.", no_of_elements, s.Seconds, s.Milliseconds);
+				Console.WriteLine("Sort of {0} elements took {1,2:N3} seconds.", no_of_elements, s.TotalSeconds);
 			}
 		}
 
