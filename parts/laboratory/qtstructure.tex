@@ -68,12 +68,18 @@ Unused direct dependencies:
 
 Threading library (pthread\index{pthread}) is used by QtCore on Linux. LibGL\index{libGL} is 3D graphics library. LibGL is unused because no OpenGL-related\index{OpenGL} function was called explicitly in our sample application. You will learn more about linking in \autoref{section:compilation}.
 
+Number of chosen modules affects memory consumption an executable file. So pick a reasonable subset of available Qt modules to make your application thin and fit.
+
 \subsection{Tree-like class structure}
 Cleverly developed library has smart class structure which makes that library easily maintainable, expandable and functional. \textit{Class inheritance}\index{class inheritance} is used very extensively if library design is something we need to deal with. Read \citep[p.~708-783]{prata:cprimer} to get more familiar with \cpp class inheritance if you are not so far. Class inheritance says that if one class is inheritor of another class, then it inherits parent's \textit{data} and \textit{methods}.
 
 It's good practice to have some properties available in all classes of the library. Such a property could be \eg \textit{id}, the textual (or perhaps numerical) identification of each object (instantiated class) within the library. You would have to define what \textit{id} means in each and every of your classes manually without inheritance usage. With inheritance, everything you must do, is to define \textit{id} in exactly one of your classes, promoting this class to \textit{root} class and make rest of classes to inherit the new \textit{library base class}.
 
-This approach is good base to have library with the tree-like structure (see \autoref{figure:library}) where classes are structured according to their natural relationship.
+This approach is solid base for having library with the tree-like structure (see \autoref{figure:library}) where classes are structured according to their natural relationship.
+
+So, as we found out, there is exactly one class that sits above other classes, which share its data and methods. Qt disposes this kind of top-level class too, it's called\fdocinlinecode{cpp}{!}{QObject}.
+
+\vfill
 
 \begin{fdocextra}
 Many well-known libraries follow root class idea and tree-like class structure. One example is .NET Framework. Its very base class is called\fdocinlinecode{csharp}{!}{System.Object} and provides some basic functionality (shared by all .NET classes via class inheritance) such as method providing basic string representation of each object. You can find more about .NET base class in \citep[p.~84]{nigel:csharp}. Java follows very similar class hierarchy ideas.
@@ -81,8 +87,6 @@ Many well-known libraries follow root class idea and tree-like class structure. 
 
 \begin{figure}[ht]
 \centering
-\includegraphics[angle=-90,width=12cm]{graphics/laboratory/02-tree.pdf}
+\includegraphics[angle=-90,width=14cm]{graphics/laboratory/02-tree.pdf}
 \caption{Typical library tree-like class structure}\label{figure:library}
 \end{figure}
-
-So, as we found out, there is exactly one class that sits above other classes, which share its data and methods. Qt disposes this kind of top-level class too, it's called\fdocinlinecode{cpp}{!}{QObject}.
