@@ -53,9 +53,7 @@ libXau.so.6 => /usr/lib/libXau.so.6 (0xb4d2e000)
 libXdmcp.so.6 => /usr/lib/libXdmcp.so.6 (0xb4d27000)
 \end{fdoccode}
 
-Pay attention to lines \ref{listing:qt5w} -- \ref{listing:qt5c}. Typical program with user interface needs to be linked against QtCore, QtGui and QtWidgets. Console applications need just QtCore.
-
-You can list unused (but linked) libraries too as seen in \autoref{listing:ldd2}.
+Pay attention to lines \ref{listing:qt5w} -- \ref{listing:qt5c}. Typical program with user interface needs to be linked against QtCore, QtGui and QtWidgets. Console applications need just QtCore. You can list unused (but linked) libraries too as seen in \autoref{listing:ldd2}.
 
 \begin{fdoccode}{text}{listing:ldd2}{Unused (but linked) libraries for \fdocabbrevref{GUI} application}
 [root@arch-linux 04-guiapp]# ldd -d -r -u 04-guiapp
