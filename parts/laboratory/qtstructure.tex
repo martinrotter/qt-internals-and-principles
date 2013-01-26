@@ -18,7 +18,7 @@ Not so favourite kind of linkage. Library is packed into executable file and lin
 \end{description}
 \end{fdocextra}
 
-\subsubsection{Linking}
+\subsubsection{Linking}\label{listing:linking}
 Each module usually depends on QtCore\index{QtCore} module, including QtWidgets module. Moreover, QtWidgets module depends on QtGui module. So each Qt-based application with user interface has to be linked against 3 or more modules.
 
 Consider elementary \fdocabbrevref{GUI} application with main window. You can find source in\fdocinlinecode{text}{!}{sources/laboratory/04-guiapp} subdirectory. Application is compiled with modules QtCore and QtWidgets. You can use GNU \textit{ldd}\index{ldd} application to list all dynamic libraries required for executable file to run successfully. Output for our sample application looks very similar to the on in \autoref{listing:ldd}.
