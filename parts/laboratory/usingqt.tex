@@ -1,5 +1,5 @@
 \section{Using Qt framework}
-Basic Qt library structure is known to us but we need to know something about Qt-related development evnironments and tools. You can develop Qt applications in any text editor or in major development environment, including Microsoft Visual Studio{Visual Studio}. Some tools are part of Qt framework, however. This includes young and thriving Qt Creator\index{Qt Creator} development environment.
+Basic Qt library structure is known to us but we need to know something about Qt-related development evnironments and tools. You can develop Qt applications in any text editor or in major development environment, including Microsoft Visual Studio\index{Visual Studio}. Some tools are part of Qt framework, however. This includes young and thriving Qt Creator\index{Qt Creator} development environment.
 
 Every Qt/\cpp programmmer should be aware of existence of certain rules concerning source code appearance. These rules are called \textit{conventions}\index{convention} and you will learn about them too.
 
@@ -12,9 +12,9 @@ Qt Creator (see \autoref{figure:qtcreator}) is fully-featured \cpp \& JavaScript
 \caption{Qt Creator empty environment}\label{figure:qtcreator}
 \end{figure}
 
-Qt Creator supports big collection of features:
+Qt Creator supports big collection of features:\index{CMake}\index{Autotools}\index{QMake}
 \begin{itemize}
-\item multiple build systems (CMake\index{CMake}, Autotools\index{Autotools} and QMake\index{QMake})
+\item multiple build systems (CMake, Autotools and QMake)
 \item syntax highlighting for more than one hundred programming languages
 \item auto-completion for variables, functions and macros (see \autoref{figure:qtcreatorauto})
 \item consistent look on every supported operating system
@@ -50,7 +50,7 @@ Qt Creator supports big collection of features:
 \end{figure}
 
 \subsubsection{Speeding-up Qt Creator}
-You can make Qt Creator less memory-hungry by disabling some unneeded plugins. You can disable plugins in\fdocinlinecode{text}{!}{About -> About Plugins...} menu. Minimal setup for desktop Qt development using CMake\index{CMake} may look like the one in \autoref{table:plugins}.
+You can make Qt Creator less memory-hungry by disabling some unneeded plugins. You can disable plugins in\fdocinlinecode{text}{!}{About -> About Plugins...} menu. Minimal setup for desktop Qt development using CMake may look like the one in \autoref{table:plugins}.
 
 \begin{table}[ht]
 \begin{center}
@@ -102,7 +102,8 @@ Writing working application isn't, by far, enough in Qt world. Qt itself is huge
 \subsubsection{What are conventions?}
 Programming can be very difficult job sometimes. That's why programmers do need to make their work easier. Conventions are tools to achieve that. It's always useful to know what certain source code does simply by taking a brief look at it. If this happens, then code is written well, it is readable, understandable and it's actually joy to browse it.
 
-Let's compare source code to formatted text (\eg  text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Everything (almost) can have its style and conventions. Style makes things usable, predictable. Style is good.
+Let's compare source code to formatted text (\eg  text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Everything (almost) can have its style and conventions. Style makes things usable, predictable. Style 
+is good.
 
 Good programmer has to realise he produces source code not for him but for other programmers in a community or in a team. Aware programmer produces code styled the way a team (or a community) likes, not the way that he wants.
 
