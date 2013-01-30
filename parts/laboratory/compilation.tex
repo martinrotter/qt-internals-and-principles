@@ -1,5 +1,5 @@
 \section{Compilation process}\label{section:compilation}
-Compilers\index{compiler} pursue programming languages since the time languages arised. Modern compilers are often written in quite high level programming languages. Compiler of Scheme\index{Scheme} can be (and for learning purposes is) written in Scheme itself. Smart people see here typical instance of \enquote{the chicker or the egg} problem. What if we have just invented new programming language and we need to program its compiler? We need to use another programming language to program its very first compiler.
+Compinilers\index{compiler} pursue programming languages since the time languages arised. Modern compilers are often written in quite high level programming languages. Compiler of Scheme\index{Scheme} can be (and for learning purposes is) written in Scheme itself. Smart people see here typical instance of \enquote{the chicker or the egg} problem. What if we have just invented new programming language and we need to program its compiler? We need to use another programming language to program its very first compiler.
 
 Same problem was faced by developers in the times of programming antiquity. Perfect example is the C\index{C} compiler. When C was invented, there was (naturally) no compiler for it. It had to be programmed from scratch using another programming language. Assembly\index{assembly} language was chosen. That led to quite high code complexity and very huge effort by the programmers had to be spent, so that compiler could be finished.
 
@@ -22,11 +22,11 @@ Let's look at compilation process of plain \cpp application and Qt-based applica
 \subsection{Classic C plus plus compilation process}
 Experienced \cpp programmer is probably familiar with standard compilation process (\autoref{figure:classicpr}). This process consists of four main steps:
 \begin{enumerate}
-\item Makefile\index{makefile} generation utility generates desired kind of makefiles. This step is fairly optional and is not needed for small applications.
-\item Preprocessor\index{preprocessor} examines input source code, replaces all occurrences of preprocessor definitions and expand macros to actual code. Files produced by preprocessor are ready to be processed by compiler.
-\item Compiler\index{compiler} checks syntactical correctness of input \cpp code. If code is correct, then compilation goes on, otherwise procedure halts and error is displayed to the user. Compiler produces assembly code which is accepted by assembler.
-\item Assembler\index{assembler} takes assembly code and produces machine code (object code) for target architecture.
-\item Linker\index{linker} accepts compiled machine code as its input and produces executable file by linking machine code against needed libraries and adding necessary metadata and headers.
+\item Makefile generation utility generates desired kind of makefiles. This step is fairly optional and is not needed for small applications.
+\item Preprocessor examines input source code, replaces all occurrences of preprocessor definitions and expand macros to actual code. Files produced by preprocessor are ready to be processed by compiler.
+\item Compiler checks syntactical correctness of input \cpp code. If code is correct, then compilation goes on, otherwise procedure halts and error is displayed to the user. Compiler produces assembly code which is accepted by assembler.
+\item Assembler takes assembly code and produces machine code (object code) for target architecture.
+\item Linker accepts compiled machine code as its input and produces executable file by linking machine code against needed libraries and adding necessary metadata and headers.
 \end{enumerate}
 
 \begin{figure}[ht]
@@ -35,8 +35,8 @@ Experienced \cpp programmer is probably familiar with standard compilation proce
 \caption{Classic \cpp code compilation process}\label{figure:classicpr}
 \end{figure}
 
-\fdocabbrevdeclare{moc}{moc}{Meta-Object Compiler}
-\fdocabbrevdeclare{mos}{mos}{Meta-Object System}
+\fdocabbrevdeclare{moc}{moc}{Meta-object compiler}
+\fdocabbrevdeclare{mos}{mos}{Meta-object system}
 \subsection{Qt-way C plus plus compilation process}
 Qt/\cpp compilation process (\autoref{figure:qtpr} differs from classic \cpp code compilation process because \fdocabbrevref{moc}\index{\fdocabbrevref{moc}} comes into the compilation process. \fdocabbrevref{moc} one of fundamental basic stones of Qt itself. It is just more sophisticated preprocessor tool and source code generator. You will learn about \fdocabbrevref{moc} later becaus it is essential part of Qt \fdocabbrevref{mos}.
 

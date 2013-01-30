@@ -50,7 +50,7 @@ Mathematically rounds input paramater either to 64/32 bit integer.
 All functons can be found in\fdocinlinecode{text}{!}{/qt-root-directory/include/QtCore/qglobal.h}.
 
 \subsection{Producing console outputs with QDebug class}
-Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{\fdocinlinecode{cpp}{!}{QDebug}} class and\fdocinlinecode{cpp}{!}{QtMessageHandler qInstallMessageHandler(QtMessageHandler handler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better.
+Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{\fdocinlinecode{cpp}{!}{QDebug}} class and\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better.
 
 Basic syntax for using\fdocinlinecode{cpp}{!}{QDebug} is fairly simple (\autoref{listing:qdebug}).
 
@@ -59,7 +59,9 @@ qDebug() << "Print this to standard output.";
 qDebug("Print number %d.\n", 10);
 \end{fdoccode}
 
-First\fdocinlinecode{cpp}{!}{qDebug()} usage requires explicit\fdocinlinecode{cpp}{!}{<QDebug>} inclusion because operator\fdocinlinecode{cpp}{!}{<<} is used. Second usage acts as wrapper for the\fdocinlinecode{cpp}{!}{printf()} function from standard C library. You can use also\fdocinlinecode{cpp}{!}{qWarning()},\fdocinlinecode{cpp}{!}{qCritical()} and\fdocinlinecode{cpp}{!}{qFatal()} in accordance to importance of message. Default implementation halts an application if\fdocinlinecode{cpp}{!}{qFatal()} is called.
+First\fdocinlinecode{cpp}{!}{qDebug} usage requires explicit\fdocinlinecode{cpp}{!}{<QDebug>} inclusion because\fdocinlinecode{cpp}{!}{<<} operator is used. Second usage acts as wrapper for the\fdocinlinecode{cpp}{!}{printf} function from standard C library. You can use also\fdocinlinecode{cpp}{!}{qWarning},\fdocinlinecode{cpp}{!}{qCritical} or\fdocinlinecode{cpp}{!}{qFatal} functions in accordance to importance of message.
+
+Default implementation halts an application if\fdocinlinecode{cpp}{!}{qFatal} is called and uses\fdocinlinecode{cpp}{!}{std::cerr} output for printing messages.
 
 You can implement custom behavior for previous functions very simply:
 \begin{enumerate}
@@ -67,7 +69,7 @@ You can implement custom behavior for previous functions very simply:
 You need to implement global (or static) function with signature\fdocinlinecode{cpp}{!}{void (*function)(QtMsgType, const QMessageLogContext &, const QString &)}. Typical\\ implementation may look like \autoref{listing:qdebug2}.
 
 \item
-You need to assign handler to this function via\fdocinlinecode{cpp}{!}{qInstallMessageHandler()} function.
+You need to assign handler to this function via\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function.
 \end{enumerate}
 
 \begin{fdoccode}{cpp}{listing:qdebug2}{Typical printing handler for QDebug}
@@ -105,7 +107,7 @@ void debug_handler(QtMsgType type, const QMessageLogContext &placement, const QS
 }
 \end{fdoccode}
 
-Calling\fdocinlinecode{cpp}{!}{qFatal()} results in error dialog in Windows operating system (\autoref{figure:errordialog}).
+Calling\fdocinlinecode{cpp}{!}{qFatal} function results in error dialog in Windows operating system (\autoref{figure:errordialog}).
 
 \begin{figure}[ht]
 \centering\includegraphics[width=9cm]{graphics/laboratory/11-debugdialog.png}
@@ -119,5 +121,6 @@ Debugging outputs should always be written in English.
 This implementation prints out extra information which is extremely important for debugging. However, you can do whatever you want in your implementation. Storing outputs to database or sending them over network are just some possible enhancements.
 
 The is another (simpler) way of forcing Qt to format console outputs if you want to tweak just format. You may tweak\fdocinlinecode{text}{!}{QT_MESSAGE_PATTERN} build environment variable to display application name or other useful information. Head to the documentation \citep{various:qtdoc} for more information.
-
-\subsection{Working with system environment variables}
+%
+%\subsection{Working with system environment variables}
+%Major operating systems allow you to store data in the key--value pairs, so called environment variables.
