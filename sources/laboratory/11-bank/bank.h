@@ -29,7 +29,6 @@ class Bank : public QObject {
 
 	Account *m_sendingAccount;
 	Account *m_waitingAccount;
-
 };
 
 #endif // BANK_H

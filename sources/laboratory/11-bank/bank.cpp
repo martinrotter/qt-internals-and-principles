@@ -62,7 +62,9 @@ void Bank::checkAccounts() {
 void Bank::printAccounts() {
     checkAccounts();
 
+    qDebug("\n=== Bank accounts overview ===");
     foreach (Account *account, m_accounts) {
 	account->status();
     }
+    qDebug("=== Bank accounts overview ===\n");
 }

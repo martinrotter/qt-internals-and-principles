@@ -116,7 +116,7 @@ Signal--slot mechanism is the main tool to interconnect two \fdocinlinecode{cpp}
 
 \begin{description}\label{desc:sig}
 \item[What is signal?] \hfill \\
-Signal is sign, which signs occurrence of specific event that happened during method execution of particular\fdocinlinecode{cpp}{!}{QObject}-based class. In fact, specially formed method.
+Signal is sign, which signs occurrence of specific event that happened during method execution of particular\fdocinlinecode{cpp}{!}{QObject}-based class. In fact, specially formed method with arbitrary number of arguments.
 \item[What is slot?] \hfill \\
 Slot is method in the same or another class which represents natural reaction to the signal occurrence.
 \end{description}
@@ -133,7 +133,7 @@ So there is textbox which emits signals. We need to have receiver of signals too
 
 One signal (of one entity) can be connected to several slots (contained in several entities), this behavior represents 1\text{:}N relationship. Several signals can be connected to one slot (M\text{:}1 relationship). Existence of 1\text{:}1 relationship is obvious.
 
-Signal--slot mechanism does not applies just to \fdocabbrevref{GUI} elements. Every\fdocinlinecode{cpp}{!}{QObject} subclass can take advantage of it. Simple example can be file downloader class which signals progress of download.
+Signal--slot mechanism does not apply just to \fdocabbrevref{GUI} elements. Every\fdocinlinecode{cpp}{!}{QObject} subclass can take advantage of it. Simple example can be file downloader class which signals progress of download.
 
 \begin{fdocextra}
 Tiny definitions of signal and slot on page \pageref{desc:sig} correspond with terms \index{event} and \index{delegate} known from .NET-based languages. \citep[p.~200-202]{nigel:csharp}
@@ -142,15 +142,23 @@ Tiny definitions of signal and slot on page \pageref{desc:sig} correspond with t
 \paragraph{Using signal--slot mechanism}
 We are familiar with basic terms now. We are also able to subclass QObject. Let's implement very simple bank account representation. We expect that account provides us with possibility to save/withdraw money, check its status or make payments to another account.
 
-Accounts are usually managed by bank. Bank ensures us that our payments are sent to correct target accounts. Sample application can be found in\fdocinlinecode{text}{!}{sources/laboratory/11-bank} subdirectory. Let's dig into the application.
+Accounts are usually managed by bank. Bank ensures us that our payments are sent to the correct target accounts. Sample application can be found in\fdocinlinecode{text}{!}{sources/laboratory/11-bank} subdirectory. Let's dig into the application.
 
 Application contains two primary classes:\fdocinlinecode{cpp}{!}{Account} and\fdocinlinecode{cpp}{!}{Bank}. Let's start with\fdocinlinecode{cpp}{!}{Account} class (see \autoref{listing:acc-head}). This class inherits\fdocinlinecode{cpp}{!}{QObject} (lines \ref{listing:qobj1}-\ref{listing:qobj2}), thus, meta-object features (including signal--slot mechanism) are available. Slots declaration is preceded by\fdocinlinecode{cpp}{!}{slots} keyword (line \ref{listing:slots1}) with any modifier. You can have public slot as well as private slot. It's just a matter of situation. As stated earlier, slot is just method with special rights.
+
+Class \fdocinlinecode{cpp}{!}{Account} contains two signals. Their purpose is to inform connected\fdocinlinecode{cpp}{!}{QObject}-based instances (for example\fdocinlinecode{cpp}{!}{Bank} instances) about money flow within the account. Signals are placed in their own section (line \ref{listing:signals1}) preceded by\fdocinlinecode{cpp}{!}{signals} keyword.
+
+\begin{fdocextra}
+Quick look inside the Qt\fdocinlinecode{text}{!}{qglobal.h} file tells us that\fdocinlinecode{cpp}{!}{signals} keyword is synonym for\fdocinlinecode{cpp}{!}{public} keyword. Thus, signals are just public methods. This observation gets clarified on page \pageref{section:mocfun} in chapter \nameref{section:mocfun}.
+\end{fdocextra}
 
 \begin{fdoccode}{cpp}{listing:acc-head}{Account class design}
 class Account : public QObject {(*@\label{listing:qobj1}@*)
 	Q_OBJECT(*@\label{listing:qobj2}@*)
 
     public:
+		// No copy constructor or assignment operator is declared,
+		// just simple constructor.
 		explicit Account(const QString &owner,
 						int deposit,
 						Bank *parent);
@@ -168,12 +176,12 @@ class Account : public QObject {(*@\label{listing:qobj1}@*)
 		// Customer can be either bank or account owner.
 		void saveMoney(int sum);(*@\label{listing:slots2}@*)
 
-    signals:
+    signals:(*@\label{listing:signals1}@*)
 		// Emitted when money is withdrawn successfully from this account.
 		void withdrawn(int sum);
 
 		// Emitted when money is saved successfully into this account.
-		void saved(int sum);
+		void saved(int sum);(*@\label{listing:signals2}@*)
 
     private:
 		QString m_owner;
@@ -181,5 +189,96 @@ class Account : public QObject {(*@\label{listing:qobj1}@*)
 };
 \end{fdoccode}
 
+Second biggest class is the\fdocinlinecode{cpp}{!}{Bank} class (see \autoref{listing:bank-head}). Primary purpose of this class is to manage underlying accounts and make sure money transfers among them are okay.
+
+\begin{fdoccode}{cpp}{listing:bank-head}{Bank class design}
+class Bank : public QObject {
+	Q_OBJECT
+
+    public:
+		explicit Bank(QObject *parent = 0);
+		void printAccounts();
+		void transfer(const QString &from, const QString &to, int sum);
+
+    signals:
+		// Emitted both accounts are ready for money transfer and
+		// money should be withdrawn from the first account.
+		void withdrawalWanted(int sum);
+
+    protected:
+		void checkAccounts();
+		Account *getAccountByName(const QString &name);
+
+    protected slots:
+		void serveAccount(int sum);
+
+	private:
+		QList<Account*> m_accounts;
+
+		Account *m_sendingAccount;
+		Account *m_waitingAccount;
+};
+\end{fdoccode}
+
+Money transfer is managed by\fdocinlinecode{cpp}{!}{transfer(const QString &from, const QString &to, int sum)} method (\autoref{listing:bank-tran}). Method checks for existence of both accounts and some other tasks and, finally, estabilishes two signal--slot connections (lines \ref{listing:conn1}-\ref{listing:conn2}).
+
+First connection says: \enquote{If bank wants to withdraw the money from the first account, then account must really withdraw the money.} Second connection says: \enquote{If the money was withdrawn from the first account, then bank should finalize money transfer by sending the money to the second account.}
+
+Bank starts the money transfer procedure by trying to withdraw the money from the first account (line \ref{listing:conn3}).
+
+\begin{fdoccode}{cpp}{listing:bank-tran}{Money transfer between accounts}
+void Bank::transfer(const QString &from, const QString &to, int sum) {
+    if (sum <= 0) {
+		qDebug("You cannot transfer sum %d USD.", sum);
+		return;
+    }
+
+    checkAccounts();
+
+    Account *acc_from;
+    Account *acc_to;
+    if ((acc_from = getAccountByName(from)) == NULL) {
+		qDebug("Source account is not registered in this bank.");
+		return;
+    }
+    if ((acc_to = getAccountByName(to)) == NULL) {
+		qDebug("Destination account is not registered in this bank.");
+		return;
+    }
+
+    m_sendingAccount = acc_from;
+    m_waitingAccount = acc_to;
+
+    connect(this, &Bank::withdrawalWanted, acc_from, &Account::withdrawMoney);(*@\label{listing:conn1}@*)
+    connect(acc_from, &Account::withdrawn, this, &Bank::serveAccount);(*@\label{listing:conn2}@*)
+
+    emit withdrawalWanted(sum);(*@\label{listing:conn3}@*)
+}
+\end{fdoccode}
+
+Money transfer gets done by serving the target account (method\fdocinlinecode{cpp}{!}{serveAccount(int sum)}) but there still exists connection between the bank and the source account. This connection needs to be destroyed after the transfer completes. It is done in the same method.
+
+\paragraph{Explanations}
+We saw typical\fdocinlinecode{cpp}{!}{connect(....)} method usage on line \ref{listing:conn1} of \autoref{listing:bank-tran} it corresponds with this generic notation:
+\begin{lstlisting}[firstnumber=1,language=cpp]
+connect(source-object, source-signal, target-object, target-slot);
+\end{lstlisting}
+This is basic syntax for connecting two objects. First and third arguments are pointers to both objects. Second argument is signature of the source signal in the form\fdocinlinecode{cpp}{!}{&Class::signal}. Last argument is slot signature in the same form.
+
+Both signal and slot have to have the same number of mutually compatible arguments which are passed to the slot when connected signal is emitted. Money sum was that argument in previous example.
+
+%\vfill
+% použití lambda výratu
+% property system
+
 \subsubsection{QObject instance life cycle}
-% Q_OBJECT, QObject, object model, metaobject compiler, property system
+It's good to know something about events that happen during the life cycle of each and every\fdocinlinecode{cpp}{!}{QObject}-based instance.
+
+\paragraph*{Geniture}
+
+\paragraph*{Lifetime}
+
+\paragraph*{Forfeiture}
+
+
+\subsubsection{Meta-object compiler and his functions}\label{section:mocfun}

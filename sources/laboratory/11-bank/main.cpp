@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
     bank.transfer("Carl", "Martin", 2000);
     bank.printAccounts();
 
+    bank.transfer("Carl", "Martin", 25000);
+    bank.printAccounts();
+
     qDebug("Application exit.");
     return a.exec();
 }
