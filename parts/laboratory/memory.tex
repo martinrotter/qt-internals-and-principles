@@ -1,3 +1,12 @@
 \section{Memory management}\label{section:memorym}
-% počítání referencí
-% stromy QObjectů
+Qt brings many new features into standard \cpp memory management. We can stick with plain\fdocinlinecode{cpp}{!}{new} and\fdocinlinecode{cpp}{!}{delete} operator. Qt features are, however, highly addictive and useful. We have already heard about object trees (page \pageref{section:model}) which are real base for Qt memory management because tree structure is quite natural. Therefore, object trees are used much and many memory leaks is fixed with them.
+
+Each object tree has root object and we (as programmers) are responsible for deleting this root from memory in the right time as there is no other parent object which gets this done for us.
+
+\subsection{Copy-on-write}
+Qt uses copy-on-write\index{copy-on-write} technique for managing Qt classes data. If you copy\fdocinlinecode{cpp}{!}{QString} instance, then these two instances point to the same textual data, unless you try to modify contents of any instance. Shared data are then copied to new place and each instance has its own data. Modifications are done after. 
+
+\subsection{Safe pointers}
+Pointers are both great and evil. They offer us great possibilities, \eg they are used as thin method parameters. Pointers are also cause of the most of application crashes. We often use pointers which point to 0. Qt offers better pointers. They deal with their invalidity and ensuring that pointer is used only if it points to existing object. Lets introduce\fdocinlinecode{cpp}{!}{QPointer} class. \citep[QPointer class]{various:qtdoc}
+
+\fdocinlinecode{cpp}{!}{QPointer} does one simple job, it sets pointer to 0 if it's deleted. This helps a lot because you can check if pointer is valid by comparing it to 0. This class is pretty straightforward, look at documentation for more information.

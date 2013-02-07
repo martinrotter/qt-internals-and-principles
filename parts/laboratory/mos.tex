@@ -22,7 +22,7 @@ This approach makes the compilation little slower because an extra tool has to b
 \end{description}
 
 \subsection{Qt meta-object system}
-Qt uses compilation-based reflection due to \cpp language limitations. Each object created within Qt meta-object system is automatically equipped with shadow meta-object. This meta-object allows you to do amazing things with that particular object. You can obtain its class name, check if this object's class inherits another class, get name of the superclass or names of its methods. You can even call methods by their names stored in a string (\autoref{listing:invoke})! Complete example can be found in\fdocinlinecode{text}{!}{sources/laboratory/08-invoke} directory.
+Qt uses compilation-based reflection\index{reflection} due to \cpp language limitations. Each object created within Qt meta-object system\index{meta-object system} is automatically equipped with shadow meta-object\index{meta-object}. This meta-object allows you to do amazing things with that particular object. You can obtain its class name, check if this object's class inherits another class, get name of the superclass\index{superclass} or names of its methods. You can even call methods by their names stored in a string (\autoref{listing:invoke})! Complete example can be found in\fdocinlinecode{text}{!}{sources/laboratory/08-invoke} directory.
 
 \begin{fdoccode}{cpp}{listing:invoke}{String-based method invokation in Qt meta-object system}
 #include <QDebug>
@@ -53,12 +53,12 @@ Not all classes in a Qt-based application take part in the meta-object system. Y
 \end{enumerate}
 
 \subsection{QObject class -- the cradle of meta-objects}
-\fdocinlinecode{cpp}{!}{QObject} class is the very base class for each meta-object-system-enabled class and provides many marvelous features. It is good to use\fdocinlinecode{cpp}{!}{QObject} as the base class even for your custom classes within any Qt application because there is one particularly amazing feature -- the automatic memory management provided by \nameref{section:model}.
+\fdocinlinecode{cpp}{!}{QObject}\index{QObject} class is the very base class for each meta-object-system-enabled class and provides many marvelous features. It is good to use\fdocinlinecode{cpp}{!}{QObject} as the base class even for your custom classes within any Qt application because there is one particularly amazing feature -- the automatic memory management provided by \nameref{section:model}.
 
 \subsubsection{Qt object trees}\label{section:model}
 There are some rules that apply to the way\fdocinlinecode{cpp}{!}{QObject} should be inherited. Copy constructor and assignment operator mustn't be implemented in inheriting class. Reasons are very simple:
 \begin{enumerate}
-\item Each and every\fdocinlinecode{cpp}{!}{QObject} instance stores pointer to its parent\fdocinlinecode{cpp}{!}{QObject} instance. This results in instance tree hierarchy (\autoref{figure:modeltree}). Should copy of\fdocinlinecode{cpp}{!}{QObject} instance point to the parent of the original\fdocinlinecode{cpp}{!}{QObject} instance?
+\item Each and every\fdocinlinecode{cpp}{!}{QObject} instance stores pointer to its parent\fdocinlinecode{cpp}{!}{QObject} instance. This results in instance tree\index{tree hierarchy} hierarchy (\autoref{figure:modeltree}). Should copy of\fdocinlinecode{cpp}{!}{QObject} instance point to the parent of the original\fdocinlinecode{cpp}{!}{QObject} instance?
 
 Consider situation in the \autoref{figure:samenames}. \enquote{George} instance was cloned and placed in the hierarchy. In general, there is no rule on where to place new copy in the tree hierarchy. It could be positioned as the sibling of the original object. New \enquote{George} is the sibling of the original \enquote{George}. Problem becomes clear when the original \enquote{George} instance is freed from memory. All its children are removed too, in other words, whole subtree with \enquote{George} as the root gets cleared from application memory but another (cloned) \enquote{George} remains untouched. Is this desired behavior? In some situations it could be but sometimes it's not.
 
@@ -144,7 +144,7 @@ We are familiar with basic terms now. We are also able to subclass QObject. Let'
 
 Accounts are usually managed by bank. Bank ensures us that our payments are sent to the correct target accounts. Sample application can be found in\fdocinlinecode{text}{!}{sources/laboratory/11-bank} subdirectory. Let's dig into the application.
 
-Application contains two primary classes:\fdocinlinecode{cpp}{!}{Account} and\fdocinlinecode{cpp}{!}{Bank}. Let's start with\fdocinlinecode{cpp}{!}{Account} class (see \autoref{listing:acc-head}). This class inherits\fdocinlinecode{cpp}{!}{QObject} (lines \ref{listing:qobj1}-\ref{listing:qobj2}), thus, meta-object features (including signal--slot mechanism) are available. Slots declaration is preceded by\fdocinlinecode{cpp}{!}{slots} keyword (line \ref{listing:slots1}) with any modifier. You can have public slot as well as private slot. It's just a matter of situation. As stated earlier, slot is just method with special rights.
+Application contains two primary classes:\fdocinlinecode{cpp}{!}{Account} and\fdocinlinecode{cpp}{!}{Bank}. Let's start with\fdocinlinecode{cpp}{!}{Account} class (see \autoref{listing:acc-head}). This class inherits\fdocinlinecode{cpp}{!}{QObject} (lines \ref{listing:qobj1}-\ref{listing:qobj2}), thus, meta-object features (including signal--slot mechanism) are available. Slots declaration is preceded by\fdocinlinecode{cpp}{!}{slots} keyword (line \ref{listing:slots1}) with any modifier. You can have public slot as well as private slot. It's just a matter of situation. As stated earlier, slot is just method with special behavior, it's able to react to signal occurrence.
 
 Class \fdocinlinecode{cpp}{!}{Account} contains two signals. Their purpose is to inform connected\fdocinlinecode{cpp}{!}{QObject}-based instances (for example\fdocinlinecode{cpp}{!}{Bank} instances) about money flow within the account. Signals are placed in their own section (line \ref{listing:signals1}) preceded by\fdocinlinecode{cpp}{!}{signals} keyword.
 
@@ -220,7 +220,7 @@ class Bank : public QObject {
 };
 \end{fdoccode}
 
-Money transfer is managed by\fdocinlinecode{cpp}{!}{transfer(const QString &from, const QString &to, int sum)} method (\autoref{listing:bank-tran}). Method checks for existence of both accounts and some other tasks and, finally, estabilishes two signal--slot connections (lines \ref{listing:conn1}-\ref{listing:conn2}).
+Money transfer is managed by\fdocinlinecode{cpp}{!}{void transfer(const QString &from, const QString &to, int sum)} method (\autoref{listing:bank-tran}). Method checks for existence of both accounts and some other tasks and, finally, establishes two signal--slot connections (lines \ref{listing:conn1}-\ref{listing:conn2}).
 
 First connection says: \enquote{If bank wants to withdraw the money from the first account, then account must really withdraw the money.} Second connection says: \enquote{If the money was withdrawn from the first account, then bank should finalize money transfer by sending the money to the second account.}
 
@@ -256,7 +256,7 @@ void Bank::transfer(const QString &from, const QString &to, int sum) {
 }
 \end{fdoccode}
 
-Money transfer gets done by serving the target account (method\fdocinlinecode{cpp}{!}{serveAccount(int sum)}) but there still exists connection between the bank and the source account. This connection needs to be destroyed after the transfer completes. It is done in the same method.
+Money transfer gets done by serving the target account, which is done by calling method\fdocinlinecode{cpp}{!}{void serveAccount(int sum)}, but there still exists connection between the bank and the source account. This connection needs to be destroyed after the transfer completes so that another money transfer can be realized.
 
 \paragraph{Explanations}
 We saw typical\fdocinlinecode{cpp}{!}{connect(....)} method usage on line \ref{listing:conn1} of \autoref{listing:bank-tran} it corresponds with this generic notation:
@@ -267,18 +267,57 @@ This is basic syntax for connecting two objects. First and third arguments are p
 
 Both signal and slot have to have the same number of mutually compatible arguments which are passed to the slot when connected signal is emitted. Money sum was that argument in previous example.
 
-%\vfill
-% použití lambda výratu
-% property system
+There are other kinds of signal--slot connection. You can connect signal to another signal too:
+\begin{lstlisting}[firstnumber=1,language=cpp]
+connect(source-object, source-signal, target-object, target-signal);
+\end{lstlisting}
+Target signal is emitted when source signal is emitted. You can forward signals this way. This is primarily used in classes which form some kind of sublayer between to other layers which usually run in different threads.
 
-\subsubsection{QObject instance life cycle}
+\paragraph{Signals and slots with regard to meta-object compiler}\label{section:mocfun}
+There is a need of extra meta-object compiler job before the actual \cpp code compilation (see \autoref{figure:qtpr} on page \pageref{figure:qtpr}). \fdocabbrevref{moc} goes through every\fdocinlinecode{cpp}{!}{QObject}-based class in project and seeks signals and slots. If it founds any, then:
+\begin{enumerate}
+\item New source file is created, this file is named\fdocinlinecode{text}{!}{moc_original-name.cpp}. This file contains meta-information about all Qt entities from the original source file.
+\item All signals are supplied with method bodies which are written to the\fdocinlinecode{text}{!}{moc_*.cpp} file.
+\item Each slot/signal obtains unique integer id, starting from 0. So if class contains two signals and two slots, then their ids are $0,1,2,3$.
+\end{enumerate}
+
+Qt creates new meta-method which maps external method calls to signal/slot calls if signal is emitted or slot called. This mettod has signature\fdocinlinecode{cpp}{!}{int Account::qt_metacall(QMetaObject::Call _c, int _id, void **_a)} and its typical body looks like the one in \autoref{listing:qmetacall}. This code comes from Bank example, see\fdocinlinecode{text}{!}{sources/laboratory/11-bank}.
+
+\begin{fdoccode}{cpp}{listing:qmetacall}{Signal/slot call entry point}
+int Account::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 4)(*@\label{listing:invoke2}@*)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 4;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 4)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 4;
+    }
+    return _id;
+}
+\end{fdoccode}
+
+This method is called if signal or slot of particular\fdocinlinecode{cpp}{!}{Account} instance should be invoked. Note that\fdocinlinecode{cpp}{!}{Account} offers two signals and two slots. Wanted operation checked in according to variable\fdocinlinecode{cpp}{!}{_c}. It states if signal/slot really needs to be invoked or if some other situation occurred. In our case, let's suppose that signal/slot should be called. Execution processes to line \ref{listing:invoke2}. Id of wanted element is checked on line and if id is less than four, then slot or signal is executed by\fdocinlinecode{cpp}{!}{void Account::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)} method.
+
+Signals and slots are compile time created entities but connections are not. There is no need to dig into technical aspects of connection. Generally, connection is collection of two pointers (source object and target object) and names of signals or slots. Signals and slots are invoked by name in run time. This was mentioned few pages back. Static method\fdocinlinecode{cpp}{!}{bool QMetaObject::invokeMethod(....)} is used to do that. \citep[QMetaObject class]{various:qtdoc}  You will learn something more about connections in chapter \nameref{section:thread} (page \pageref{section:thread}).
+
+
+% TODO: použití lambda výratu
+% TODO: property system
+
+\subsubsection{QObject instance lifetime}
 It's good to know something about events that happen during the life cycle of each and every\fdocinlinecode{cpp}{!}{QObject}-based instance.
 
 \paragraph*{Geniture}
+\fdocinlinecode{cpp}{!}{QObject}-based object is born on the stack or on the heap. There is no real difference between stacked and heaped object from Qt perspective. New objects are added to one of trees (see \nameref{section:model} on page \pageref{section:model}) if they are created with valid parent pointer.
 
 \paragraph*{Lifetime}
+Object is used as any other \cpp object/class. It can take part in many signal/slot connections.
 
 \paragraph*{Forfeiture}
-
-
-\subsubsection{Meta-object compiler and his functions}\label{section:mocfun}
+Stacked objects are freed automatically if they are out of scope. This usually happens if method returns. Heaped objects are freed manually or by object tree destruction. All established connections are disconnected and signal\fdocinlinecode{cpp}{!}{void	destroyed(QObject *obj = 0)} is emitted just before object gets deleted from memory. You can connect other objects to this signal and delete them if signals occurs. You can chain several object trees this way.

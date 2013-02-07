@@ -2,15 +2,57 @@
 Events do not  Generally, events are reactions for some other actions. In software, actions can be divided into to categories:
 \begin{description}
 \item[HUMAN-TRIGGERED ACTIONS] \hfill \\
-This type of actions represents natural notion of what events are. Mouse button clicks, keyboard key presses or perhaps cursor movements are human-triggered events. Each of them disposes certan properties, \eg mouse-click produces coordinates of click or key push produces the pressed character or perhaps set of characters if key sequence is used.
-\item[APPLICATION-TRIGGERED ACTIONS]
-ss
+This type of actions represents natural notion of what events are. Mouse button clicks, keyboard key presses or perhaps cursor movements are human-triggered events. Each of them disposes certain properties, \eg mouse-click produces coordinates of click or key push produces the pressed character or perhaps set of characters if key sequence is used.
+\item[APPLICATION-TRIGGERED ACTIONS]  \hfill \\
+Are not triggered directly by application user. Typical application-triggered event is painting event which is responsible for drawing \fdocabbrevref{GUI} elements on the screen. User starts this event indirectly by manipulating application user interface.
 \end{description}
+
+Event is consequence of occurrence of certain action in running application. There are plenty of various types of events. Typical event might be key-press-event or perhaps mouse-click-event or repaint-gui-event.
+
+Each\fdocinlinecode{cpp}{!}{QObject} subclass has ability to send events. Events are usually distributed by one entity which manages whole event process. This entity \enquote{sits} on the top of event loop. Event loop is part of application execution which encapsulates all events sent by objects inside the loop. Loop goes from time to time through all raised events from its underlying objects and delivers those events to target objects. Event loop structure looks similar to one in \autoref{listing:eventloop2}. Event loop exits if \enquote{exit} signal occurs.
+
+Each Qt application has one main global event loop with\fdocinlinecode{cpp}{!}{QApplication} instance as managing entity (entity which caused the creation of the event loop). Consider \autoref{listing:eventloop} too. Call on line \ref{listing:loop1} of \autoref{listing:eventloop} results in entering to global event loop, so that events from application objects, \eg from main application window, can be processed.
+
+
+\begin{fdoccode}{cpp}{listing:eventloop}{Global event loop}
+int main(int argc, char *argv[]) {
+    QApplication a(argc, argv);
+    
+    // Display main application window here.
+    .............
+
+	// int QApplication::exec() triggers global event loop.
+    return a.exec();(*@\label{listing:loop1}@*)
+}
+\end{fdoccode}
+
+\begin{fdoccode}{cpp}{listing:eventloop2}{Typical event loop structure}
+while() {
+	if (exit) {
+		return status;
+	}
+	process_all_pending_events;
+}
+\end{fdoccode}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[angle=-90,width=11cm]{graphics/laboratory/15-eventloop.pdf}
+\caption{Typical event loop}\label{figure:eventloop}
+\end{figure}
+
+Let's take a look at \autoref{figure:eventloop} which displays typical structure of Qt application.  Arrow indicates position of supervising entity (entity which triggered event loop). If\fdocinlinecode{cpp}{!}{QSystemTrayIcon} notices that certain event happened in it,\fdocinlinecode{cpp}{!}{QApplication} instance is notified about the situation and is given information about the situation and about the sender of event. It appends event to its internal list of unsolved events.
+
+\fdocinlinecode{cpp}{!}{QApplication} event loop iterates and finds new unsolved events which marked as solved and sent to their senders.\fdocinlinecode{cpp}{!}{QSystemTrayIcon} then \textit{handles} the event and responds with expected behavior which finally concludes life of this event.
+
+Handling event means calling \textit{event handler} -- some kind of special method. If you handle some events in one object, sometimes you need to \textit{propagate} the same event in another object too. For example if you move use\fdocinlinecode{cpp}{!}{QButton} instance by mouse, then paint-event is raised, because\fdocinlinecode{cpp}{!}{QButton} needs to be repainted on the screen, and this event is propagated to parent object which is usually application window which needs to redraw itself too. Some events are propagated and other ones are not.
+
 
 
 % metoda QObject::startTimer...událost dále customEvent
 % diagram cyklu
 % deleteLater vs delete
+% qapplication event loop
 
 \subsection{Event filters}
 
