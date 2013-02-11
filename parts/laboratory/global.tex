@@ -1,4 +1,4 @@
-\section{Global Qt functions and macros}
+\chapter{Global Qt functions and macros}
 Qt has its functionality separated into modules\index{module}. There is one special module (incarnated in QtCore module) called QtGlobal\index{QtGlobal}. QtGlobal is contained within single header file\fdocinlinecode{text}{!}{qglobal.h}. QtGlobal contains following:
 \begin{itemize}
 \item
@@ -34,7 +34,7 @@ orignal type name & Qt type name \\
 \end{center}
 \end{table}
 
-\subsection{Fundamental functions}
+\section{Fundamental functions}
 QtGlobal offers very fundamental functions for value-based comparing and other basic tasks. These functions (often) wrap similar functions from standard C/\cpp library\index{standard library}. Most used functions are:
 \begin{description}
 \item[T qAbs(const T \& value)] \hfill \\
@@ -49,7 +49,7 @@ Mathematically rounds input paramater either to 64/32 bit integer.
 
 All functons can be found in\fdocinlinecode{text}{!}{/qt-root-directory/include/QtCore/qglobal.h}.
 
-\subsection{Producing console outputs with QDebug class}
+\section{Producing console outputs with Qt}
 Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{QDebug} class and\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better.
 
 Basic syntax for using\fdocinlinecode{cpp}{!}{QDebug} is fairly simple (\autoref{listing:qdebug}).

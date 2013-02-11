@@ -1,5 +1,5 @@
 \fdocabbrevdeclare{KDE}{KDE}{K Desktop Environment}
-\stdsection{Foreword}
+\chapter{Foreword}
 Qt framework is one of the greatest libraries ever made. You probably use it and you don't even know about it. If you use Skype\index{Skype} (for online communication) or \fdocabbrevref{KDE}\index{KDE}, then you use Qt too, because those applications are based on Qt.
 
 Skype uses just graphical interface made in Qt but \fdocabbrevref{KDE} is totally based on Qt as it uses not just graphical interface from Qt but other components too.
@@ -12,7 +12,7 @@ As years passed by, Qt was more and more robust, \fdocabbrevref{KDE} made its pr
 
 Luckily, Qt 5 appeared, bringing us some new exciting features, giving itself a chance to compete its opponents in category of mobile development toolkits. If we add rock-solid desktop features, we have versatile and stable base to build on.
 
-\subsection{What is Qt?}\label{section:what}
+\section{What is Qt?}\label{section:what}
 As said previously, Qt is framework, toolkit or, simply, set of libraries. It has very roots in Norway. Original creators are Haavard Nord\index{Haavard Nord} and Eirik Chambe-Eng\index{Eirik Chambe-Eng}. Basically Qt framework consists of:
 \begin{itemize}
 \item set of libraries written in \cpp
@@ -25,14 +25,14 @@ As said previously, Qt is framework, toolkit or, simply, set of libraries. It ha
 
 So as you see, Qt is not just collection of header/source files. It's completed with a variety of other stuff. You will learn more about Qt structure in \autoref{section:qtstructure}.
 
-\subsection{Companies behind Qt}
+\section{Companies behind Qt}
 Qt lives for more than two decades and its owners changed accordingly. Haavard Nord and Eirik Chambe-Eng assembled themselves in a team and called it Quasar Technologies. Later company was renamed to Trolltech. This company led Qt development for period of 12 exciting years, preffering desktop development.
 
 \fdocabbrevdeclare{POSIX}{POSIX}{Portable Operating System Interface}
 
 But as we know, things have changed and smartphones became massively popular lately. That's why Trolltech was acquired by Nokia. It was obvious that Nokia can bring something new to Qt as it is leading company in smartphones world production. Nokia promised that they would keep Qt open-souce and made it available via public Git\footnote{Git is revision control system originally created to support Linux kernel development. Founding author is well-know Linus Torvalds\index{Linus Torvalds}. Git is multi-platform and runs on Windows, Linux or Mac OS X. It's \fdocabbrevref{POSIX}-compatible.}\index{Git} repository. But Nokia somehow was not able to utilize potential of Qt and sold it to another company called Digia.
 
-\subsubsection{Licensing}
+\subsection{Licensing}
 Qt uses two separate licenses:
 \begin{enumerate}
 \item \textbf{Commercial license}, which provides you (as indie developer) with possibility to produce \textit{closed-source} (proprietary) or \textit{open-source} applications, you can do whatever you want with your copy of Qt. This kind of license is usually sold per particular platform and it is generally rather expensive. It may cost around several thousands US dollars and this price may get even higher if you buy license for more platforms or if you have bigger development team. This license is usually bought by developers who want to sell their software for money and/or stay closed-source, otherwise open-source license is much better choice.
@@ -45,7 +45,7 @@ Commercial license grants you even more rights. You can link Qt statically to yo
 Licenses have always been quite a problem for Qt framework. Commercial license was fine. But non-commercial was not. Qt used its own license before GNU LGPL and GNU GPL were chosen as primary ones. Problem was that Q Public License\index{Q Public License} wasn't GPL compatible. This problem became much more obvious when \fdocabbrevref{KDE} established itself as one the most favored desktop environments, gaining milions of users. They were naturally afraid of KDE becoming the piece of proprietary software, which was more or less possible with Q Public License. Luckily this problem got solved by releasing Qt under GNU GPL.
 
 \fdocabbrevdeclare{OOP}{OOP}{Object-oriented programming}
-\subsection{C plus plus as base stone}\label{subsection:cpp}
+\section{C plus plus as base stone}\label{subsection:cpp}
 \cpp is known as general-purpose programming language, based on famous C. It was created around 1979 by Bjarne Stroustrup\index{Bjarne Stroustrup}, bringing in many \fdocabbrevref{OOP} features such as implementation of classes, polymorphism, entity overloading or inheritance. You can find very tiny example of basic techniques in \autoref{listing:sampleoop}.
 
 \begin{fdoccode}{cpp}{listing:sampleoop}{Basic \fdocabbrevref{OOP} techniques in \cpp}
@@ -245,18 +245,20 @@ When it comes to code portability (same as multi-platformity), \cpp leaves its a
 Indeed, \cpp might be missing some very useful language constructs, which are quite common in other (\eg functional, logic or perhaps declarative) programming paradigms. Many features emerged in \cpp11 revision, however.
 \end{description}
 
-\subsubsection{Version 11 and its enhancements}
+\vfill
+
+\subsection{Version 11 and its enhancements}
 \cpp programming language was, for the first time, standardized in 1998. This version is known as \cpp98 and if someone talks about \cpp, he probably has this version in mind. Programming was changing depending on time and so \cpp had to change to catch new trends and demands of its users.
 
 \cpp11 brought many new features, eliminating some of its annoyances. You can read about \cpp11 in a massively extensive \citep{various:cppstandard} or goe through its finest new properties right now. It is recommended to know something about \cpp11 as its support is turned on in Qt 5 by default on supported compilers.
 
-\paragraph{Basic C plus plus 11 information}
+\subsubsection{Basic C plus plus 11 information}
 \cpp11 is source code compatible with C and with \cpp98. It means that valid C (or \cpp98) source code is valid \cpp11 code too. Inprovements in \cpp were done in two categories: language core and standard library.
 
-\subparagraph{Language core improvements}
+\paragraph{Language core improvements}
 Syntax of \cpp was always considered to be evil, which is partially true, because \cpp offers huge collection of syntactical constructs and sugar, compared to other well-known programming languages. Moreover, \cpp11 adds new language constructs.
 
-\subparagraph*{Compile time constants}
+\paragraph*{Compile time constants}
 In \cpp98, you cannot write some thing like:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 int happy_number() {
@@ -274,7 +276,7 @@ int *array = new array[10];
 array[happy_number()] = happy_number();
 \end{lstlisting}
 
-\subparagraph*{Initializer lists}
+\paragraph*{Initializer lists}
 Consider having the custom class which encapsulates\fdocinlinecode{cpp}{!}{std::list} and perhaps adds some functionality:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 class CustomList {
@@ -312,12 +314,10 @@ class CustomList {
 CustomList my_list_instance = {1, 2, 3, 4, 5, 6, 7};
 \end{fdoccode}
 
-\subparagraph*{Clever for-loops}
+\paragraph*{Clever for-loops}
 Careful reader certainly noticed strange notation of for-loop in \autoref{listing:initializer} on line \ref{listing:forloop}. This new for-loop syntax is known as \textit{range-based for-loop}.\footnote{This kind of for-loop is available in Qt too, as we will see later.} It's just syntactical sugar. This loop works for all containers in standard library as well as for classic C-style arrays. Furthermore, all custom containers defining its iterators are supported too.
 
-\vfill
-
-\subparagraph*{Type deduction}
+\paragraph*{Type deduction}
 \cpp is statically typed language. So you, as programmer, have to know and mark the type of each and every variable you declare. You basically write:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 int variable_1 = 15;
@@ -330,7 +330,7 @@ auto *variable_2 = new std::list<int>();
 \end{lstlisting}
 Compiler deduces type of each \enquote{automatic} variable during compilation. This feature is useful when that particular type is hard to write.\footnote{\cpp programmers used to use\fdocinlinecode{cpp}{!}{typedef} to \enquote{clone} types and assign shorter names to them.} You can use\fdocinlinecode{cpp}{!}{auto} in every thinkable situation as compiler does type checking anyway. Automatic type deduction works for pointer types too.
 
-\subparagraph*{Lambda expressions}
+\paragraph*{Lambda expressions}
 Well, lambda expressions were the most expected feature. Known from functional languages (\eg Common Lisp, Scheme), they rapidly penetrated even object-oriented programming. Lambda expressions\index{lambda expression} are basically function objects. They can have input parameters and return values.
 
 Lambdas are functions which are defined within another function, thus having no identifier. Typical lambda expression looks like this:
@@ -384,25 +384,25 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 \end{fdoccode}
-Lambda expression make huge impact on Qt 5.
+Lambda expressions make huge impact on Qt 5.
 
-\subparagraph*{Null pointers}\index{null}\index{pointer}
+\paragraph*{Null pointers}\index{null}\index{pointer}
 It is quite common to type something like\fdocinlinecode{cpp}{!}{int *variable = NULL} in \cpp03. Let's expand\fdocinlinecode{cpp}{!}{NULL}. In most cases, the result is\fdocinlinecode{cpp}{!}{#define NULL ((void *)0)}. So\fdocinlinecode{cpp}{!}{NULL} is literally \enquote{the pointer pointing to nothing of any possible type.}
 
 Problem occurs if\fdocinlinecode{cpp}{!}{NULL} is defined as $0$. Troubles might appear when overloaded function gets called with such a\fdocinlinecode{cpp}{!}{NULL}. It's not obvious if\fdocinlinecode{cpp}{!}{function(int)} or\fdocinlinecode{cpp}{!}{function(int*)} gets called by\fdocinlinecode{cpp}{!}{function(variable)}. It might be the first function on one system or second one on another system.
 
 \cpp11 implements new keyword\fdocinlinecode{cpp}{!}{nullptr} wich is always evaluated to correct value.
 
-\subparagraph{Standard library improvements}\index{standard library}
+\paragraph{Standard library improvements}\index{standard library}
 Standard library has always been quite tiny. It included just necessary classes, nothing special. But time goes forward, so that standard library must too. Number of fine classes were added.
 
-\subparagraph*{Threading}\index{thread}
+\paragraph*{Threading}\index{thread}
 Finally, threading was introduced within the standard library. This threading subsystem should not depend on operating system threading implementation. But threading-related stuff in Qt depends on specific classes from operating system (pthreads on Linux)\index{pthreads}\index{Linux} and work really fine. So these standardized threading facilities are not so important for ordinary Qt user.
 
-\subparagraph*{Tuples (pairs)}\index{tuple}
+\paragraph*{Tuples (pairs)}\index{tuple}
 Good bonus for every \cpp programmer. No need to use \nth{3} party tuples implementations. More classes are new in the standard library, look at \citep{various:cppstandard} for more.
 
-\subsection{Qt components}\label{section:components}
+\section{Qt components}\label{section:components}
 Qt consists of libraries, tools and other supplemental software. You have already seen very brief list of Qt components in \autoref{section:what}. Libraries themselves are divided into so-called \textit{modules}\index{modules}.\footnote{You are not familiar with modules yet. Module is simply collection of related classes.} You can learn more about modules in \autoref{section:qtstructure}. Let's look into Qt library collection more thoroughly. Qt library collection contains these main components:
 \begin{enumerate}
 \item Tools for \fdocabbrevref{GUI} design and implementation consisting of user interface designer (QtDesiger) and user interface classes (known as QtWidgets and QtGui).
@@ -419,7 +419,7 @@ Qt consists of libraries, tools and other supplemental software. You have alread
 
 Some parts from this (not-so-complete) list will be examined deeply, some won't.
 
-\subsubsection{Supported platforms}
+\subsection{Supported platforms}
 Qt 5 is multi-platform framework and support of various operating systems and platforms is one if its key features if now the biggest one. Supported operating systems are:
 \begin{itemize}
 \item Windows ($+$ Windows Embedded Compact)
@@ -430,7 +430,7 @@ Qt 5 is multi-platform framework and support of various operating systems and pl
 \end{itemize}
 Qt is ported to even more operating systems but those ports lack quality and completeness.
 
-\subsubsection{Qt 5 additions}
+\subsection{Qt 5 additions}
 Qt 5 concetrates on using modern technologies for painting user interfaces and introduces many other tweaks and improvements:
 \begin{itemize}
 \item
@@ -468,7 +468,7 @@ New multi-platform user interface style called Fusion is available (\autoref{fig
 \caption{Qt Fusion style example}\label{figure:fusion}
 \end{figure}
 
-\subsection{Getting and installing Qt}
+\section{Getting and installing Qt}
 There are basically three ways of obtaining Qt framework:
 \begin{enumerate}
 \item You have bought commercial Qt license so you can use specific Qt packages provided by Digia.
@@ -480,7 +480,7 @@ Qt can be downloaded as executable installer file which containes binaries preco
 
 Qt framework versions gets released precompiled for certain compilers only. Linux releases are meant to work with \fdocabbrevref{GCC}, Windows releases are usually precompiled by \fdocabbrevref{MSVC}. Qt framework with MinGW support is released from time to time too.
 
-\subsubsection{Installing Qt on Windows}
+\subsection{Installing Qt on Windows}
 %% instalace na windows a linuxu
 Qt installation on Windows is fairly straightforward if binaries are available. All you need to do is obtain the setup executable file and follow instructions. Some troubles might occur, though.
 
@@ -503,7 +503,7 @@ Paths within the PATH variable are separated by semicolons. Typical content of P
 \end{fdoccode}
 \end{enumerate}
 
-\subsubsection{Installing Qt on Linux}
+\subsection{Installing Qt on Linux}
 As stated, Qt can be installed on Linux in two ways:
 \begin{enumerate}
 \item Linux distribution \textit{package manager}\index{package manager} offers it as the package. This is the case for many major distributions, \eg Ubuntu, Archlinux, Fedora, Debian or Mint.
@@ -530,7 +530,7 @@ QMAKESPEC=$QTDIR/mkspecs/linux-g++
 \end{enumerate}
 
 
-\subsubsection{Compilling Qt}\index{compilation}
+\subsection{Compilling Qt}\index{compilation}
 Sometimes, you may need to compile Qt on your own. Compilation allows you to throw away features you do not like, resulting in smaller dynamic (and static too) libraries sizes.
 
 Qt sources are always contained within compressed file. All you need to do is to have correctly installed \cpp compiler (\fdocabbrevref{GCC} or \fdocabbrevref{MSVC} are recommended). Basic compilation steps are quite similar for each operating system:

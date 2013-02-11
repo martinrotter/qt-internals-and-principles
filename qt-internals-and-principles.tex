@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt,twoside]{article}
+\documentclass[a4paper,12pt]{book}
 
 %% Package kvoptions-patch is needed if you pass unicode strings as parameters to fancydoc packages.
 \usepackage{kvoptions-patch}
@@ -33,6 +33,7 @@
 \usepackage[shortcuts]{extdash}
 \usepackage[super]{nth}
 \usepackage[euler]{textgreek}
+\usepackage{chngcntr}
 
 \fdoctitle{Qt: Internals and Principles}
 \fdocsubtitle{Get to grips with Qt}
@@ -40,14 +41,39 @@
 \fdocauthor{Martin Rotter}
 \fdocanot{Qt is one of the best-known and the mightiest general-purpose libraries available. Its functionality covers each and every thinkable programming area, including threading, graphical interfaces, relational databases, networks, 2D/3D painting and many more. This text aims at one modest task - providing the solid base for learning and understanding Qt by revealing its internals and principles.}
 
-\pagestyle{fancy}
+\makeatletter
+\@addtoreset{chapter}{part}
+\makeatother
+
+\newcommand*\realworld{\renewcommand\theHchapter{sec.\arabic{chapter}}}
+
+\makeatletter
+\renewcommand\part{
+  \if@openright
+    \cleardoublepage
+  \else
+    \clearpage
+  \fi
+  \thispagestyle{empty}
+  \if@twocolumn
+    \onecolumn
+    \@tempswatrue
+  \else
+    \@tempswafalse
+  \fi
+  \null\vfil
+  \secdef\@part\@spart}
+\makeatother
+
+\makeatletter
+\renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
+                    \thispagestyle{fancy}% original style: plain
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \secdef\@chapter\@schapter}
+\makeatother
 
 % start parts and sections on odd page
-\let\stdsection\section
-\renewcommand*\section{\cleardoublepage\stdsection}
-
-\let\originalpart=\part
-\renewcommand*\part{\cleardoublepage\originalpart}
 
 \newcommand{\ts}{\textsuperscript}
 \newcommand{\ie}{i.\,e. }
@@ -56,6 +82,7 @@
 \newcommand{\Eg}{E.\,g. }
 
 \begin{document}
+\pagestyle{empty}
 
 % vytiskne titulní stranu
 \fdoctitlesimple
@@ -69,6 +96,7 @@
 \fdoctableofcontents
 
 \part{Laboratory Qt}\label{part:lab}
+\pagestyle{fancy}
 \input{parts/laboratory/foreword}
 \input{parts/laboratory/qtstructure}
 \input{parts/laboratory/usingqt}
@@ -82,8 +110,10 @@
 %% gui
 %% rss guard
 
-
+\realworld
 \part{Real-world Qt}\label{part:real}
+\pagestyle{fancy}
+\input{parts/real-world/foreword}
 
 %\upendoftreatise
 %\fdocendofmainmatter

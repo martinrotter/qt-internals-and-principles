@@ -1,16 +1,16 @@
-\section{Meta-object system}
+\chapter{Meta-object system}
 Meta-object system forms substantial part of Qt functionality, providing majority of Qt classes with ability to asynchronously report its state when something happens. Furthermore, you can equip even your custom classes with extra textual information, fetch names of your objects\index{object} at run time or make your classes use of the custom \textit{property system}\index{property system} that provides faster and syntactically unified access to your class member data.
 
 \begin{fdocextra}
 The word \enquote{meta} (which is originally Greek preposition, in Greek written as \enquote{\textmu \textepsilon \texttau \textalpha} was for the first time used by \textit{Aristotle}, the great Greek philosopher. Aristotle wrote plenty of writings, covering poetry, music or politics. His creations needed to be sorted later so that they could be interpreted correctly. Writings got sorted and scholars realized that there is one book with no name. It was placed \textit{after} Aristotle's great work \textit{Physics}. That's why that mysterious paper was named \textit{Metaphysics}, literally \enquote{the paper after Physics.}
 \end{fdocextra}
 
-\subsection{What is meta-object?}
+\section{What is meta-object?}
 Generally, meta-object is an entity that extends another object, providing us certain kind of information \textit{beyond} that particular object or set of objects. Meta-objects lie beyond actual objects, forming (kind of \enquote{higher}) abstraction layer of any Qt application. We can name this layer \textit{meta-echelon}\index{meta-echelon}.
 
 Each class instance exposes its private data through \textit{methods} to its users -- other classes. Publicly available class members (methods or \textit{properties}\footnote{Property can be understood as private data member plus accessing getter/setter functions.}) form class interface, the only way to control class data and class behavior. This data is the only classical way to \enquote{see} the object from the view of its purpose but it says completely nothing about object inner structure and representation,\eg it doesn't expose type of on object (in run time) or count of its methods. Classic class methods do not provide us with \textit{meta-information}\index{meta-information}. Meta-objects do that.
 
-\subsection{Reflection}
+\section{Reflection}
 Ability to obtain and perhaps modify meta-information of any object is an action called \textit{introspection}\index{introspection} (or \textit{reflection})\index{reflection}. We can distinguish two kinds of reflection:
 \begin{description}
 \item[RUN TIME REFLECTION] \hfill \\
@@ -21,7 +21,7 @@ Compiler of compile time reflection supported language has to do extra work to m
 This approach makes the compilation little slower because an extra tool has to be executed to do the job. This concerns Qt. Qt uses meta-object compiler\index{meta-object compiler}\index{moc} to produce meta-objects.
 \end{description}
 
-\subsection{Qt meta-object system}
+\section{Qt meta-object system}
 Qt uses compilation-based reflection\index{reflection} due to \cpp language limitations. Each object created within Qt meta-object system\index{meta-object system} is automatically equipped with shadow meta-object\index{meta-object}. This meta-object allows you to do amazing things with that particular object. You can obtain its class name, check if this object's class inherits another class, get name of the superclass\index{superclass} or names of its methods. You can even call methods by their names stored in a string (\autoref{listing:invoke})! Complete example can be found in\fdocinlinecode{text}{!}{sources/laboratory/08-invoke} directory.
 
 \begin{fdoccode}{cpp}{listing:invoke}{String-based method invokation in Qt meta-object system}
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
 }
 \end{fdoccode}
 
-\subsection{Enabling meta-object features for custom classes}
+\section{Enabling meta-objectivity for custom classes}
 Not all classes in a Qt-based application take part in the meta-object system. You need to to several steps to make sure that objects of your class will be accompanied with corresponding meta-objects:
 
 \begin{enumerate}
@@ -52,10 +52,10 @@ Not all classes in a Qt-based application take part in the meta-object system. Y
 \item Your class needs to contain\fdocinlinecode{cpp}{!}{Q_OBJECT} macro in its private section, best way is right under class name. This macro adds several methods to your class, one of them is all important\fdocinlinecode{cpp}{!}{QMetaObject *metaObject() const} method. Moreover, dynamic translation system is enabled by this macro too. You will learn about Qt applications translation later.
 \end{enumerate}
 
-\subsection{QObject class -- the cradle of meta-objects}
+\section{QObject class -- the cradle of meta-objects}
 \fdocinlinecode{cpp}{!}{QObject}\index{QObject} class is the very base class for each meta-object-system-enabled class and provides many marvelous features. It is good to use\fdocinlinecode{cpp}{!}{QObject} as the base class even for your custom classes within any Qt application because there is one particularly amazing feature -- the automatic memory management provided by \nameref{section:model}.
 
-\subsubsection{Qt object trees}\label{section:model}
+\subsection{Qt object trees}\label{section:model}
 There are some rules that apply to the way\fdocinlinecode{cpp}{!}{QObject} should be inherited. Copy constructor and assignment operator mustn't be implemented in inheriting class. Reasons are very simple:
 \begin{enumerate}
 \item Each and every\fdocinlinecode{cpp}{!}{QObject} instance stores pointer to its parent\fdocinlinecode{cpp}{!}{QObject} instance. This results in instance tree\index{tree hierarchy} hierarchy (\autoref{figure:modeltree}). Should copy of\fdocinlinecode{cpp}{!}{QObject} instance point to the parent of the original\fdocinlinecode{cpp}{!}{QObject} instance?
@@ -88,7 +88,7 @@ Existence of tree hierarchies impacts positively on several topics:
 \item better debugging
 \end{itemize}
 
-\subsubsection{Subclassing QObject}
+\subsection{Subclassing QObject}
 You have already read something about\fdocinlinecode{cpp}{!}{QObject} class in previous paragraphs. You know that\fdocinlinecode{cpp}{!}{QObject} instances form tree hierarchy. Subclassing\fdocinlinecode{cpp}{!}{QObject} is similar to standard \cpp class subclassing but you need to include\fdocinlinecode{cpp}{!}{Q_OBJECT} macro and you should instantiate\fdocinlinecode{cpp}{!}{QObject} with correct parent object, except some rare cases. Inheriting\fdocinlinecode{cpp}{!}{QObject} is very simple, just see \autoref{listing:qobjecti}.
 
 You see that\fdocinlinecode{cpp}{!}{QObject} constructor accepts pointer to parent object which is used to construct\fdocinlinecode{cpp}{!}{QObject} base for\fdocinlinecode{cpp}{!}{MyQObject} instances.
@@ -111,7 +111,7 @@ MyQObject::MyQObject(QObject *parent) : QObject(parent) {
 \end{fdoccode}
 %% případně ještě dynamic cast a QPointer a custom type.
 
-\subsubsection{Signal--slot mechanism}
+\subsection{Signal--slot mechanism}
 Signal--slot mechanism is the main tool to interconnect two \fdocinlinecode{cpp}{!}{QObject}-based objects, allowing thread-safe communication between them. Signals and slots form alternative to the callback mechanism. 
 
 \begin{description}\label{desc:sig}
@@ -139,7 +139,7 @@ Signal--slot mechanism does not apply just to \fdocabbrevref{GUI} elements. Ever
 Tiny definitions of signal and slot on page \pageref{desc:sig} correspond with terms \index{event} and \index{delegate} known from .NET-based languages. \citep[p.~200-202]{nigel:csharp}
 \end{fdocextra}
 
-\paragraph{Using signal--slot mechanism}
+\subsubsection{Using signal--slot mechanism}
 We are familiar with basic terms now. We are also able to subclass QObject. Let's implement very simple bank account representation. We expect that account provides us with possibility to save/withdraw money, check its status or make payments to another account.
 
 Accounts are usually managed by bank. Bank ensures us that our payments are sent to the correct target accounts. Sample application can be found in\fdocinlinecode{text}{!}{sources/laboratory/11-bank} subdirectory. Let's dig into the application.
@@ -258,7 +258,7 @@ void Bank::transfer(const QString &from, const QString &to, int sum) {
 
 Money transfer gets done by serving the target account, which is done by calling method\fdocinlinecode{cpp}{!}{void serveAccount(int sum)}, but there still exists connection between the bank and the source account. This connection needs to be destroyed after the transfer completes so that another money transfer can be realized.
 
-\paragraph{Explanations}
+\subsubsection{Explanations}
 We saw typical\fdocinlinecode{cpp}{!}{connect(....)} method usage on line \ref{listing:conn1} of \autoref{listing:bank-tran} it corresponds with this generic notation:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 connect(source-object, source-signal, target-object, target-slot);
@@ -273,7 +273,7 @@ connect(source-object, source-signal, target-object, target-signal);
 \end{lstlisting}
 Target signal is emitted when source signal is emitted. You can forward signals this way. This is primarily used in classes which form some kind of sublayer between to other layers which usually run in different threads.
 
-\paragraph{Signals and slots with regard to meta-object compiler}\label{section:mocfun}
+\subsubsection{Signals and slots with regard to meta-object compiler}\label{section:mocfun}
 There is a need of extra meta-object compiler job before the actual \cpp code compilation (see \autoref{figure:qtpr} on page \pageref{figure:qtpr}). \fdocabbrevref{moc} goes through every\fdocinlinecode{cpp}{!}{QObject}-based class in project and seeks signals and slots. If it founds any, then:
 \begin{enumerate}
 \item New source file is created, this file is named\fdocinlinecode{text}{!}{moc_original-name.cpp}. This file contains meta-information about all Qt entities from the original source file.
@@ -310,14 +310,14 @@ Signals and slots are compile time created entities but connections are not. The
 % TODO: použití lambda výratu
 % TODO: property system
 
-\subsubsection{QObject instance lifetime}
+\subsection{QObject instance lifetime}
 It's good to know something about events that happen during the life cycle of each and every\fdocinlinecode{cpp}{!}{QObject}-based instance.
 
-\paragraph*{Geniture}
+\subsubsection*{Geniture}
 \fdocinlinecode{cpp}{!}{QObject}-based object is born on the stack or on the heap. There is no real difference between stacked and heaped object from Qt perspective. New objects are added to one of trees (see \nameref{section:model} on page \pageref{section:model}) if they are created with valid parent pointer.
 
-\paragraph*{Lifetime}
+\subsubsection*{Lifetime}
 Object is used as any other \cpp object/class. It can take part in many signal/slot connections.
 
-\paragraph*{Forfeiture}
+\subsubsection*{Forfeiture}
 Stacked objects are freed automatically if they are out of scope. This usually happens if method returns. Heaped objects are freed manually or by object tree destruction. All established connections are disconnected and signal\fdocinlinecode{cpp}{!}{void	destroyed(QObject *obj = 0)} is emitted just before object gets deleted from memory. You can connect other objects to this signal and delete them if signals occurs. You can chain several object trees this way.
