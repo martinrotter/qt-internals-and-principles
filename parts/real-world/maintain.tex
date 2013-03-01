@@ -1,0 +1,296 @@
+\chapter{Maintaining Qonverter}
+Many ambitious software projects offer applications of great quality but something is wrong. Even if rock-solid software is written, it's not used or well-known. Actually writing a piece of software is just starting phase of application life cycle. True merit comes from good application maintenance and deployment.
+
+\section{Storing source code}
+Reachable and efficient source code storage is critically important for collaborative application development. Event if we are lonely developers, we need to use safe storage to backup and protect our source code. Answer for this is version control system. There are some favorite systems such as Git or Subversion. One of these is good choice. I recommend using Git because it's more robust, provides more functions and is supported by both Github (\href{http://www.github.com}{www.github.com}) and Google Code (\href{http://www.code.google.com}{www.code.google.com}) services.
+
+Google Code and Github are free hosting services to hold and protect your source code. Moreover, each and every user is provided with ability to present his (or her) software product and share publicly.
+
+Let's suppose we have written our software and we need to store its source code via Git:
+\begin{enumerate}
+\item Obtain Git client. Good choice is Cygwin (\href{http://www.cygwin.com}{www.cygwin.com}). Cygwin (\autoref{figure:cig}) is port of Bash to Windows operating system. It allows you to install Git during its installation.
+\item Create new project on Google Code.
+\item Navigate to root directory of your project and hit \enquote{git init} in Cygwin.
+\item Navigate to \enquote{.git} subdirectory and edit \enquote{config} with text editor.
+\item Change file to look similar to one in \autoref{listing:cfg}. Section \enquote{remote} is important because it sets correct user name and password for your Google Code on-line Git repository.
+\item Your local repository is ready for usage.
+\end{enumerate}
+
+\begin{fdoccode}{text}{listing:cfg}{Git repository config file}
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+[remote "origin"]
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = https://GOOGLE-USER-NAME:GOOGLE-ACCOUNT-PASSWORD@code.google.com/p/PROJECT-NAME/
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+\end{fdoccode}
+
+\begin{fdocextra}
+Note that Google Code supports just open-source projects. Github supports both open and closed source projects.
+\end{fdocextra}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=9cm]{graphics/real-world/04-cygwin.png}
+\caption{Cygwin user interface}\label{figure:cig}
+\end{center}
+\end{figure}
+
+\subsection{Working with Git}
+We completed the setup for our imaginary project. Basically we need just three Git commands to start saving our code to on-line repository:
+\begin{description}
+\item[git add LIST-OF-FILES] \hfill \\
+Adds selected files to new commit.
+\item[git commit -m 'Message'] \hfill \\
+Creates new local revision from marked files.
+\item[git push origin master] \hfill \\
+Uploads local revision to on-line repository.
+\end{description}
+
+See typical and very basic work with Git in \autoref{figure:gitshow}.
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=12cm]{graphics/real-world/05-gitshow.png}
+\caption{Cygwin user interface}\label{figure:gitshow}
+\end{center}
+\end{figure}
+
+\section{Deploying Qt applications}
+Open-source projects have specific deployment phase. Compiled binaries aren't distributed regularly and user compiles his own executables directly from source code. Someone may think that special knowledge is needed to do that but it is not true.
+
+Nowadays, many semi-automatic build systems are available and it's good to use one. Qt applications require build system, which is cross-platform and supports all Qt versions. There is one build system that meets these criteria perfectly. It's called CMake (\href{http://www.cmake.org}{www.cmake.org}).
+
+CMake takes care of application compilation and installation. It's easy to use. Programmer needs to write one script per software project and user runs just two commands in command line (for example in Cygwin) to install the software. CMake can be installed via Cygwin setup.
+
+\subsection{Writing CMake application script}
+CMake script contains all information needed to setup and compile input source code. It can provide extra functionality for installing and packaging compiled files too.
+
+CMake script is usually contained in single text file (called\fdocinlinecode{text}{!}{CMakeLists.txt}) which is written by application programmer or distributor. Qonverter is no different. It offers CMake script too. It can be found in\fdocinlinecode{text}{!}{sources/real-world/qonverter} directory. 
+
+\subsubsection{Basic data contained in CMake Qonverter script}
+Let's make a journey into the center of the\fdocinlinecode{text}{!}{CMakeLists.txt} file of Qonverter. It contains full collection of macros and command which guide potential user from compilation to installation of Qonverter. Even Qonverter translators can take advantage of this script, as we will see later. We split\fdocinlinecode{text}{!}{CMakeLists.txt} into several fragments and investigate these.
+
+\begin{fdoccode}{text}{listing:cmakei}{Basic Qonverter information in CMakeLists.txt script}
+cmake_minimum_required(VERSION 2.8.9)
+
+# Setup basic variables.
+project(qonverter)
+set(APP_NAME "Qonverter")
+set(APP_LOW_NAME "qonverter")
+set(APP_VERSION "1.0.2-prealfa")
+set(APP_AUTHOR "Martin Rotter")
+set(APP_URL "http://code.google.com/p/qonverter")
+
+message(STATUS "[qonverter] Welcome to Qonverter compilation process.")
+message(STATUS "[qonverter] Compilation process begins right now.")
+
+.
+.
+.
+
+# Find includes in corresponding build directories.
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+\end{fdoccode}
+
+We see (\autoref{listing:cmakei}) that\fdocinlinecode{text}{!}{CMakeLists.txt} contains basic information assigned to variables. Moreover, it produces messages which are printed to the standard output if script is executed by CMake. Last line of \autoref{listing:cmakei} is Qt-specific. It turns the meta-object compiler on. Meta-object compiler then goes through all Qonverter headers (which are specified in script too) and creates corresponding meta-object features if needed.
+
+\begin{fdoccode}{text}{listing:cmakeb}{Compiler settings in CMakeLists.txt script}
+# Unicode settings.
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUNICODE")
+add_definitions(-DUNICODE -D_UNICODE)
+if(WIN32)
+    # UNICODE support with Visual C++ and MinGW.
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_UNICODE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_UNICODE")
+endif()
+
+# Enable compiler warnings.
+if(CMAKE_COMPILER_IS_GNUCXX)
+  add_definitions(-Wall)
+endif()
+\end{fdoccode}
+
+Proper compiler settings (\autoref{listing:cmakeb}) is key here. Qonverter is totally Unicode-based application because it allows special characters, such as square root character ({\raise.38ex\hbox{$\sqrt{ }$}}), to be used in calculator expressions.
+
+\begin{fdoccode}{text}{listing:cmakec}{C++ 11 check in CMakeLists.txt script}
+# Check for C++ 11 features availability.
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
+    execute_process(
+	COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION
+    )
+    if(NOT (GCC_VERSION VERSION_GREATER 4.7 OR GCC_VERSION VERSION_EQUAL 4.7))
+        message(FATAL_ERROR "Your C++ compiler does not support C++11.")
+    else()
+	add_definitions(-std=c++11)
+    endif()
+elseif("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+elseif(${MSVC_VERSION} VERSION_LESS 1600)
+    message(FATAL_ERROR "Your C++ compiler does not support C++11.")
+endif()
+\end{fdoccode}
+
+Qonverter is written using \cpp11 and CMake script needs to ensure that selected compiler is valid. Unfortunately, there is no macro provided by CMake to do \cpp11 checks. Best way is to check versions of major compilers (MSVC, GCC, CLANG) manually. These three compilers are the only ones supported by Qonverter. See \autoref{listing:cmakec}, it is initially written by Matthias Vallentin, all credits go to him.
+
+One last elementary thing needs to be done. We need to load source files, headers and other needed files. It's simple, paths to files are added to variable, as seen in \autoref{listing:cmf}. Headers and other files (skins, translations, \ldots)are prepares in the same way.
+
+\begin{fdoccode}{text}{listing:cmf}{Typical source files variable in CMakeLists.txt script}
+# Add form files.
+set(APP_FORMS
+    ui/formmain.ui
+    ui/formabout.ui
+    ui/formsettings.ui
+    ui/calculator/formcalculator.ui
+    ui/unitconverter/formunitconverter.ui
+    ui/currencyconverter/formcurrencyconverter.ui
+    ui/formvariables.ui
+)
+\end{fdoccode}
+
+\subsubsection{Advanced macros and packaging}
+We have set some basic stuff, compiler is detected and Unicode is enabled. We need to load Qt 5. CMake $2.8.9$ (and later) supports Qt 5.
+
+\begin{fdoccode}{text}{}{Detect and load Qt 5 in CMakeLists.txt script}
+# Find all needed Qt modules.
+if(UNIX)
+    find_package(Qt5DBus)
+endif()
+find_package(Qt5Sql)
+find_package(Qt5Widgets)
+find_package(Qt5Xml)
+find_package(Qt5Network)
+find_package(Qt5LinguistTools)
+
+if(Qt5DBus_FOUND)
+    message(STATUS "[qonverter] Qt DBUS module found. It's good.")
+    add_definitions(-DHAVE_DBUS)
+    set(APP_HEADERS src/dbusadaptor.h)
+    set(APP_SOURCES src/dbusadaptor.cpp)
+else()
+    message(STATUS "[qonverter] Qt DBUS is not found. Disabling it.")
+endif()
+
+# Wrap files, create moc files.
+qt5_wrap_cpp(APP_MOC ${APP_HEADERS})
+qt5_wrap_ui(APP_UI ${APP_FORMS})
+qt5_add_resources(APP_RCC ${APP_RESOURCES})
+
+if(Qt5LinguistTools_FOUND)
+    message(STATUS "[qonverter] Qt Linguist Tools found. Translations will get refreshed.")
+    qt5_add_translation(APP_QM ${APP_TRANSLATIONS})
+else()
+    message(STATUS "[qonverter] Qt Linguist Tools NOT found. No refreshing for translations.")
+endif()
+\end{fdoccode}
+
+Macro\fdocinlinecode{text}{!}{find_package} loads necessary Qt modules. If module is not found, then error message is triggered and script fails to complete. Additionaly, special Qt 5 related macros are run. These create additional files needed for successful compilation. If translation tools are found, translation files are added.
+
+Qt 5 introduced new system for linking modules. As we know, each module is represented by dynamic-link (or static-link) library file. CMake can link our compiled executable against correct libraries which is easy to get done with CMake (\autoref{listing:linkc}.
+
+\begin{fdoccode}{text}{listing:linkc}{Link against Qt 5 in CMakeLists.txt script}
+# Use modules from Qt.
+qt5_use_modules(${EXE_NAME}
+    Core
+    Widgets
+    Sql
+    Network
+    Xml
+)
+
+if(Qt5DBus_FOUND)
+    qt5_use_modules(${EXE_NAME}
+	DBus
+    )
+endif()
+\end{fdoccode}
+
+But there is one little problem. Qt 5 CMake scripts don't automatically link against Qt 5 platform library. Qt 5 platform library is responsible for appropriate "categorization" of executable file. Typical categories are:
+\begin{itemize}
+\item console application
+\item \fdocabbrevref{GUI}-based application
+\end{itemize}
+
+If CMake is not told that our application contains user interface, then console window is displayed (along with user interface) if our application launches. Thus, extra linking is needed (\autoref{listing:winmain}).
+
+\begin{fdoccode}{text}{listing:winmain}{Link against Qt 5 platform library in CMakeLists.txt script}
+if(WIN32)
+    add_executable(${EXE_NAME} WIN32
+        ${APP_SOURCES}
+        ${APP_FORMS}
+        ${APP_RCC}
+        ${APP_QM}
+    )
+    target_link_libraries(${EXE_NAME} Qt5::WinMain)
+else()
+    add_executable(${EXE_NAME}
+        ${APP_SOURCES}
+        ${APP_FORMS}
+        ${APP_RCC}
+        ${APP_QM}
+    )
+endif()
+\end{fdoccode}
+
+Qonverter CMake script supports semi-automatic instalation via \enquote{make install} command.\fdocinlinecode{text}{!}{CMakeLists.txt} script contains code which is responsible for that.
+
+\begin{fdoccode}{text}{}{Installation code in CMakeLists.txt}
+elseif(UNIX)
+    message(STATUS "[qonverter] You will probably install on Linux.")
+    install(TARGETS ${EXE_NAME} RUNTIME DESTINATION bin)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/resources/desktop/qonverter.desktop DESTINATION share/applications)
+    install(FILES resources/graphics/qonverter.png DESTINATION share/icons/hicolor/256x256/apps/)
+    install(FILES ${APP_QM} DESTINATION share/qonverter/l10n)
+    install(FILES ${APP_SKIN_PLAIN} DESTINATION share/qonverter/skins/base)
+    install(FILES ${APP_SKIN_MODERN} DESTINATION share/qonverter/skins/base)
+endif()
+\end{fdoccode}
+
+Each supported platform has its own installation code because some files need to be installed in different paths on each platform. In Windows, for example, all files of an application are installed in single root directory. On Unix-like operating systems, on the other hand, files of one application are often spread over across the file system directory tree. Binaries may be placed in\fdocinlinecode{text}{!}{/usr/bin} directory, icons in\fdocinlinecode{text}{!}{/usr/share/icons} directory and so on.
+
+CMake even supports packaging of source code. Imagine that you are software developer and new version of your application comes out. You want to distribute its source code. Easiest way to do that is to pack all source code into single archive. That's what CMake does. \autoref{listing:cpack} show fragment of Qonverter script which does the job too via new command \enquote{make dist}.
+
+\begin{fdoccode}{text}{listing:cpack}{Packing support for Qonverter}
+# Custom target for packaging.
+set(CPACK_PACKAGE_NAME ${APP_LOW_NAME})
+set(CPACK_PACKAGE_VERSION ${APP_VERSION})
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+set(CPACK_IGNORE_FILES "/CVS/;/\\\\.svn/;/\\\\.git/;\\\\.swp$;/CMakeLists.txt.user;\\\\.#;/#;\\\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;\\\\.qm$;/build/;\\\\.diff$;.DS_Store'")
+set(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
+
+# Load packaging facilities.
+include(CPack)
+
+# make dist implementation.
+add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+\end{fdoccode}
+\vfill
+
+\subsection{Using CMake scripts}
+Previous chapter was about CMake scripts from the view of programmer. Let's assume that we are interested in installing software which is available with CMake script. In that situation we only need working compiler, installed CMake and source code with valid script.
+
+Usual installation contains three typical steps:
+\begin{enumerate}
+	\item Open command line, navigate to unpacked source code root directory and check if\fdocinlinecode{text}{!}{CMakeLists.txt} file exists.
+	\item Create new subdirectory \enquote{build}, this directory will contain compiled files when compilation ends. Run this code in command line:
+\begin{lstlisting}[language=text,numbers=none]
+cmake ./build -DCMAKE_INSTALL_PREFIX=<path-to-installed-application> -DCMAKE_BUILD_TYPE=release
+\end{lstlisting}
+	\item Run \enquote{make} and \enquote{make install} in command line.
+\end{enumerate}
+
+Qonverter uses the same approach. User has to do just one thing, provide correect target installation path. So on Windows,\fdocinlinecode{text}{!}{cmake} call could look like this:
+\begin{lstlisting}[language=text,numbers=none]
+cmake ./build -DCMAKE_INSTALL_PREFIX="C:/Program Files/Qonverter" -DCMAKE_BUILD_TYPE=release
+\end{lstlisting}
+

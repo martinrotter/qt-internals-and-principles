@@ -12,6 +12,8 @@ As years passed by, Qt was more and more robust, \fdocabbrevref{KDE} made its pr
 
 Luckily, Qt 5 appeared, bringing us some new exciting features, giving itself a chance to compete its opponents in category of mobile development toolkits. If we add rock-solid desktop features, we have versatile and stable base to build on.
 
+\vfill
+
 \section{What is Qt?}\label{section:what}
 As said previously, Qt is framework, toolkit or, simply, set of libraries. It has very roots in Norway. Original creators are Haavard Nord\index{Haavard Nord} and Eirik Chambe-Eng\index{Eirik Chambe-Eng}. Basically Qt framework consists of:
 \begin{itemize}
@@ -404,6 +406,7 @@ Good bonus for every \cpp programmer. No need to use \nth{3} party tuples implem
 
 \section{Qt components}\label{section:components}
 Qt consists of libraries, tools and other supplemental software. You have already seen very brief list of Qt components in \autoref{section:what}. Libraries themselves are divided into so-called \textit{modules}\index{modules}.\footnote{You are not familiar with modules yet. Module is simply collection of related classes.} You can learn more about modules in \autoref{section:qtstructure}. Let's look into Qt library collection more thoroughly. Qt library collection contains these main components:
+
 \begin{enumerate}
 \item Tools for \fdocabbrevref{GUI} design and implementation consisting of user interface designer (QtDesiger) and user interface classes (known as QtWidgets and QtGui).
 \item Painting system which is accessory for \fdocabbrevref{GUI} design or can server as the main force for creating graphics-related software, \eg painting applications, video editors or perhaps chart designer programs.
@@ -480,11 +483,11 @@ Qt can be downloaded as executable installer file which containes binaries preco
 
 Qt framework versions gets released precompiled for certain compilers only. Linux releases are meant to work with \fdocabbrevref{GCC}, Windows releases are usually precompiled by \fdocabbrevref{MSVC}. Qt framework with MinGW support is released from time to time too.
 
+\vfill
+
 \subsection{Installing Qt on Windows}
 %% instalace na windows a linuxu
-Qt installation on Windows is fairly straightforward if binaries are available. All you need to do is obtain the setup executable file and follow instructions. Some troubles might occur, though.
-
-Let's assume that Qt was installed in\fdocinlinecode{text}{!}{c:\\Qt\\Qt5.0.0\\}.
+Qt installation on Windows is fairly straightforward if binaries are available. All you need to do is obtain the setup executable file and follow instructions. Some troubles might occur, though. Let's assume that Qt was installed in\fdocinlinecode{text}{!}{c:\\Qt\\Qt5.0.0\\}.
 
 You need to tweak your PATH environment variable in order to be able to run Qt tools from command line. Qt Creator will work even without proper PATH because it does all necessary settings for itself automatically. You can setup PATH variable in Windows 7 as follows:
 \begin{enumerate}
@@ -528,7 +531,6 @@ QMAKESPEC=$QTDIR/mkspecs/linux-g++
 \fdocinlinecode{text}{!}{QTDIR} variable contains path to root qt directory. This is the directory which contains subdirectories\fdocinlinecode{text}{!}{bin},\fdocinlinecode{text}{!}{include},\fdocinlinecode{text}{!}{lib}, \ldots
 \end{enumerate}
 \end{enumerate}
-
 
 \subsection{Compilling Qt}\index{compilation}
 Sometimes, you may need to compile Qt on your own. Compilation allows you to throw away features you do not like, resulting in smaller dynamic (and static too) libraries sizes.

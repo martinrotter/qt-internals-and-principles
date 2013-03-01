@@ -1,0 +1,274 @@
+\chapter{Writing Qonverter}
+Libraries and compiler are selected. Let's think about application. Let's assume we need to write simple and easy-to-use calculator application, which should run on Windows and Linux. We already know something about Qt and we are able to seek for needed information in \citep{various:qtdoc}. Qonverter should run in single window mode but we may eventually need to hide it into tray area. So tray icon functionality has to be provided.
+
+\begin{fdocextra}
+Use source code of Qonverter for understanding this part of the book. Source code is commented and this part of the book is (intentionally) just collection of hints on how to build your own Qt application.
+\end{fdocextra}
+
+Qonverter should be translated to English (as it is globally spoken language) and Czech which is native language of author of this book. Qonverter should fit into desktop environments so native icon themes with fall-back theme should be used. Installation of Qonverter should be as easy as possible. This means simple ZIP archive for Windows and native package for Linux distributions. More specific feature list for Qonverter could look like this one:
+\begin{itemize}
+\item use muParserX as mathematical core
+\item offer unit and currency converters
+\item on-line currency rates synchronization for currency converter
+\item conversions of mathematical formulas for unit converter (This means that for example formula $5+7$ is computed first and result is then converted as needed.)
+\item simple calculator with many functions
+\item most used functions accessible via calculator keypad
+\item big input text box for mathematical formulas (no single lines as in classic calculators)
+\item manual language switching
+\item free software licensed
+\item (optional) possibility to define variables
+\item many built-in constants
+\item history of computations
+\item depends only on Qt and muParserX
+\end{itemize}
+
+These are primary goals. Optional goals appear during the course of development.
+
+\section{Qonverter structure}
+Qonverter application consists of two main parts:
+\begin{description}
+\item[CORE] \hfill \\
+Is based on muParserX and is responsible for providing results of input formulas. Logic of currency (unit) converter is separated into core too. Core doesn't depend on graphical interface of the application.
+\item[\fdocabbrevref{GUI}] \hfill \\
+Forms visual part of the application and provides user with main application window and switchable tray icon.
+\end{description}
+
+\section{Programming application core}
+Calculator core does one and only thing. It wraps muParserX and offers some portion of its functionality. Main task is to wrap\fdocinlinecode{cpp}{!}{ParserX} class instance which provides computations. Usage of this class is simple (\autoref{listing:parser}).
+
+\begin{fdoccode}{cpp}{listing:parser}{Basic ParserX class usage}
+ParserX m_parser;
+m_parser.SetExpr("5+7");
+
+Value result;
+try {
+	result = m_parser.Eval();
+}
+catch (ParserError &e) {
+	qDebug("Error occurred.");
+}
+// The result variable contains result of computation.
+\end{fdoccode}
+
+Wrapper of muParserX is called \enquote{Calculator} and is represented by the class with the same name. Calculator offers method\fdocinlinecode{cpp}{!}{void calculateExpression(Calculator::CallerFunction function, QString expression)} which takes mathematical expression in textual form and identification of target function. This method is used by calculator and unit converter as these entities may want to do computations.
+
+\indent \fdocinlinecode{cpp}{!}{Calculator} class will be used as \textit{singleton} pattern and will be separated into its own thread by\fdocinlinecode{cpp}{!}{CalculatorWrapper} class which manages\fdocinlinecode{cpp}{!}{Calculator} singleton instance. This class basically just starts the thread with calculator and quits the thread if needed (\autoref{listing:thrq}).
+
+\begin{fdoccode}{cpp}{listing:thrq}{Running calculator in separated thread}
+// CalculatorWrapper constructor
+CalculatorWrapper::CalculatorWrapper(QObject *parent) : QObject(parent) {
+    // Create calculator.
+    m_calculator = new Calculator();
+
+    // Create separate thread for calculator.
+    m_thread = new QThread();
+
+    // Prepare calculator for usage in separate thread.
+    m_calculator->moveToThread(m_thread);
+    connect(m_thread, &QThread::started, m_calculator, &Calculator::initialize);
+    connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
+}
+
+// CalculatorWrapper destructor
+CalculatorWrapper::~CalculatorWrapper() {
+    qDebug("Deleting calculator wrapper.");
+
+    m_thread->quit();
+    m_thread->wait(1000);
+
+    delete m_calculator;
+}
+\end{fdoccode}
+
+Unit converter and currency converter use very similar approach with one exception. They are not separated into threads. It's not needed because calculations done in converters are very simple and fast. Both classes just store list of coefficients for each currency/unit and then do various multiplications to produce desired results. Check out classes\fdocinlinecode{cpp}{!}{UnitConverter} and\fdocinlinecode{cpp}{!}{UnitConverter} for more information.
+
+\section{Programming user interface}
+Let's focus on \fdocabbrevref{GUI} of Qonverter in high detail. Everyone agrees that calculator application requires quite specific user interface. Many calculators offers skinnable look with \enquote{different} user experience but most of those calculator applications don't offer native look on each and every supported platform.
+
+\fdocabbrevdeclare{CSS}{CSS}{Cascading Style Sheets}
+There was one simple task to be done in the area of skins and styles. Qonverter should support some ways of skinning but native looks \& feels should be available too.
+
+\subsection{Qt style sheets}
+Qonverter uses Qt style sheets \citep[style sheets]{various:qtdoc} along with dynamic\fdocinlinecode{cpp}{!}{QStyle}-based styles loading. Qt style sheets follow \fdocabbrevref{CSS}, specification 2.1. Qonverter uses specifically tweaked style sheets which are parsed in run time to allow loading of images from relative paths.
+
+\begin{fdoccode}{cpp}{listin:skins}{Loading and parsing of skin file}
+QTextStream str(&skin_file_name_full_path);
+QString skin_data;
+
+// Read skin data from file and close it.
+skin_data.append(str.readAll());
+skin_file_full_path.close();
+skin_file_full_path.deleteLater();
+
+// Here we use "/" instead of QDir::separator() because CSS2.1 url field
+// accepts '/' as path elements separator.
+skin_data = skin_data.replace("##",
+			APP_SKIN_PATH + "/" + skin_folder + "/images");
+
+// Set skin to application.
+qApp->setStyleSheet(skin_data);
+\end{fdoccode}
+
+Skin file is loaded and its content is stored in single\fdocinlinecode{cpp}{!}{QString} instance. Then parsing is done. All references to external files are refreshed to point to correct files. Typical Qonverter style sheet fragment looks like the one in \autoref{listing:ssheet}.
+
+\begin{fdoccode}{text}{listing:ssheet}{Typical Qonverter style sheet}
+...
+QLineEdit[readOnly="true"] {
+    color: gray;
+    font-weight: lighter;
+}
+
+/* spin boxes and other stuff */
+QDoubleSpinBox {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffffff, stop: 1 #f7f7f7);
+    border-radius: 1px;
+	border: 1px solid gray;
+}
+
+QCheckBox::indicator:checked {
+    image:url(##/checkbox.png);
+}
+...
+\end{fdoccode}
+
+\enquote{\#\#} is special mark which represents absolute path to global Qonverter skins storage which is set in run time and is platform-dependent as seen in \autoref{listing:sk}.
+
+\begin{fdoccode}{cpp}{listing:sk}{Paths to global skins storage}
+#if defined(Q_OS_LINUX)
+#define	APP_SKIN_PATH APP_PREFIX + QString("/share/qonverter/skins")
+#elif defined(Q_OS_MAC)
+#define	APP_SKIN_PATH QApplication::applicationDirPath() + "/../Resources/skins"
+#elif defined(Q_OS_WIN) || defined(Q_OS_OS2)
+#define	APP_SKIN_PATH QApplication::applicationDirPath() + QString("/skins")
+#endif
+\end{fdoccode}
+
+Qonverter supports dynamic loading of external Qt plug-ins. They can be loaded from platform-dependent directory path. On Windows, this path consists of path to executable file and \enquote{plugins} subdirectory. Searched path addition is provided by call displayed next source code fragment.
+\begin{fdoccode}{cpp}{}{Settings up path for dynamic plug-ins loading}
+// Add 3rd party plugin directory to application PATH variable.
+// This is useful for styles, encoders, ...
+QApplication::addLibraryPath(APP_PLUGIN_PATH);
+\end{fdoccode}
+
+\subsection{Calculator button layout}
+User interface layout represents critical point of calculator user interface. Many calculators support so-called \enquote{modes}. One calculator layout is mode. Calculators do include \enquote{scientific} mode or perhaps \enquote{basic} mode. Each mode display different buttons on different places in the calculator window which is not good. I prefer static interfaces, so that user memorizes exactly one mode. All buttons have fixed position. The only thing, that changes, is appearance of buttons. And this is the great part.
+
+As we know, Qonverter supports skins. Some skins represent pure native look \& feel. Other ones may tweak user interface to bring new features and on of the best ones could be graphical distinction of calculator buttons. Each button provides specific functionality but some buttons offer similar functionality. For example calculator button \enquote{5} and \enquote{6} do almost the same thing, thus, they are related to each other. On the other hand, \enquote{max} button does completely different job than the \enquote{$=$} button does.
+
+Buttons can be separated into groups and they really are in Qonverter. Each calculator button carries special flag, which exposes purpose of the button (\autoref{listing:typesbtn}). Type of button is available via dynamic property.
+\begin{fdoccode}{cpp}{listing:typesbtn}{Types of calculator buttons}
+// Here are possible types of each CalculatorButton instance.
+enum Type {
+    NUMBER	= 0,
+    OPERATOR	= 1,
+    FUNCTION	= 2,
+    SOLVER	= 3,
+    COMPARE	= 4,
+    CONTROL	= 5,
+    BIT		= 6
+};
+
+// Marking some buttons as "numeric" buttons.
+QList<CalculatorButton*> but_numbers;
+but_numbers <<	m_ui->m_btnOne << m_ui->m_btnTwo <<
+				m_ui->m_btnThree << m_ui->m_btnFour <<
+				m_ui->m_btnFive << m_ui->m_btnSix <<
+				m_ui->m_btnSeven << m_ui->m_btnEight <<
+				m_ui->m_btnNine << m_ui->m_btnZero <<
+				m_ui->m_btnDot;
+
+foreach (CalculatorButton *btn, but_numbers) {
+	btn->setProperty("type", (int) CalculatorButton::NUMBER);
+}
+\end{fdoccode}
+
+Qonverter style sheet can (but doesn't have to) take advantage of calculator buttons resolution and highlight each group of buttons differently. That's what Modern skin does. Modern skin file can be found in\fdocinlinecode{text}{!}{resources/skins/base} subdirectory of Qonverter source tree. This skin contains many enhancements for user interface plus distinctive coloring (\autoref{listing:stylebtn}) for calculator buttons.
+\begin{fdoccode}{text}{listing:stylebtn}{Calculator button coloring style sheet}
+/* some code here */
+.....
+
+/* colors for calculator buttons */
+CalculatorButton[type="2"] {
+    background-color: rgb(245, 245, 245);
+}
+CalculatorButton[type="2"]:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #d7d7d7, stop: 1 #e6e6e6);
+}
+CalculatorButton[type="3"] {
+    background-color: rgb(251, 153, 14, 240);
+}
+CalculatorButton[type="3"]:hover {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e89116, stop: 1 #fb9d18);
+}
+
+/* some code here */
+.....
+\end{fdoccode}
+
+We see that each group of buttons can be highlighted differently in user interface. \autoref{figure:skinsq} display Qonverter application with native skin applied and with Modern skin applied. There is noticeable difference between these two skins. Left one looks natively while right one is perhaps too wild. It's matter of taste. Anyone with basic knowledge of \fdocabbrevref{CSS} can write own skins.
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\includegraphics[width=7cm]{graphics/real-world/00-qon-native}
+\caption{Native skin}
+\end{subfigure}
+~
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\includegraphics[width=7cm]{graphics/real-world/00-qon-modern}
+\caption{Modern skin}
+\end{subfigure}
+\caption{Skinned Qonverter}\label{figure:skinsq}
+\end{figure}
+
+\subsection{Tray icon and desktop integration}
+Desktop applications can be divided into two groups:
+\begin{enumerate}
+\item Which are run manually if needed. They are closed after usage.
+\item Applications which run constantly. They can be hidden (typically) into notification area of desktop environment.
+\end{enumerate}
+
+We probably use some applications very rarely, so they don't need to run all the time. We simply open them, do needed job and then close them. It's sometimes better to keep certain application in main memory and hidden so that they don't disturb us. Tray icon is amazing tool to achieve that. This is typical for applications which are used frequently.
+
+Qonverter supports both modes. If we want to use it irregularly and not too often, then Qonverter can run in single-window mode and it quits if window gets closed. But if we are advanced users who use calculator often, then Qonverter can be hidden to tray area and only tray icon remains visible. Interaction with tray icon is critical because its the only user interface element visible if application windows are hidden.
+
+\subsubsection{Single-window mode}
+This is the default mode for Qonverter. It is also used in desktop environments which don't support tray icon mode. This mode offers standard windows and dialogs. Qonverter exits when last window is closed by a user.
+
+\subsubsection{Tray icon mode}
+Tray icon mode (\autoref{figure:opttray}) offers greater functionality. We can use windows and dialogs again. But Qonverter doesn't have to (but can) quit if last window is close. It can minimize itself into notification area, resulting in last visible element - the tray icon. User can switch between modes freely via configuration dialog (\autoref{figure:settingsgui}).
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=7cm]{graphics/real-world/01-tray.png}
+\caption{Qonverter tray icon}\label{figure:opttray}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=13cm]{graphics/real-world/02-settings-gui.png}
+\caption{Qonverter mode selection}\label{figure:settingsgui}
+\end{center}
+\end{figure}
+
+\subsection{Unit and currency converter}
+Unit converter doesn't contain special elements, except one thing. It doesn't contain single button. All calculations are done on-the-fly. User gets hints about what to do via placeholder texts of input controls (\autoref{figure:unit}).
+
+\begin{figure}[ht]
+\centering
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\includegraphics[width=7cm]{graphics/real-world/03-unit}
+\caption{Initial state}
+\end{subfigure}
+~
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\includegraphics[width=7cm]{graphics/real-world/03-unit-full}
+\caption{With calculated and converted value}
+\end{subfigure}
+\caption{Unit converter overview}\label{figure:unit}
+\end{figure}
