@@ -3,30 +3,32 @@ Big thanks belongs my bachelor thesis leader Mgr.~Tomáš Kühr. Special praise 
 
 \clearpage
 
-\section*{Whom this book is for?}
-This book is for anyone who is interested in creating dynamic and multi-platform applications using Qt framework. It does not matter if you are hugely experienced software engineer or self-taught enthusiast. Information included in this book can be useful either way.
+\section*{Who this book is for?}
+This book is for anyone who is interested in creating dynamic and multi-platform applications using Qt framework. It does not matter if you are experienced software engineer or self-taught enthusiast. Information included in this book can be useful both ways.
 
 \section*{What is covered by this book?}
-Covering all components of Qt framework in one book is impossible task because of massive complexity of these libraries. It's better to focus on certain aspects only. Each Qt-related books begins with graphical interfaces. Probably, that's not the best approach because graphical interfaces form very complex science. You need to be able to manage easy Qt-related tasks first in order be able to master harder ones.
+Covering all components of Qt framework in one book is impossible task because of massive complexity of these libraries. It's better to focus on certain aspects only. Each Qt-related books begins with graphical interfaces. Probably, that's not the best approach because graphical interfaces represent nontrivial part of any application. You need to be able to manage easy Qt-related tasks first in order be able to master harder ones.
 
-That's why this book starts with very fundamental topics, therefore pushing graphical-interfaces-related topics back to further chapters. You learn something about \cpp programming language, Qt compilation process and Qt framework structure follow. Meta-object system is discussed too. Understanding meta-object system is the key for next progress and is the main precondition for building solid Qt-based applications. You learn to use threads to separate logic from user interface.
+That's why this book starts with fundamental topics, therefore pushing graphi-cal-interfaces-related topics back to further chapters. You learn something about \cpp programming language, Qt compilation process and Qt framework structure. Meta-object system is discussed too. Understanding meta-object system is one of the main preconditions for building solid Qt-based applications. You learn to use threads to separate logic from user interface.
 
 Finally, newly gained knowledge is used to build applications, which can be easily maintainable, compilable and easy to package and ship to your customers.
 
-This books equips you primarily with principles. Facts (which are unknown to you and are not included in this book) can be found in \citep{various:qtdoc}. Note that in this paper, we discuss relatively new (as of January, 2013) Qt 5.
+This books equips you primarily with principles. Facts (which are unknown to you and are not included in this book) can be found in \citep{various:qtdoc}. Note that in this paper, we discuss relatively new (January, 2013) Qt 5.
 
 \fdocabbrevdeclare{QML}{QML}{Qt Meta Language}
 \fdocabbrevdeclare{GUI}{GUI}{Graphical User Interface}
 
 \section*{What is not covered by this book?}
-As said earlier, it's not possible to cover all nooks of Qt libraries in one book. We will omit some hugely admired Qt features, so that we can concentrate on other ones. \fdocabbrevref{QML} will be ignored completely, along with whole QtQuick and other stuff for cell-phones or tablet devices. 2D and 3D painting features won't be described too but you will clap on them from time to time as they are needed for advanced \fdocabbrevref{GUI} tweaking. Some other parts of Qt are ignored too. You will be informed about some of them throughout the book.
+As said earlier, it's not possible to cover all parts of Qt libraries in one book. We will omit some admired Qt features, so that we can concentrate on other ones. \fdocabbrevref{QML} will be ignored completely, along with whole QtQuick and other stuff for cell-phones or tablet devices. 2D and 3D painting features won't be described too. Moreover, some other parts of Qt are ignored. You will be informed about some of them throughout the book.
+
+\vfill
 
 \section*{How this book is structured?}
 As said earlier, there are basically two main stories told by this book. First one lets you know something about Qt, its features and principles. Analogy to this story is called \nameref{part:lab} and it is the first part of the book.
 
 Second part practically builds on basic Qt knowledge and show the way of complex application construction. This part is called \nameref{part:real} and it's the second (and more exciting) story.
 
-\section*{Are there any prerequisites?}
+\section*{Are there any preliminaries?}
 Of course there are. Qt itself is based on the \cpp programming language and thus \cpp knowledge is main prerequisite. One could argue that Qt has bindings into many better programming languages and I would respond: \enquote{It's true.} But \cpp is core language for Qt and for you, as future Qt developer, using Qt in its native programming language is important.
 
 \cpp went through massive update recently and we face its eleventh version. So we will use \cpp 11 in this book. You can learn more about \cpp 11 in \citep{various:cppstandard} or in section \ref{subsection:cpp}.
@@ -34,7 +36,7 @@ Of course there are. Qt itself is based on the \cpp programming language and thu
 Another prerequisite is basic knowledge of threading terminology.
 
 \section*{Text formatting}
-This book is riddled with pictures, tables and other fancy elements. There are also source code fragments included as seen in \autoref{list:sample}.
+This book is supplemented with pictures, tables and other fancy elements. There are also source code fragments included as seen in \autoref{list:sample}.
 
 \begin{fdoccode}{cpp}{list:sample}{Sample code fragment}
 int main(int argc, char *argv[]) {
@@ -49,7 +51,7 @@ This is very interesting text here\ldots
 \end{fdocextra}
 
 \section*{Source code}
-Topics of this book are supplemented sample applications to describe the matter. You can find source code in \textit{sources} subdirectory.
+Topics of this book are supplemented sample applications to describe the matter. You can find source code in \textit{sources} subdirectory or on \url{https://github.com/Martin-Rotter/qt-internals-and-principles/tree/master/sources}.
 
 \section*{Licensing}
 This work is licensed under the Creative Commons Attribution-NonComme\-/rcial-NoDerivs 3.0 Unported License. To view a copy of this license, visit \href{http://www.creativecommons.org/licenses/by-nc-nd/3.0}{www.\-/crea\-/tive-commons.org/licenses/by-nc-nd/3.0} or send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.

@@ -1,5 +1,5 @@
 \chapter{Event system}\label{section:events}
-Events do not  Generally, events are reactions for some other actions. In software, actions can be divided into to categories:
+Events are reactions for some other actions. In software, actions can be divided into to categories:
 \begin{description}
 \item[HUMAN-TRIGGERED ACTIONS] \hfill \\
 This type of actions represents natural notion of what events are. Mouse button clicks, keyboard key presses or perhaps cursor movements are human-triggered events. Each of them disposes certain properties, \eg mouse-click produces coordinates of click or key push produces the pressed character or perhaps set of characters if key sequence is used.
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 }
 \end{fdoccode}
 
-\begin{fdoccode}{cpp}{listing:eventloop2}{Typical event loop structure}
+\begin{fdoccode}{cpp}{listing:eventloop2}{Typical event loop scheme}
 while() {
 	if (exit) {
 		return status;
@@ -45,11 +45,11 @@ while() {
 
 Let's take a look at \autoref{figure:eventloop} which displays typical structure of Qt application.  Arrow indicates position of supervising entity (entity which triggered event loop). If\fdocinlinecode{cpp}{!}{QSystemTrayIcon} notices that certain event happened in it,\fdocinlinecode{cpp}{!}{QApplication} instance is notified about the situation and is given information about:
 \begin{itemize}
-\item type of event
-\item event properties
-\item sender
+\item type of event,
+\item event properties,
+\item sender.
 \end{itemize}
-Event (object) is posted by\fdocinlinecode{cpp}{!}{QSystemTrayIcon} and appended to event loop queue for further processing and\fdocinlinecode{cpp}{!}{QSystemTrayIcon} possibly waits for backward event delivery from event loop.
+Event is posted by\fdocinlinecode{cpp}{!}{QSystemTrayIcon} and appended to event loop queue for further processing and\fdocinlinecode{cpp}{!}{QSystemTrayIcon} possibly waits for backward event delivery from event loop.
 
 \indent\fdocinlinecode{cpp}{!}{QApplication} event loop iterates and finds new unsolved events which are eventually removed from the queue and sent to their senders.\fdocinlinecode{cpp}{!}{QSystemTrayIcon} then \textit{handles} the event and responds with expected behavior which finally concludes life of this event.
 
@@ -96,14 +96,8 @@ void MyQObject::childEvent(QChildEvent *event) {
 }
 \end{fdoccode}
 
-% TODO: 
-% metoda QObject::startTimer...událost dále customEvent
-% diagram cyklu
-% deleteLater vs delete
-% qapplication event loop
-
 \section{Event filters}
-Classic event handlers maybe unusable if you want to handle all events in one place. One solution is to use generic\fdocinlinecode{cpp}{!}{bool QObject::event(QEvent * e)} event handler which catches all events. Another solution of this approach is event filtering. Event filter is ordinary method which accepts destination\fdocinlinecode{cpp}{!}{QObject} instance and event object. Example (\autoref{listing:reimplm2}) shows the approach quite clearly.
+Classic event handlers maybe unusable if you want to handle all events in one place. One solution is to use generic\fdocinlinecode{cpp}{!}{bool QObject::event(QEvent * e)} event handler which catches all events. Another solution of this approach is event filtering. Event filter is ordinary method which accepts destination\fdocinlinecode{cpp}{!}{QObject} instance and event object. \autoref{listing:reimplm2} shows the approach quite clearly.
 
 \begin{fdoccode}{cpp}{listing:reimplm2}{Using event filter}
 // myqobject.h
@@ -131,15 +125,46 @@ bool MyQObject::eventFilter(QObject *object, QEvent *event) {
     qDebug("Event happened in %s.", qPrintable(object->objectName()));
 
     if (event->type() == QEvent::ChildAdded) {
-	qDebug("Observing child-event for %s and child %s.",
-	       qPrintable(object->objectName()),
-	       qPrintable(static_cast<QChildEvent*>(event)->child()->objectName()));
+				qDebug("Observing child-event for %s and child %s.",
+	      qPrintable(object->objectName()),
+	      qPrintable(static_cast<QChildEvent*>(event)->child()->objectName()));
     }
 
     return QObject::eventFilter(object, event);
 }
 \end{fdoccode}
 
+\section{Events and QObject instance lifetime}
+\fdocinlinecode{cpp}{!}{QObject} instances are capable of sending and receiving events. One instance can be addressed by hundreds of pending events. What if that QObject instance is scheduled for deletion and some events aren't processed yet?
+
+Remaining events need to be processed before objects is deleted. This is done automatically by parent event loop. \autoref{listing:eventloop3} displays enhanced event loop. Objects from current context are checked and if some of them are scheduled for deletion, then they are freed. That happens after all events are consumed.
+
+\begin{fdoccode}{cpp}{listing:eventloop3}{Enhanced event loop scheme}
+while() {
+	if (exit) {
+		return status;
+	}
+	check_queue_of_pending_events;
+	process_all_pending_events;
+	remove_processed_events_from_the_queue;
+	
+	foreach (QObject object in event_loop_context) {
+		if (object.is_scheduled_for_deletion) {
+			object.delete;
+		}
+	}
+}
+\end{fdoccode}
+
+This approach for deleting\fdocinlinecode{cpp}{!}{QObject}-based instances is used automatically and the only thing the programmer needs to do is to call\fdocinlinecode{cpp}{!}{object.deleteLater()} with particular object.
+
+Programmer can use classic\fdocinlinecode{cpp}{!}{delete} operator too but that's risky. If there are pending events with deleted object as recipient, then these events are delivered to unallocated memory and segmentation fault occurs.
+
+% TODO: 
+% metoda QObject::startTimer...událost dále customEvent
+% diagram cyklu
+% deleteLater vs delete
+% qapplication event loop1
 
 % TODO: Custom events.
 %\subsection{Custom events}

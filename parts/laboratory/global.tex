@@ -1,19 +1,17 @@
 \chapter{Global Qt functions and macros}
-Qt has its functionality separated into modules\index{module}. There is one special module (incarnated in QtCore module) called QtGlobal\index{QtGlobal}. QtGlobal is contained within single header file\fdocinlinecode{text}{!}{qglobal.h}. QtGlobal contains following:
+Qt has its functionality separated into modules\index{module}. There is one special module (incarnated in QtCore module) called QtGlobal\index{QtGlobal}. QtGlobal is contained within single header file\fdocinlinecode{text}{!}{qglobal.h} and is the part of QtCore library file. QtGlobal contains following:
 \begin{itemize}
 \item
-type clones (\autoref{table:types}) for every standard \cpp type
-
+type clones (\autoref{table:types}) for every standard \cpp{} type,
 \item
-functions
-
+functions,
 \item
-macros\index{macro}
+macros.\index{macro}
 \end{itemize}
 
 \begin{table}[ht]
 \begin{center}
-\caption{Qt Creator minimal plugins setup on x86 architecture (Linux)}\label{table:types}
+\caption{\cpp{} type aliases in Qt}\label{table:types}
 \begin{tabular}{c | c}
 orignal type name & Qt type name \\
 \hline
@@ -47,23 +45,19 @@ Returns value which represents infinity.
 Mathematically rounds input paramater either to 64/32 bit integer.
 \end{description}
 
-All functons can be found in\fdocinlinecode{text}{!}{/qt-root-directory/include/QtCore/qglobal.h}.
+All functons can be found in\fdocinlinecode{text}{!}{/qt-root-directory/include/QtCore/qglobal.h}. Some other functions will be used throughout the rest of the book.
 
 \section{Producing console outputs with Qt}
-Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{QDebug} class and\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better.
-
-Basic syntax for using\fdocinlinecode{cpp}{!}{QDebug} is fairly simple (\autoref{listing:qdebug}).
+Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{QDebug} class and\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better. Basic syntax for using\fdocinlinecode{cpp}{!}{QDebug} is fairly simple (\autoref{listing:qdebug}) as it implements \fdocinlinecode{cpp}{!}{<<} operator and can act as \fdocinlinecode{cpp}{!}{printf(...)} function.
 
 \begin{fdoccode}{cpp}{listing:qdebug}{Basic QDebug usage}
 qDebug() << "Print this to standard output.";
 qDebug("Print number %d.\n", 10);
 \end{fdoccode}
 
-First\fdocinlinecode{cpp}{!}{qDebug} usage requires explicit\fdocinlinecode{cpp}{!}{<QDebug>} inclusion because\fdocinlinecode{cpp}{!}{<<} operator is used. Second usage acts as wrapper for the\fdocinlinecode{cpp}{!}{printf} function from standard C library. You can use also\fdocinlinecode{cpp}{!}{qWarning},\fdocinlinecode{cpp}{!}{qCritical} or\fdocinlinecode{cpp}{!}{qFatal} functions in accordance to importance of message.
+First\fdocinlinecode{cpp}{!}{qDebug} usage requires explicit\fdocinlinecode{cpp}{!}{<QDebug>} inclusion. Second usage acts as wrapper for the\fdocinlinecode{cpp}{!}{printf} function from standard C library. You can use also\fdocinlinecode{cpp}{!}{qWarning},\fdocinlinecode{cpp}{!}{qCritical} or\fdocinlinecode{cpp}{!}{qFatal} functions according to importance of message.
 
-Default implementation halts an application if\fdocinlinecode{cpp}{!}{qFatal} is called and uses\fdocinlinecode{cpp}{!}{std::cerr} output for printing messages.
-
-You can implement custom behavior for previous functions very simply:
+Default implementation halts an application if\fdocinlinecode{cpp}{!}{qFatal} is called and uses\fdocinlinecode{cpp}{!}{std::cerr} output for printing messages. You can implement custom behavior for previous functions very simply:
 \begin{enumerate}
 \item
 You need to implement global (or static) function with signature\fdocinlinecode{cpp}{!}{void (*function)(QtMsgType, const QMessageLogContext &, const QString &)}. Typical\\ implementation may look like \autoref{listing:qdebug2}.
@@ -115,7 +109,7 @@ Calling\fdocinlinecode{cpp}{!}{qFatal} function results in error dialog in Windo
 \end{figure}
 
 \begin{fdocextra}
-Debugging outputs should always be written in English.
+Debugging outputs should always be written in English language with ASCII character set.
 \end{fdocextra}
 
 This implementation prints out extra information which is extremely important for debugging. However, you can do whatever you want in your implementation. Storing outputs to database or sending them over network are just some possible enhancements.

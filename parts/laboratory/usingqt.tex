@@ -4,23 +4,22 @@ Basic Qt library structure is known to us but we need to know something about Qt
 Every Qt/\cpp programmmer should be aware of existence of certain rules concerning source code appearance. These rules are called \textit{conventions}\index{convention} and you will learn about them too.
 
 \section{Qt Creator}
-Qt Creator (see \autoref{figure:qtcreator}) is fully-featured \cpp \& JavaScript development environment. It is suitable for plain \cpp development as well as for Qt development. Qt Creator is part of Qt SDK, thus can be installed along with Qt libraries. Qt Creator supports big collection of features:\index{CMake}\index{Autotools}\index{QMake}
+Qt Creator (see \autoref{figure:qtcreator}) is fully-featured \cpp{} \& JavaScript development environment. It is suitable for plain \cpp{}  development as well as for Qt development. Qt Creator is part of Qt SDK, thus can be installed along with Qt libraries. Qt Creator supports big collection of features:\index{CMake}\index{Autotools}\index{QMake}
 \begin{itemize}
-\item multiple build systems (CMake, Autotools and QMake)
-\item syntax highlighting for more than one hundred programming languages
-\item auto-completion for variables, functions and macros (see \autoref{figure:qtcreatorauto})
-\item consistent look on every supported operating system
-\item many plugins
-\item refactoring facilities
-\item tools for debugging
-\item cooperation with Android SDK
-\item dynamic keyboard shortcuts
-\item integrated Qt help system (see \autoref{figure:qtcreatorhelpfull})
-\item context-aware help (see \autoref{figure:qtcreatorhelp})
-\item support for simultaneously installed Qt frameworks
-\item integrated Qt Designer for \fdocabbrevref{GUI} design
-\item sharing source code via online services
-\item many more\ldots
+\item multiple build systems (CMake, Autotools and QMake),
+\item syntax highlighting for more than one hundred programming languages,
+\item auto-completion for variables, functions and macros (see \autoref{figure:qtcreatorauto}),
+\item consistent look on every supported operating system,
+\item many plugins,
+\item refactoring facilities,
+\item tools for debugging,
+\item cooperation with Android SDK,
+\item dynamic keyboard shortcuts,
+\item integrated Qt help system (see \autoref{figure:qtcreatorhelpfull}),
+\item context-aware help (see \autoref{figure:qtcreatorhelp}),
+\item support for simultaneously installed Qt frameworks,
+\item integrated Qt Designer for \fdocabbrevref{GUI} design,
+\item sharing source code via online services and many other features.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -86,7 +85,7 @@ Qt Designer\index{Qt Designer} (see \autoref{figure:designer}) is a tool for use
 \end{figure}
 
 \section{Tools and chains}
-Qt Creator supports multiple compilers and multiple Qt libraries installed side by side. You can choose any installed compiler or Qt library to build your projects. Qt Creator uses special terminology for groups of compilers and Qt libraries called \textit{kits}. Kit (see typical kit setup in \autoref{figure:kit}) is virtual container for one compiler and one specific Qt library (for example Qt 5 library). Moreover, kit specifies primary debugger and and other stuff needed to compile your projects. Kit (or \textit{toolchain}) says what is used to compile your project. You can manage compilers and Qt versions in\fdocinlinecode{text}{!}{Build & Run} section of Qt Creator settings dialog.
+Qt Creator supports multiple compilers and multiple Qt libraries installed side by side. You can choose any installed compiler or Qt library to build your projects. Qt Creator uses special terminology for groups of compilers and Qt libraries called \textit{kits}. Kit (see typical kit setup in \autoref{figure:kit}) is virtual container for one compiler and one specific Qt library (for example Qt 5 library). Moreover, kit specifies primary debugger and other stuff needed to compile your projects. Kit (or \textit{toolchain}) says what is used to compile your project. You can manage compilers and Qt versions in\fdocinlinecode{text}{!}{Build & Run} section of Qt Creator settings dialog.
 
 \begin{figure}[ht]
 \centering
@@ -95,12 +94,12 @@ Qt Creator supports multiple compilers and multiple Qt libraries installed side 
 \end{figure}
 
 \section{Code conventions}
-Writing working application isn't, by far, enough in Qt world. Qt itself is huge library and rules are more important here than everywhere. These rules we talk about apply primarily to our source code. Code \textbf{must} be self-descriptive. This can be achieved by following certain code conventions. We are talking here about source code \enquote{typography}.\footnote{You should assure yourself you have some base to build on before you proceed. If certainty is not solid, then take a look at \citep[p.~40-77]{mcconnell:codecomplete}.}
+Writing working application isn't, by far, enough in Qt world. Qt itself is huge library and rules are more important here than everywhere. These rules we talk about apply primarily to our source code. Code must be self-descriptive. This can be achieved by following certain code conventions. We are talking here about source code \enquote{typography}.\footnote{You should assure yourself you have some base to build on before you proceed. If certainty is not solid, then take a look at \citep[p.~40-77]{mcconnell:codecomplete}.}
 
 \subsection{What are conventions?}
 Programming can be very difficult job sometimes. That's why programmers do need to make their work easier. Conventions are tools to achieve that. It's always useful to know what certain source code does simply by taking a brief look at it. If this happens, then code is written well, it is readable, understandable and it's actually joy to browse it.
 
-Let's compare source code to formatted text (\eg  text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Everything (almost) can have its style and conventions. Style makes things usable, predictable. Style 
+Let's compare source code to formatted text (\eg{} text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Everything (almost) can have its style and conventions. Style makes things usable, predictable. Style 
 is good.
 
 Good programmer has to realise he produces source code not for him but for other programmers in a community or in a team. Aware programmer produces code styled the way a team (or a community) likes, not the way that he wants.

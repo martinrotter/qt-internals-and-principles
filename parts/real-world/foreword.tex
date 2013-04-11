@@ -1,7 +1,7 @@
 \chapter{Foreword}
 
 \section{What is covered in this part?}
-This part is different from the previous one. In this part, you will be guided through development of more complex Qt-based application. Whole development processed will be discovered, including initial ideas, solving dependencies, licensing, programming the application, translating or publishing.
+This part is different from the previous one. In this part, you will be guided through development of more complex Qt-based application. Important parts of development process will be discovered, including initial ideas, solving dependencies, licensing, programming the application, translating or publishing.
 
 Someone could state that licensing issues or publishing the application is not important. Programmer's main task is to program the application correctly.\ That's true but programmer needs to take advantage of other tasks too because all of them provide him with chance of producing event better software.
 
@@ -22,25 +22,32 @@ I searched for calculator application which could offer such a functionality to 
 So I decided to write my own calculator which provides function I need.
 
 \section{Choosing programming language}
-I am not skilled programmer but i know \cpp programming language, so it was easy to choose. Anyway, choice of programming language is extremely important. You may take a look at section \nameref{subsection:cpp} to see \cpp features. \cpp is fairly fast so it is good choice for this kind of application.
+I am not skilled programmer but i know \cpp{} programming language, so it was easy to choose. Anyway, choice of programming language is extremely important. You may take a look at section \nameref{subsection:cpp} to see \cpp{} features. \cpp{} is fairly fast so it is good choice for this kind of application.
 
-I decided to use newest (as of 2013) \cpp version called \cpp 11. It offers many features (some already mentioned in this book) which can bring me many advantages:
+I decided to use newest (as of January 2013) \cpp{} version called \cpp{} 11. It offers many features (some already mentioned in this book) which can bring me many advantages:
 \begin{itemize}
-\item shorter code
-\item easier-to-understand code
-\item (perhaps) greater performance
+\item shorter code,
+\item easier-to-understand code,
+\item (perhaps) greater performance.
 \end{itemize}
 
 Many disadvantages can arise:
 \begin{itemize}
-\item lack of support by \cpp compilers
-\item lack of support by libraries
+\item lack of support by \cpp{} compilers,
+\item lack of support by libraries.
 \end{itemize}
 
 \fdocabbrevdeclare{MinGW}{MinGW}{Minimalistic GNU for Windows}
-There are many \cpp compilers to choose from. I want to keep my Qonverter multiplatform because I use both Linux and Windows operating systems. \fdocabbrevref{GCC} is main compiler for Linux, so there is clear situation. Latest \fdocabbrevref{GCC} is known to support all major features of \cpp 11. Several great compilers are available for Windows platform. I could use \fdocabbrevref{MSVC} 2010 compiler but it lacks some \cpp 11 features so latest \fdocabbrevref{MinGW} (\fdocabbrevref{GCC}-based) was chosen instead. Mac OS X operating system uses \fdocabbrevref{GCC}-based compiler too so there is implicit support too.
+There are many \cpp{} compilers to choose from. I want to keep my Qonverter multiplatform because I use both Linux and Windows operating systems. \fdocabbrevref{GCC} is main compiler for Linux, so there is clear situation. Latest \fdocabbrevref{GCC} (version 4.8.0, as of March 2013) is known to support all major features of \cpp{} 11. Several great compilers are available for Windows platform. I could use \fdocabbrevref{MSVC} 2010 compiler but it lacks some \cpp{} 11 features so latest \fdocabbrevref{MinGW} compiler was chosen instead. \fdocabbrevref{MinGW} is \fdocabbrevref{GCC}-based compiler. Mac OS X operating system uses Clang compiler which is known to support \cpp{} 11 too \citep{various:clang}. So hypothetically, these operating systems might be supported:
+\begin{itemize}
+\item Windows,
+\item GNU/Linux,
+\item Mac OS X.
+\end{itemize}
+In fact, even more operating systems can be supported in the future, because Qt is ported for example to eComStation \citep{various:ecomstation} operating system.
+
 
 \section{Choosing libraries}
-I picked compilers and  programming language in five minutes. It wasn't the big deal. I had to choose libraries too and that was the big deal. I knew just few libraries but only one which provides me with ability to build \fdocabbrevref{GUI}. It was Qt. Latest Qt (Qt 5) is known to work with \cpp 11. It just came out when i decided to create Qonverter (spring of 2013) so I decided to use it.
+I picked compilers and programming language in five minutes. It wasn't the big deal. I had to choose libraries too and that was the big deal. I knew just few libraries but only one which provides me with ability to build \fdocabbrevref{GUI}. It was Qt. Latest Qt (Qt 5) is known to work with \cpp{} 11. It just came out when i decided to create Qonverter (spring of 2012) so I decided to use it.
 
-One last piece of puzzle needed to be found. Library for mathematical core of the application. I was searching for the right one for one week and nothing great appeared. Eventually, I discovered muParserX library (\href{http://code.google.com/p/muparserx}{http://code.google.com/p/\-/muparserx}) developed by Ingo Berg.
+One last piece of puzzle needed to be found. Library for mathematical core of the application. I was searching for the right one for one week and nothing great appeared. Eventually, I discovered muParserX library \citep{various:muparserx}.
