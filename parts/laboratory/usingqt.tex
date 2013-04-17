@@ -1,7 +1,7 @@
 \chapter{Using Qt framework}
-Basic Qt library structure is known to us but we need to know something about Qt-related development evnironments and tools. You can develop Qt applications in any text editor or in major development environment, including Microsoft Visual Studio\index{Visual Studio}. Some tools are part of Qt framework, however. This includes young and thriving Qt Creator\index{Qt Creator} development environment.
+Basic Qt library structure is known to us but we need to know something about Qt-related development environments and tools. You can develop Qt applications in any development environment, including Microsoft Visual Studio\index{Visual Studio}. Some tools are part of Qt framework, however. This includes young and thriving Qt Creator\index{Qt Creator} development environment.
 
-Every Qt/\cpp programmmer should be aware of existence of certain rules concerning source code appearance. These rules are called \textit{conventions}\index{convention} and you will learn about them too.
+Every Qt/\cpp{} programmmer should be aware of existence of certain rules concerning source code appearance. These rules are called \textit{conventions}\index{convention} and you will learn about them too.
 
 \section{Qt Creator}
 Qt Creator (see \autoref{figure:qtcreator}) is fully-featured \cpp{} \& JavaScript development environment. It is suitable for plain \cpp{}  development as well as for Qt development. Qt Creator is part of Qt SDK, thus can be installed along with Qt libraries. Qt Creator supports big collection of features:\index{CMake}\index{Autotools}\index{QMake}
@@ -94,13 +94,12 @@ Qt Creator supports multiple compilers and multiple Qt libraries installed side 
 \end{figure}
 
 \section{Code conventions}
-Writing working application isn't, by far, enough in Qt world. Qt itself is huge library and rules are more important here than everywhere. These rules we talk about apply primarily to our source code. Code must be self-descriptive. This can be achieved by following certain code conventions. We are talking here about source code \enquote{typography}.\footnote{You should assure yourself you have some base to build on before you proceed. If certainty is not solid, then take a look at \citep[p.~40-77]{mcconnell:codecomplete}.}
+Writing working application is not enough in Qt world. Qt itself is huge library and rules are more important here than everywhere. These rules we talk about apply primarily to our source code. Code must be self-descriptive. This can be achieved by following certain code conventions. We are talking here about source code \enquote{typography}.\footnote{You should assure yourself you have some base to build on before you proceed. If certainty is not solid, then take a look at \citep[p.~40-77]{mcconnell:codecomplete}.}
 
 \subsection{What are conventions?}
-Programming can be very difficult job sometimes. That's why programmers do need to make their work easier. Conventions are tools to achieve that. It's always useful to know what certain source code does simply by taking a brief look at it. If this happens, then code is written well, it is readable, understandable and it's actually joy to browse it.
+Programming can be very difficult job sometimes. That's why programmers do need to make their work easier. Conventions are tools to achieve that. It's always useful to know what certain source code does simply by taking a brief look at it. If this happens, then code is written well, it is readable, understandable and it is actually joy to browse it.
 
-Let's compare source code to formatted text (\eg{} text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Everything (almost) can have its style and conventions. Style makes things usable, predictable. Style 
-is good.
+Let's compare source code to formatted text (\eg{} text of a book). Good books do have their content formatted so that reader can read it smoothly and comfortably. It is supplemented with pictures, tables, charts and diagrams. Text itself is separated into paragraphs (usually one paragraph per idea), which can have indented first lines or can be separated by vertical white space. In addition, important words can be \textcolor{purple}{highlighted} with color or \emph{emphasised} alternatively. You can disagree with claims in this paragraph but these claims can be summed up into one thing called \emph{style}\index{style}. Your potential disagreement signs that there are many various styles. Some apply to books, other ones to cars. Styles are not perfect. If majority of interested people likes these adjustments (\eg visual adjustments of source code), then we call these adjustments a \emph{conventions}\index{convention}. Almost everything can have its style and conventions. Style makes things usable and predictable.
 
 Good programmer has to realise he produces source code not for him but for other programmers in a community or in a team. Aware programmer produces code styled the way a team (or a community) likes, not the way that he wants.
 
@@ -152,7 +151,7 @@ There are considerable differences between these two code fragments. Conventions
 Base for \autoref{listing:goodstyle} is sample application in\fdocinlinecode{text}{!}{sources/laboratory/06-good-car}. Let's explore both file\fdocinlinecode{text}{!}{sources/laboratory/06-good-car/car.h} and\fdocinlinecode{text}{!}{sources/laboratory/06-good-car/car.cpp}.
 
 \subsubsection*{File car.h}
-Using two blank lines between header file last\fdocinlinecode{cpp}{!}{#define} macro and class declaration beginning is generally good habit. Some programmers use just one blank line, it's a matter of taste.
+Using two blank lines between header file last\fdocinlinecode{cpp}{!}{#define} macro and class declaration beginning is generally good habit. Some programmers use just one blank line.
 \begin{lstlisting}[firstnumber=1,language=cpp]
 #ifndef CAR_H
 #define CAR_H
@@ -160,12 +159,12 @@ Using two blank lines between header file last\fdocinlinecode{cpp}{!}{#define} m
 
 class Car {
 \end{lstlisting}
-Blank-lining is good in many constructs of \cpp language. One blank line should appear before each class section except the very first section.
+Blank-lining is good in many constructs of \cpp language. One blank line should appear before each class section except the first one.
 \begin{lstlisting}[firstnumber=5,language=cpp]
 class Car {
     public:
 \end{lstlisting}
-Comment\index{code comment} your code. Comments are essential part of source code. Always comment parts of code which are not straightforward. Uncommented code buys you ticket to hell.
+Comment\index{code comment} your code. Comments are essential part of source code. Always comment parts of code which are not straightforward.
 \begin{lstlisting}[firstnumber=7,language=cpp]
 	// Creates new car.
 \end{lstlisting}
@@ -206,4 +205,4 @@ Inclusion of header files is a matter that should attract our attention. It is \
 \end{fdocextra}
 \footnotetext{That has actually happened with Qt 5 release. Module QtWidgets was created and some classes from QtGui were moved into it.}
 
-As we said, code style is unique for each and every programmer in some detail. If you program an application, try to stop from time to time and imagine you're someone who sees that piece of code for the first time and try to think about goal of that code. Or even better, send your code to someone else for review.
+As we said, code style is unique for each and every programmer in some detail. If you program an application, try to stop sometimes and imagine that you are someone who sees your piece of code for the first time and try to think about goal of the code. Or even better, send your code to someone else for review.

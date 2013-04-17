@@ -8,7 +8,7 @@ Qt penetrated the world of interactive applications and now it can be found even
 
 In a matter of time, Qt began to be perceived as very dynamic library which is particularly great for graphical interface design. There was very good reason for such an opinions because \fdocabbrevref{KDE} was released in 1996, invoking quite a sensation. In short, its desktop environment looked great and overpowered other major environments in this aspect. Qt was pushed forward by those events and became massively popular. The only goal of Qt was to be a good library for anyone who does desktop programming.
 
-As years passed, Qt was more and more robust, \fdocabbrevref{KDE} made its progress through version 3 and 4, and things have changed. Presently, desktop\index{desktop} does not mean everything for application developer. Today cyber-world needs to be interconnected and people want to be mobile. You can't do that with desktop environment running on personal computer. You need cell-phone. Cell-phone with (possibly) good-looking environment and fancy applications. Unfortunately, Qt 4 was not able to offer this kind of functionality to its users -- programmers, so they looked at the competition and chose Android\index{Android} as their platform, leaving Qt behind.
+As years passed, Qt was more and more robust, \fdocabbrevref{KDE} made its progress through version 3 and 4, and things have changed. Presently, desktop\index{desktop} does not mean everything for application developer. Today cyber-world needs to be interconnected and people want to be mobile. You can't do that with desktop environment running on personal computer. You need cell-phone. Cell-phone with (possibly) good-looking environment and fancy applications. Unfortunately, Qt 4 was not able to offer this kind of functionality to its users\,--\,programmers, so they looked at the competition and chose Android\index{Android} as their platform, leaving Qt behind.
 
 Luckily, Qt 5 appeared, bringing us some new exciting features, giving itself a chance to compete its opponents in category of mobile development toolkits. If we add rock-solid desktop features, we have versatile and stable base to build on.
 
@@ -104,7 +104,7 @@ I am BaseClass.
 I am InheritingClass.
 \end{fdoccode}
 
-\cpp{} has many characteristics -- some are bad while other ones may be great.
+\cpp{} has many characteristics\,--\,some are bad while other ones may be great.
 \begin{description}
 \item[SYNTAX\ts{\textcolor{red}{bad}}]\hfill \\
 \cpp{} is known to have some oddities rooted in its syntax, \eg we can be confused by rife usages of\fdocinlinecode{cpp}{!}{const} keyword. One\fdocinlinecode{cpp}{!}{const} marks methods which can operate only with constant objects and another distinguishes constant variables from non-constant ones. Even the greatest fan of \cpp{} has to admit uncomfortable usage of this keyword. You can read about this topic in \citep[p.~90--92, p.~537]{prata:cprimer}.
@@ -128,7 +128,7 @@ On the other, manual management of allocated objects gives programmer bigger pow
 Neither virtual machine nor complex runtime environment supports execution of \cpp{} application, thus \enquote{nobody} supervises actions of your application, except operating system. Your application is left alone with its segment of primary memory and your application is entrusted with everything, including memory management.
 
 \item[THREADING\ts{\textcolor{red}{bad}}]\hfill \\
-\cpp{} doesn't contain unified interface for threading.\footnote{Threading is supported in new \cpp11 standard. You can read about threading\index{threading} inclusion in \citep[p.~1114-1160]{various:cppstandard}.} That could make pure \cpp{} poorly usable for developing more complex applications if no \nth{3}-party threading library is available.
+\cpp{} doesn't contain unified interface for threading.\footnote{Threading is supported in new \cpp{} 11 standard. You can read about threading\index{threading} inclusion in \citep[p.~1114-1160]{various:cppstandard}.} That could make pure \cpp{} poorly usable for developing more complex applications if no \nth{3}-party threading library is available.
 
 \item[FAST CODE EXECUTION\ts{\textcolor{YellowOrange}{great}}]\hfill \\
 \cpp{} code execution is amazingly fast compared to other modern programming languages. Direct compilation (see more in \autoref{section:compilation})  into machine code is the cause here. Other favorite languages are compiled into bytecode, thus they have to be compiled just-in-time by virtual machine and that is time consuming job, thus making application execution slow.
@@ -235,7 +235,7 @@ static unsafe void swap(int* lhs, int* rhs) {
 
 \begin{figure}[ht]
 \centering\includegraphics[width=9cm,angle=-90]{graphics/laboratory/00-langcomparison.pdf}
-\caption{\cpp{} vs. \csharp{} comparison -- Quicksort algorithm}\label{figure:comparison}
+\caption{\cpp{} vs. \csharp{} comparison\,--\,Quicksort algorithm}\label{figure:comparison}
 \end{figure}
 
 We can see that \cpp{} outperformed classic \csharp{} implementation, while being aproximately 3 times faster. Even \enquote{unsafe} \csharp{} implementation got beaten, although the difference was tiny. So we can state that \cpp{} is faster than \csharp{} even in fairly simple task. You may think about performance difference if hugely complex computation (\eg rendering of 3D scene) is needed to be done.
@@ -253,24 +253,24 @@ Plenty of world-renowned software is written using \cpp{}, including many 3D gam
 When it comes to \textit{code portability} (which is just another term for \textit{multi-platformity}), \cpp{} leaves its users uncertain. They can be sure about portability of \cpp{} standard library but that's all. Standard library is not trully packed with stunning features, forcing you to use \nth{3}-party libraries for advanced functionality. Those libraries don't have to be multi-platform, which can be problematic if you want to port your application to another platform.
 
 \item[MISSING CONSTRUCTS\ts{\textcolor{red}{bad}}]\hfill \\
-Indeed, \cpp{} might be missing some very useful language constructs, which are quite common in other (\eg functional, logic or even declarative) programming paradigms. Many features emerged in \cpp11 revision, however.
+Indeed, \cpp{} might be missing some very useful language constructs, which are quite common in other (\eg functional, logic or even declarative) programming paradigms. Many features emerged in \cpp{} 11 revision, however.
 \end{description}
 
 \vfill
 
 \subsection{Version 11 and its enhancements}
-\cpp{} programming language was, for the first time, standardized in 1998. This version is known as \cpp98 and if someone talks about \cpp, he probably has this version in mind. Programming was changing depending on time and so \cpp{} had to change too to catch new trends and demands of its users.
+\cpp{} programming language was standardized in 1998. This version is known as \cpp{} 98 and if someone talks about \cpp, he probably has this version in mind. Programming was changing in time. So, \cpp{} had to change to catch new trends and demands of its users.
 
-\cpp11 brought many new features, eliminating some of its annoyances. You can read about \cpp11 in a massively extensive \citep{various:cppstandard} or goe through its finest new properties right now. It is recommended to know something about \cpp11 as its support is turned on in Qt 5 by default on supported compilers.
+\cpp{} 11 brought many new features, eliminating some of its annoyances. You can read about \cpp{} 11 in \citep{various:cppstandard} or go through its finest new properties right now. It is recommended to know something about \cpp{} 11 because Qt 5 uses its enhancements on some compilers.
 
 \subsubsection{Basic C plus plus 11 information}
-\cpp11 is source code compatible with C and with \cpp98. It means that valid C (or \cpp98) source code is valid \cpp11 code too. Inprovements in \cpp{} were done in two categories: language core and standard library.
+\cpp{} 11 is source code compatible with C and with \cpp{} 98. It means that valid C (or \cpp{} 98) source code is valid \cpp{} 11 code too. Inprovements in \cpp{} were done in two categories: language core and standard library.
 
 \paragraph{Language core improvements}
-Syntax of \cpp{} was always considered to be evil, which is partially true, because \cpp{} offers huge collection of syntactical constructs and sugar, compared to other well-known programming languages. Moreover, \cpp11 adds new language constructs.
+Syntax of \cpp{} was always considered to be bad, which is partially true, because \cpp{} offers huge collection of syntactical constructs and sugar, compared to other well-known programming languages. Moreover, \cpp{} 11 adds new language constructs.
 
 \paragraph*{Compile time constants}
-In \cpp98, you cannot write this piece of code:
+In \cpp{} 98, you cannot write this piece of code:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 int happy_number() {
 	return 7;
@@ -288,7 +288,7 @@ array[happy_number()] = happy_number();
 \end{lstlisting}
 
 \paragraph*{Initializer lists}
-Consider having the custom class which encapsulates\fdocinlinecode{cpp}{!}{std::list} and perhaps adds some functionality:
+Consider the custom class which encapsulates\fdocinlinecode{cpp}{!}{std::list} and perhaps adds some functionality:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 class CustomList {
 	private:
@@ -302,7 +302,11 @@ class CustomList {
 		}
 };
 \end{lstlisting}
-Such an implementation allows you to instantiate empty\fdocinlinecode{cpp}{!}{CustomList} and fill it with values one by one via\fdocinlinecode{cpp}{!}{insert(int i)} method. But what if you know all values in compile time? In older \cpp{} you would have to insert all values one by one. (Note that there is no\fdocinlinecode{cpp}{!}{CustomList(const std::list &list)} constructor available.) But \cpp11 allows you to use initializer list:
+Such an implementation allows you to instantiate empty\fdocinlinecode{cpp}{!}{CustomList} and fill it with values one by one via\fdocinlinecode{cpp}{!}{insert(int i)} method. What if you know all values in compile time? In older \cpp{} you would have to insert all values one by one.
+
+It would be nice if one could use better syntax for constructing\fdocinlinecode{cpp}{!}{CustomList} instances, array brace initializer syntax would be great. Its example usage looks like this:\fdocinlinecode{cpp}{!}{CustomList my_list_instance =  \{1, 2, 3, 4, 5, 6, 7\};}.
+
+\cpp{} 11 allows you to use this syntax via initializer list:
 \begin{fdoccode}{cpp}{listing:initializer}{Initializer list usage}
 class CustomList {
 	private:
@@ -329,12 +333,12 @@ CustomList my_list_instance = {1, 2, 3, 4, 5, 6, 7};
 Careful reader certainly noticed strange notation of for-loop in \autoref{listing:initializer} on line \ref{listing:forloop}. This new for-loop syntax is known as \textit{range-based for-loop}.\footnote{This kind of for-loop is available in Qt too, as we will see later.} It's just syntactical sugar. This loop works for all containers in standard library as well as for classic C-style arrays. Furthermore, all custom containers defining its iterators are supported.
 
 \paragraph*{Type deduction}
-\cpp{} is statically typed language. So you, as programmer, have to know and mark the type of each and every variable you declare. You basically write:
+\cpp{} is statically typed language. So, programmers have to know and mark the type of each and every variable you declare. You basically write:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 int variable_1 = 15;
 std:list<int> *variable_2 = new std::list<int>();
 \end{lstlisting}
-or something similar. \cpp11 allows you to omit type of variable with the\fdocinlinecode{cpp}{!}{auto} keyword:
+or something similar. \cpp{} 11 allows you to omit type of variable with the\fdocinlinecode{cpp}{!}{auto} keyword:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 auto variable_1 = 15;
 auto *variable_2 = new std::list<int>();
@@ -342,7 +346,7 @@ auto *variable_2 = new std::list<int>();
 Compiler deduces type of each \enquote{automatic} variable during compilation. This feature is useful when that particular type is hard to write.\footnote{\cpp{} programmers used to use\fdocinlinecode{cpp}{!}{typedef} to \enquote{clone} types and assign shorter names to them.} You can use\fdocinlinecode{cpp}{!}{auto} in every thinkable situation as compiler does type checking anyway. Automatic type deduction works for pointer types too.
 
 \paragraph*{Lambda expressions}
-Well, lambda expressions were the most expected feature. Known from functional languages (\eg Common Lisp, Scheme), they rapidly penetrated even object-oriented programming. Lambda expressions\index{lambda expression} are basically function objects. They can have input parameters and return values.
+Lambda expressions were the most expected feature for \cpp{} 11. Known from functional languages (\eg Common Lisp, Scheme), they rapidly found their way into object-oriented programming. Lambda expressions\index{lambda expression} are basically function objects. They can have input parameters and return values.
 
 Lambdas are functions which are defined within another function, thus having no identifier. Typical lambda expression looks like this:
 \begin{lstlisting}[firstnumber=1,language=cpp]
@@ -350,7 +354,7 @@ Lambdas are functions which are defined within another function, thus having no 
 	return input_1 * input_2;
 }
 \end{lstlisting}
-Tricky thing is that lambda expression is able to use variables from the \enquote{outside} of its body. Lambdas can be assigned to automatic variable and user can even decide if he (or she) wants to allocate lambda expression on the stack\index{stack} or on the heap\index{heap}:
+Tricky thing is that lambda expression is able to use variables from the \enquote{outside} of its body. Lambdas can be assigned to automatic variable and user can even decide if he wants to allocate lambda expression on the stack\index{stack} or on the heap\index{heap}:
 \begin{lstlisting}[firstnumber=1,language=cpp]
 auto twice_function_stack = [] (double input_1) -> double {
 	return input_1 * double;
@@ -360,7 +364,7 @@ auto twice_function_heap = new auto ([] (double input_1) -> double {
 	return input_1 * double;
 });
 \end{lstlisting}
-Lambda expression can be used as function parameter too. Very simple (and little naive) implementation of in-place map function can look like the one in \autoref{listing:lambda}.
+Lambda expression can be used as function parameter too. Very simple implementation of in-place map function can look like the one in \autoref{listing:lambda}.
 \begin{fdoccode}{cpp}{listing:lambda}{Lamda expression as function parameter}
 #include <iostream>
 #include <functional>
@@ -398,27 +402,25 @@ int main(int argc, char *argv[]) {
 Lambda expressions make huge impact on Qt 5.
 
 \paragraph*{Null pointers}\index{null}\index{pointer}
-It is quite common to type something like\fdocinlinecode{cpp}{!}{int *variable = NULL} in \cpp03. Let's expand\fdocinlinecode{cpp}{!}{NULL}. In most cases, the result is\fdocinlinecode{cpp}{!}{#define NULL ((void *)0)}. So\fdocinlinecode{cpp}{!}{NULL} is literally \enquote{the pointer pointing to nothing of any possible type.}
+It is quite common to type something like\fdocinlinecode{cpp}{!}{int *variable = NULL} in \cpp{} 03\footnote{\cpp{} 03 is just one of many \cpp{} standard revisions. This one was approved in 2003.}. Let's expand\fdocinlinecode{cpp}{!}{NULL}. In most cases, the result is\fdocinlinecode{cpp}{!}{#define NULL ((void *)0)}. So\fdocinlinecode{cpp}{!}{NULL} is literally \enquote{the pointer pointing to nothing of any possible type.}
 
-Problem occurs if\fdocinlinecode{cpp}{!}{NULL} is defined as $0$. Troubles might appear when overloaded function gets called with such a\fdocinlinecode{cpp}{!}{NULL}. It's not obvious if\fdocinlinecode{cpp}{!}{function(int)} or\fdocinlinecode{cpp}{!}{function(int*)} gets called by\fdocinlinecode{cpp}{!}{function(variable)}. It might be the first function on one system or second one on another system.
-
-\cpp11 implements new keyword\fdocinlinecode{cpp}{!}{nullptr} wich is always evaluated to correct value.
+Problem occurs if\fdocinlinecode{cpp}{!}{NULL} is defined as $0$. Troubles might appear when overloaded function gets called with such a\fdocinlinecode{cpp}{!}{NULL}. It's not obvious if\fdocinlinecode{cpp}{!}{function(int)} or\fdocinlinecode{cpp}{!}{function(int*)} gets called by\fdocinlinecode{cpp}{!}{function(variable)}. It might be the first function on one system or second one on another system. \cpp{} 11 implements new keyword\fdocinlinecode{cpp}{!}{nullptr} wich is always evaluated to correct value.
 
 \paragraph{Standard library improvements}\index{standard library}
-Standard library has always been quite tiny. It included just necessary classes, nothing special. But time goes forward, so that standard library must too. Number of fine classes were added.
+Standard library used to be very tiny. It included just necessary classes, nothing special. But time goes forward, so that standard library must go too. Number of fine classes were added. You can find information about some improvements below. Complete list can be found in \citep{various:cppstandard}.
 
 \paragraph*{Threading}\index{thread}
 Finally, threading was introduced within the standard library. This threading subsystem should not depend on operating system threading implementation. But threading-related stuff in Qt depends on specific classes from operating system (pthreads on Linux)\index{pthreads}\index{Linux} and work really fine. So these standardized threading facilities are not so important for ordinary Qt user.
 
 \paragraph*{Tuples (pairs)}\index{tuple}
-Good bonus for every \cpp{} programmer. No need to use \nth{3} party tuples implementations. More classes are new in the standard library, look at \citep{various:cppstandard} for more.
+Tuples are good bonus for every \cpp{} programmer. So, there is no need to use \nth{3} party tuple implementations.
 
 \section{Qt components}\label{section:components}
 Qt consists of libraries, tools and other supplemental software. You have already seen very brief list of Qt components in \autoref{section:what}. Libraries themselves are divided into so-called \textit{modules}\index{modules}.\footnote{You are not familiar with modules yet. Module is simply collection of related classes.} You can learn more about modules in \autoref{section:qtstructure}. Let's look into Qt library collection more thoroughly. Qt library collection contains these main components:
 
 \begin{enumerate}
 \item Tools for \fdocabbrevref{GUI} design and implementation consisting of user interface designer (QtDesiger) and user interface classes (known as QtWidgets and QtGui).
-\item Painting system which is accessory for \fdocabbrevref{GUI} design or can server as the main force for creating graphics-related software, \eg painting applications, video editors or perhaps chart designer programs.
+\item Painting system which is accessory for \fdocabbrevref{GUI} design. It can serve as the main force for creating graphics-related software, \eg painting applications, video editors or perhaps chart designer programs.
 \item Testing facilities which enable you to use test-driven development model. Unit-testing is extremely useful for large-scaled projects.
 \item Complete thread subsystem that allows you to split your application computations among several threads of execution, making your program more robust and versatile.
 \item Networking machinery for swift network communication between workstations and even among processes or threads.
@@ -432,7 +434,7 @@ Qt consists of libraries, tools and other supplemental software. You have alread
 Some parts from this (not-so-complete) list will be examined deeply, some won't.
 
 \subsection{Supported platforms}
-Qt 5 is multi-platform framework and support of various operating systems and platforms is one if its key features if now the biggest one. Supported operating systems are:
+Qt 5 is multi-platform framework and the support of various operating systems and platforms is one if its key features. Supported operating systems are:
 \begin{itemize}
 \item Windows ($+$ Windows Embedded Compact),
 \item Linux,
@@ -451,7 +453,7 @@ Qt 5 is neither binary nor source code compatible with previous Qt releases, res
 \fdocabbrevdeclare{QPA}{QPA}{Qt Platform Abstraction}
 
 \item
-Brand new Qt component named \fdocabbrevref{QPA}, allowing you to easier port Qt 5 for new platform and operating systems.
+Brand new Qt component named \fdocabbrevref{QPA}, allowing you to port Qt 5 easily to new platform and operating systems.
 
 \item
 All classes were update to conform to Unicode 6.2 standard.
@@ -469,7 +471,7 @@ QtWebKitWidgets\index{QtWebKitWidgets} now includes rewritten Webkit-based\index
 \fdocabbrevdeclare{MSVC}{MSVC}{Microsoft Visual \cpp}
 
 \item
-\cpp98 -- 11 compilers are supported.\footnote{Note that some compilers (\eg \fdocabbrevref{MSVC} compiler) do not support all \cpp11 features yet. Use acclaimed \fdocabbrevref{GCC} in case of problems. Even if your compilers supports \cpp11 you might have to use some compiler switch to turn \cpp11 support on.} Meta-object system was tweaked too and you will be informed about those changes later.
+\cpp{} 98\,--\,11 compilers are supported.\footnote{Note that some compilers (\eg \fdocabbrevref{MSVC} compiler) do not support all \cpp{} 11 features yet. Use acclaimed \fdocabbrevref{GCC} in case of problems. Even if your compilers supports \cpp{} 11 you might have to use some compiler switch to turn \cpp{} 11 support on.} Meta-object system was improved too.
 
 \item
 New multi-platform user interface style called Fusion is available (\autoref{figure:fusion}).
@@ -490,12 +492,12 @@ There are basically three ways of obtaining Qt framework:
 
 Qt can be downloaded as executable installer file which containes binaries precompiled for you as well as documentation and other needed tools. Sometimes manual compilation is needed.\footnote{It is commonly known that Qt compilation can last for several hours. Thus, consider getting precompiled binaries instead of compiling those by yourself.}
 
-Qt framework versions gets released precompiled for certain compilers only. Linux releases are meant to work with \fdocabbrevref{GCC}, Windows releases are usually precompiled by \fdocabbrevref{MSVC}. Qt framework with MinGW support is released from time to time too.
+Precompiled Qt libraries are released for certain compilers only. Linux releases are should work with \fdocabbrevref{GCC}, Windows releases are usually precompiled by \fdocabbrevref{MSVC}. Qt framework with MinGW support is released from time to time too.
 
 \subsection{Installing Qt on Windows}
 Qt installation on Windows is fairly straightforward if precompiled Qt binaries are available. All you need to do is obtain the setup executable file and follow instructions. Some troubles might occur, though. Let's assume that Qt was installed in\fdocinlinecode{text}{!}{c:\\Qt\\Qt5.0.0\\}.
 
-You need to tweak your PATH environment variable in order to be able to run Qt tools from command line. Qt Creator will work even without proper PATH because it does all necessary settings for itself automatically. You can setup PATH variable in Windows 7 as follows:
+You need to change your PATH environment variable in order to be able to run Qt tools from command line. Qt Creator will work even without proper PATH because it does all necessary settings for itself automatically. You can setup PATH variable in Windows 7 as follows:
 \begin{enumerate}
 \item From the desktop, right-click (by mouse) \enquote{My Computer} and then click \enquote{Properties}.
 \item Choose \enquote{Advanced System Settings} from the list.
@@ -504,7 +506,7 @@ You need to tweak your PATH environment variable in order to be able to run Qt t
 \item Move to the end of the string and add folowing paths:
 \begin{lstlisting}[firstnumber=1,language=text]
 c:\Qt\Qt5.0.0\5.0.0\msvc2010\bin\
-c:\Qt\Qt5.0.0\Tools\QtCreator\bin\ (If Qt Creator is installed too.)
+c:\Qt\Qt5.0.0\Tools\QtCreator\bin\
 \end{lstlisting}
 Paths within the PATH variable are separated by semicolons. Typical content of PATH variable may look like the one in \autoref{listing:pathwindows}.
 \begin{fdoccode}{text}{listing:pathwindows}{Setting PATH environment variable for Qt on Windows}
@@ -539,7 +541,7 @@ QMAKESPEC=$QTDIR/mkspecs/linux-g++
 \end{enumerate}
 
 \subsection{Compilling Qt}\index{compilation}
-Sometimes, you may need to compile Qt on your own. Compilation allows you to throw away features you do not like, resulting in smaller dynamic (and static too) libraries sizes.
+Sometimes, you may need to compile Qt on your own. Compilation allows you to throw away features you do not like, resulting in smaller dynamic/static libraries sizes.
 
 Qt sources are always contained within compressed file. All you need to do is to have correctly installed \cpp{} compiler\footnote{Personally, I prefer \fdocabbrevref{GCC}-based compilers for Qt development.}. Basic compilation steps are quite similar for each operating system:
 \begin{enumerate}
