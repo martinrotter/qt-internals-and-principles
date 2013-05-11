@@ -4,11 +4,11 @@ Compilers\index{compiler} pursue programming languages since the time languages 
 Same problem was faced by developers in the times of programming antiquity. Perfect example is the C\index{C} compiler. When C was invented, there was (naturally) no compiler for it. It had to be programmed from scratch using another programming language. Assembly\index{assembly} language was chosen. That led to quite high code complexity and very huge effort by the programmers had to be spent, so that compiler could be finished.
 
 \section{Compilers, linkers, assemblers, \ldots}
-Compiler is generally a converter. It does certain kind of conversion. If we talk about programming language compiler, then we naturally expect to convert textual \textit{source code} into executable\index{executable file} form. Output of compiler (of object-oriented language) is sometimes called \textit{object code}\index{object code}. Transformation from source code\index{source code} into object code is not straightforward and needs to be done in several steps in majority of \cpp{} compilers.
+Compiler is generally a converter. It does certain kind of conversion. If we talk about programming language compiler, then we naturally expect to convert textual \textit{source code} into executable\index{executable file} form. Output of a compiler (of object-oriented language) is sometimes called \textit{object code}\index{object code}. Transformation from source code\index{source code} into object code is not straightforward and needs to be done in several steps in majority of \cpp{} compilers.
 
 In fact, compiler doesn't do source code to object code transformation. It does transformation from source code to \textit{assembly language}\index{assemebly language}. Assembly language is then assembled into object code by \textit{assembler}\index{assembler}.
 
-Object code itself can be directly executable but, in most cases, it is not. \cpp{} offers many functions and features via embedded standard library\index{standard library}. All functions are placed is separate dynamic-link library\index{dynamic-link library}. Object code contains just signatures of used functions, function bodies are stored in library and object code needs to be told where library is located, so that called standard library functions can find their bodies and execute successfully. Process of connecting library functions signatures in source code to library function bodies in library file is called \textit{linking}\index{linking} and tool perform such a process is called \textit{linker}\index{linker}. Linking can be divided into static and dynamic, see below for more information.
+Object code itself can be directly executable but, in most cases, it is not. \cpp{} offers many functions and features via embedded standard library\index{standard library}. All functions are placed is separate dynamic-link library\index{dynamic-link library}. Object code contains just signatures of used functions. Function bodies are stored in library and object code needs to be told where library is located, so that called standard library functions can find their bodies and execute successfully. Process of connecting library functions signatures in source code to library function bodies in library file is called \textit{linking}\index{linking} and tool which performs such a process is called \textit{linker}\index{linker}. Linking can be divided into static and dynamic, see below for more information.
 
 \begin{fdocextra}
 There are two types of library linkage:
@@ -22,10 +22,10 @@ Not so favourite kind of linkage. Library is packed into executable file and lin
 
 \fdocabbrevdeclare{ELF}{ELF}{Executable and Linkable Format}
 \fdocabbrevdeclare{PE}{PE}{Portable Executable}
-\section{Executable files and its structure}
+\section{Executable file and its structure}
 Final output of \cpp{} code compilation is executable file or library file. Structure of executable file differs from platform to platform. Linux uses \fdocabbrevref{ELF} and Windows uses \fdocabbrevref{PE}.
 
-Both executable file formats differ in details but they follow the same idea. Executable file is divided into header and body in this idea. Header usually contains table with information about placement of linked libraries. This table is filled with actual information when exectuble file launches. Body of executable file includes object code.\footnote{Information in this paragraph intentionally simplified for our purposes.}
+Both executable file formats differ in details but they follow the same idea. Executable file is divided into header and body in this idea. Header usually contains table with information about placement of linked libraries. This table is filled with actual information when exectuble file launches. Body of executable file includes object code.\footnote{Information in this paragraph is intentionally simplified for our purposes.}
 
 Let's look at compilation process of plain \cpp{} application and Qt-based application. There are many differences as different entities take part in the process.
 
@@ -33,7 +33,7 @@ Let's look at compilation process of plain \cpp{} application and Qt-based appli
 Experienced \cpp{} programmer is probably familiar with standard compilation process (\autoref{figure:classicpr}). This process consists of four main steps:
 \begin{enumerate}
 \item Makefile generation utility generates desired kind of makefiles. This step is fairly optional and is not needed for small applications.
-\item Preprocessor examines input source code, replaces all occurrences of preprocessor definitions and expand macros to actual code. Files produced by preprocessor are ready to be processed by compiler.
+\item Preprocessor examines input source code, replaces all occurrences of preprocessor definitions and expand macros. Files produced by preprocessor are ready to be processed by compiler.
 \item Compiler checks syntactical correctness of input \cpp{} code. If code is correct, then compilation goes on, otherwise procedure halts and error is displayed to the user. Compiler produces assembly code which is accepted by assembler.
 \item Assembler takes assembly code and produces machine code (object code) for target architecture.
 \item Linker accepts compiled machine code as its input and produces executable file by linking machine code against needed libraries and adding necessary metadata and headers.
@@ -48,7 +48,7 @@ Experienced \cpp{} programmer is probably familiar with standard compilation pro
 \fdocabbrevdeclare{moc}{moc}{Meta-object compiler}
 \fdocabbrevdeclare{mos}{mos}{Meta-object system}
 \section{Qt-way C plus plus compilation process}
-Qt/\cpp{} compilation process (\autoref{figure:qtpr}) differs from classic \cpp{} code compilation process because \fdocabbrevref{moc}\index{meta-object compiler} comes into the compilation process. \fdocabbrevref{moc} one of fundamental basic stones of Qt itself. It is just more sophisticated preprocessor tool and source code generator. You will learn about \fdocabbrevref{moc} later becaus it is essential part of Qt \fdocabbrevref{mos}.
+Qt/\cpp{} compilation process (\autoref{figure:qtpr}) differs from classic \cpp{} code compilation process because \fdocabbrevref{moc}\index{meta-object compiler} takes part in the compilation process. \fdocabbrevref{moc} one of fundamental basic stones of Qt itself. It is just more sophisticated preprocessor tool and source code generator. You will learn about \fdocabbrevref{moc} later because it is essential part of Qt \fdocabbrevref{mos}.
 
 \begin{figure}[ht]
 \centering

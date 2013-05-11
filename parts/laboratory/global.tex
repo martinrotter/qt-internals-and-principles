@@ -33,7 +33,7 @@ orignal type name & Qt type name \\
 \end{table}
 
 \section{Fundamental functions}
-QtGlobal offers very fundamental functions for value-based comparing and other basic tasks. These functions (often) wrap similar functions from standard C/\cpp li-brary\index{standard library}. Most used functions are:
+QtGlobal offers very fundamental functions for value-based comparing and other basic tasks. These functions (often) wrap similar functions from standard C/\cpp{} library\index{standard library}. Most used functions are:
 \begin{description}
 \item[T qAbs(const T \& value)] \hfill \\
 Returns absolute value of input parameter.
@@ -51,7 +51,7 @@ All functons can be found in\fdocinlinecode{text}{!}{/qt-root-directory/include/
 Qt offers better way to produce console\index{console} printing for debugging purposes via \fdocinlinecode{cpp}{!}{QDebug}\index{QDebug} class and\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function. You can always use traditional\fdocinlinecode{cpp}{!}{std::cout} for console printing but\fdocinlinecode{cpp}{!}{QDebug} way is much better. Basic syntax for using\fdocinlinecode{cpp}{!}{QDebug} is fairly simple (\autoref{listing:qdebug}) as it implements \fdocinlinecode{cpp}{!}{<<} operator and can act as \fdocinlinecode{cpp}{!}{printf(...)} function.
 
 \begin{fdoccode}{cpp}{listing:qdebug}{Basic QDebug usage}
-qDebug() << "Print this to standard output.";
+qDebug() << "Print number " << 10 << ".\n";
 qDebug("Print number %d.\n", 10);
 \end{fdoccode}
 
@@ -60,7 +60,7 @@ First\fdocinlinecode{cpp}{!}{qDebug} usage requires explicit\fdocinlinecode{cpp}
 Default implementation halts an application if\fdocinlinecode{cpp}{!}{qFatal} is called and uses\fdocinlinecode{cpp}{!}{std::cerr} output for printing messages. You can implement custom behavior for previous functions very simply:
 \begin{enumerate}
 \item
-You need to implement global (or static) function with signature\fdocinlinecode{cpp}{!}{void (*function)(QtMsgType, const QMessageLogContext &, const QString &)}. Typical\\ implementation may look like \autoref{listing:qdebug2}.
+You need to implement global function (or static method) with signature\fdocinlinecode{cpp}{!}{void (*function)(QtMsgType, const QMessageLogContext &, const QString &)}. Typical\\ implementation may look like \autoref{listing:qdebug2}.
 
 \item
 You need to assign handler to this function via\fdocinlinecode{cpp}{!}{qInstallMessageHandler} function.
@@ -114,7 +114,7 @@ Debugging outputs should always be written in English language with ASCII charac
 
 This implementation prints out extra information which is extremely important for debugging. However, you can do whatever you want in your implementation. Storing outputs to database or sending them over network are just some possible enhancements.
 
-The is another (simpler) way of forcing Qt to format console outputs if you want to tweak just format. You may tweak\fdocinlinecode{text}{!}{QT_MESSAGE_PATTERN} build environment variable to display application name or other useful information. Head to the documentation \citep{various:qtdoc} for more information.
+There is another (simpler) way of forcing Qt to format console outputs. You may tweak\fdocinlinecode{text}{!}{QT_MESSAGE_PATTERN} build environment variable to display application name or other useful information. Head to the documentation \citep{various:qtdoc} for more information.
 %
 %\subsection{Working with system environment variables}
 %Major operating systems allow you to store data in the key--value pairs, so called environment variables.
