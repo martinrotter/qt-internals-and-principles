@@ -1,17 +1,17 @@
 \chapter{Event system}\label{section:events}
-Events are reactions for some other actions. In software, actions can be divided into to categories:
+Events are reactions for some other actions. In software, actions can be divided into two categories:
 \begin{description}
 \item[HUMAN-TRIGGERED ACTIONS] \hfill \\
-This type of actions represents natural notion of what events are. Mouse button clicks, keyboard key presses or perhaps cursor movements are human-triggered events. Each of them disposes certain properties, \eg mouse-click produces coordinates of click or key push produces the pressed character or perhaps set of characters if key sequence is used.
+This type of actions represents natural notion of what events are. Mouse button clicks, keyboard key presses or perhaps cursor movements are human-triggered events. Each of them disposes certain properties, \eg mouse-click produces coordinates of mouse when its button was clicked and key push produces the pressed character or perhaps set of characters if key sequence is used.
 \item[APPLICATION-TRIGGERED ACTIONS]  \hfill \\
 Are not triggered directly by application user. Typical application-triggered event is painting event which is responsible for drawing \fdocabbrevref{GUI} elements on the screen. User starts this event indirectly by manipulating application user interface.
 \end{description}
 
-Event is consequence of occurrence of certain action in running application. There are plenty of various types of events. Typical event might be key-press-event or perhaps mouse-click-event or repaint-gui-event.
+Event is consequence of occurrence of certain action in running application.
 
-Each\fdocinlinecode{cpp}{!}{QObject} subclass has ability to send events. Events are usually distributed by one entity which manages whole event process. This entity \enquote{sits} on the top of event loop. Event loop is part of application execution which encapsulates all events sent by objects inside the loop. Loop goes from time to time through all raised events from its underlying objects and delivers those events to target objects. Event loop structure looks similar to one in \autoref{listing:eventloop2}. Event loop exits if \enquote{exit} signal occurs.
+Each\fdocinlinecode{cpp}{!}{QObject} subclass has ability to send events. Events are usually distributed by one entity which manages whole event process. This entity \enquote{sits} on the top of event loop. Event loop is part of application execution and it encapsulates all events sent by objects inside the loop. Loop goes from time to time through all raised events from its underlying objects and delivers those events to target objects. Event loop structure looks similar to one in \autoref{listing:eventloop2}. Event loop exits if \enquote{exit} signal occurs.
 
-Each Qt application has one main global event loop with\fdocinlinecode{cpp}{!}{QApplication} instance as managing entity (entity which caused the creation of the event loop). Consider \autoref{listing:eventloop}. Call on line \ref{listing:loop1} of \autoref{listing:eventloop} results in entering to global event loop, so that events from application objects, \eg from main application window, can be processed.
+Each Qt application contains one global event loop with\fdocinlinecode{cpp}{!}{QApplication} instance as managing entity (entity which caused the creation of the event loop). Consider \autoref{listing:eventloop}. Call on line \ref{listing:loop1} results in entering to the global event loop, so that events from application objects, \eg from main application window, can be processed.
 
 
 \begin{fdoccode}{cpp}{listing:eventloop}{Global event loop}
@@ -21,19 +21,19 @@ int main(int argc, char *argv[]) {
     // Display main application window here.
     .............
 
-	// int QApplication::exec() triggers global event loop.
+	// Trigger global QApplication event loop.
     return a.exec();(*@\label{listing:loop1}@*)
 }
 \end{fdoccode}
 
 \begin{fdoccode}{cpp}{listing:eventloop2}{Typical event loop scheme}
 while() {
-	if (exit) {
-		return status;
-	}
 	check_queue_of_pending_events;
 	process_all_pending_events;
 	remove_processed_events_from_the_queue;
+	if (exit) {
+		return status;
+	}
 }
 \end{fdoccode}
 
@@ -49,13 +49,13 @@ Let's take a look at \autoref{figure:eventloop} which displays typical structure
 \item event properties,
 \item sender.
 \end{itemize}
-Event is posted by\fdocinlinecode{cpp}{!}{QSystemTrayIcon} and appended to event loop queue for further processing and\fdocinlinecode{cpp}{!}{QSystemTrayIcon} possibly waits for backward event delivery from event loop.
+Event is posted by\fdocinlinecode{cpp}{!}{QSystemTrayIcon} and appended to event loop queue for further processing and\fdocinlinecode{cpp}{!}{QSystemTrayIcon} possibly waits for backward event delivery from the event loop.
 
-\indent\fdocinlinecode{cpp}{!}{QApplication} event loop iterates and finds new unsolved events which are eventually removed from the queue and sent to their senders.\fdocinlinecode{cpp}{!}{QSystemTrayIcon} then \textit{handles} the event and responds with expected behavior which finally concludes life of this event.
+\indent\fdocinlinecode{cpp}{!}{QApplication}'s event loop iterates and finds new unsolved events which are eventually removed from the queue and sent to their senders.\fdocinlinecode{cpp}{!}{QSystemTrayIcon} then \textit{handles} the event and responds with expected behavior which finally concludes life of this event.
 
-Handling event means calling \textit{event handler} -- some kind of special method. If you handle some events in one object, sometimes you need to \textit{propagate} the same event in another object too. For example if you move use\fdocinlinecode{cpp}{!}{QButton} (ordinary button) instance by mouse, then paint-event is raised, because\fdocinlinecode{cpp}{!}{QButton} needs to be repainted on the screen, and this event is propagated to parent object which is usually application window which needs to redraw itself too. Some events are propagated and other ones are not.
+Handling event means calling \textit{event handler}\,--\,some kind of special method. If you handle some events in one object, sometimes you need to \textit{propagate} the same event in another object too. For example if you move your cusor over\fdocinlinecode{cpp}{!}{QPushButton} (ordinary button) instance, paint-event is raised, because\fdocinlinecode{cpp}{!}{QPushButton} needs to be repainted on the screen, and this event is propagated to parent object which is usually application window which eventually needs to redraw itself too. Some events are propagated and other ones are not.
 
-Easiest way to handle events in Qt is reimplementing available event handlers. Each\fdocinlinecode{cpp}{!}{QObject} offers specific handlers. All handlers are declared as protected methods. See \autoref{listing:reimplm} (example\fdocinlinecode{text}{!}{sources/laboratory/12-child-event}) for typical extension of event handler. In this case, we reimplemented behavior of child-event which is triggered if child is added or removed to particular\fdocinlinecode{cpp}{!}{QObject} instance. Event handler of superclass is called on line \ref{listing:handl} because we want to only extend the original handler and not to replace its behavior completely. This approach is common in Qt and is used especially for \fdocabbrevref{GUI}-related events.
+Easiest way to handle events in Qt is reimplementing available event handlers. Each\fdocinlinecode{cpp}{!}{QObject}-based Qt class offers specific handlers. All handlers are declared as protected methods. See \autoref{listing:reimplm} (example\fdocinlinecode{text}{!}{sources/laboratory/12-child-event}) for typical extension of event handler. In this case, we reimplemented behavior of child-event which is triggered if child is added (removed) to (from) another\fdocinlinecode{cpp}{!}{QObject} instance. Event handler of superclass is called on line \ref{listing:handl} because we want to only extend the original handler and not to replace its behavior completely. This approach is common in Qt and is used especially for \fdocabbrevref{GUI}-related events.
 
 \begin{fdoccode}{cpp}{listing:reimplm}{Reimplementing event handler}
 // myqobject.h
@@ -97,7 +97,7 @@ void MyQObject::childEvent(QChildEvent *event) {
 \end{fdoccode}
 
 \section{Event filters}
-Classic event handlers maybe unusable if you want to handle all events in one place. One solution is to use generic\fdocinlinecode{cpp}{!}{bool QObject::event(QEvent * e)} event handler which catches all events. Another solution of this approach is event filtering. Event filter is ordinary method which accepts destination\fdocinlinecode{cpp}{!}{QObject} instance and event object. \autoref{listing:reimplm2} shows the approach quite clearly.
+Classic event handlers are unusable if you want to handle all events in one place. One solution is to use generic\fdocinlinecode{cpp}{!}{bool QObject::event(QEvent*)} event handler which catches all events. Another solution is event filtering. Event filter is ordinary method which accepts destination\fdocinlinecode{cpp}{!}{QObject} instance and event object. \autoref{listing:reimplm2} shows the approach quite clearly.
 
 \begin{fdoccode}{cpp}{listing:reimplm2}{Using event filter}
 // myqobject.h
@@ -141,9 +141,6 @@ Remaining events need to be processed before objects is deleted. This is done au
 
 \begin{fdoccode}{cpp}{listing:eventloop3}{Enhanced event loop scheme}
 while() {
-	if (exit) {
-		return status;
-	}
 	check_queue_of_pending_events;
 	process_all_pending_events;
 	remove_processed_events_from_the_queue;
@@ -152,6 +149,9 @@ while() {
 		if (object.is_scheduled_for_deletion) {
 			object.delete;
 		}
+	}
+	if (exit) {
+		return status;
 	}
 }
 \end{fdoccode}

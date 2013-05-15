@@ -8,7 +8,7 @@ guide:	qt-internals-and-principles.tex
 	pdflatex qt-internals-and-principles
 	makeindex qt-internals-and-principles.idx
 	makeglossaries qt-internals-and-principles
-	bibtex qt-internals-and-principles
+	biber qt-internals-and-principles
 	pdflatex qt-internals-and-principles
 	pdflatex qt-internals-and-principles
 

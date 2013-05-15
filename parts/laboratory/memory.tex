@@ -1,5 +1,5 @@
 \chapter{Memory management}\label{section:memorym}
-Qt brings many new features into standard \cpp memory management. We can stick with plain\fdocinlinecode{cpp}{!}{new} and\fdocinlinecode{cpp}{!}{delete} operator. Qt features are, however, highly addictive and useful. We have already heard about object trees (page \pageref{section:model}) which are real base for Qt memory management because tree structure is quite natural. Therefore, object trees are used much and many memory leaks is fixed with them.
+Qt brings many new features into standard \cpp{} memory management. We can stick with plain\fdocinlinecode{cpp}{!}{new} and\fdocinlinecode{cpp}{!}{delete} operators. Qt features are, however, highly addictive and useful. We have already heard about object trees (page \pageref{section:model}) which are the real base for Qt memory management because tree structure is quite natural. Therefore, object trees are used much and many memory leaks get fixed with them.
 
 Each object tree has root object and we (as programmers) are responsible for deleting this root from memory in the right time as there is no other parent object which gets this done for us.
 

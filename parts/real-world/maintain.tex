@@ -2,7 +2,7 @@
 Many ambitious software projects offer applications of great quality but something is wrong. Even if rock-solid software is written, it's not used or well-known. Actually writing a piece of software is just starting phase of application life cycle. True merit comes from good application maintenance and deployment.
 
 \section{Storing source code}
-Reachable and efficient source code storage is critically important for collaborative application development. Event if we are lonely developers, we need to use safe storage to backup and protect our source code. Answer for this is version control system. There are some favorite systems such as Git \citep{various:git} or Subversion \citep{various:svn}. One of these is good choice. I recommend using Git because it's more robust, provides more functions and is supported by both Github (\href{http://www.github.com}{www.github.com}) and Google Code (\href{http://www.code.google.com}{www.code.google.com}) services.
+Reachable and efficient source code storage is critically important for collaborative application development. Event if we are lonely developers, we need to use safe storage to backup and protect our source code. Answer for this is version control system. There are some favorite systems such as Git \citep{various:git} or Subversion \citep{various:svn}. One of these is a good choice. I recommend using Git because it's more robust, provides more functions and is supported by both Github (\href{http://www.github.com}{www.github.com}) and Google Code (\href{http://www.code.google.com}{www.code.google.com}) services.
 
 Google Code and Github are free hosting services to hold and protect your source code. Moreover, each and every user is provided with ability to present his (or her) software product and share publicly.
 
@@ -43,7 +43,7 @@ Note that Google Code supports just open-source projects. Github supports both o
 \end{figure}
 
 \subsection{Working with Git}
-We completed the setup for our imaginary project. Basically we need just three Git commands to start saving our code to on-line repository:
+We completed the setup of our imaginary project. Basically we need just three Git commands to start saving our code to on-line repository:
 \begin{description}
 \item[git add LIST-OF-FILES] \hfill \\
 Adds selected files to new commit.
@@ -58,7 +58,7 @@ See typical and very basic work with Git in \autoref{figure:gitshow}.
 \begin{figure}[ht]
 \begin{center}
 \includegraphics[width=12cm]{graphics/real-world/05-gitshow.png}
-\caption{Cygwin user interface}\label{figure:gitshow}
+\caption{Using Git from Cygwin}\label{figure:gitshow}
 \end{center}
 \end{figure}
 
@@ -72,7 +72,7 @@ CMake takes care of application compilation and installation. It's easy to use. 
 \subsection{Writing CMake application script}
 CMake script contains all information needed to setup and compile input source code. It can provide extra functionality for installing and packaging compiled files too.
 
-CMake script is usually contained in single text file (called\fdocinlinecode{text}{!}{CMakeLists.txt}) which is written by application programmer or distributor. Qonverter is no different. It offers CMake script too. It can be found in\fdocinlinecode{text}{!}{sources/real-world/qonverter} directory. 
+CMake script is usually contained in single text file (called\fdocinlinecode{text}{!}{CMakeLists.txt}) which is written by application programmer or distributor. Qonverter is not different. It offers CMake script too. It can be found on \citep{various:qonrepo}. 
 
 \subsubsection{Basic data contained in CMake Qonverter script}
 Let's make a journey into the center of the\fdocinlinecode{text}{!}{CMakeLists.txt} file of Qonverter. It contains collection of macros and command which guide potential user from compilation to installation of Qonverter. Even Qonverter translators can take advantage of this script, as we will see later. We split\fdocinlinecode{text}{!}{CMakeLists.txt} into several fragments and investigate these.
@@ -120,7 +120,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 \end{fdoccode}
 
-Proper compiler settings (\autoref{listing:cmakeb}) is key here. Qonverter is totally Unicode-based application because it allows special characters, such as square root character ({\raise.38ex\hbox{$\sqrt{ }$}}), to be used in calculator expressions.
+Proper compiler settings (\autoref{listing:cmakeb}) are important here. Qonverter is totally Unicode-based application because it allows special characters, such as square root character ({\raise.38ex\hbox{$\sqrt{ }$}}), to be used in calculator expressions.
 
 \begin{fdoccode}{text}{listing:cmakec}{C++ 11 check in CMakeLists.txt script}
 # Check for C++ 11 features availability.
@@ -183,7 +183,7 @@ endif()
 
 Macro\fdocinlinecode{text}{!}{find_package} loads necessary Qt modules. If module is not found, then error message is triggered and script fails to complete. Additionaly, special Qt 5 related macros are run. These create additional files needed for successful compilation. If translation tools are found, translation files are added.
 
-Qt 5 introduced new system for linking modules. As we know, each module is represented by dynamic-link (or static-link) library file. CMake can link our compiled executable against correct libraries which is easy to get done with CMake (\autoref{listing:linkc}.
+Qt 5 introduced new system for linking modules. As we know, each module is represented by dynamic-link (or static-link) library file. CMake can link our compiled executable against correct libraries which is easy to get done with CMake (\autoref{listing:linkc}).
 
 \begin{fdoccode}{text}{listing:linkc}{Link against Qt 5 in CMakeLists.txt script}
 # Use modules from Qt.
@@ -196,7 +196,7 @@ qt5_use_modules(${EXE_NAME}
 )
 \end{fdoccode}
 
-But there is one little problem. Qt 5 CMake scripts don't automatically link against Qt 5 platform library. Qt 5 platform library is responsible for appropriate "categorization" of executable file. Typical categories are:
+There is one little problem. Qt 5 CMake scripts don't automatically link against Qt 5 platform library. Qt 5 platform library is responsible for appropriate "categorization" of executable file. Typical categories are:
 \begin{itemize}
 \item console application,
 \item \fdocabbrevref{GUI}-based application.
@@ -259,29 +259,29 @@ add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 \vfill
 
 \subsection{Using CMake scripts}
-Previous chapter was about CMake scripts from the view of programmer. Let's assume that we are interested in installing software which is available with CMake script. In that situation we only need working compiler, installed CMake and source code with valid script.
+Previous chapter was about CMake scripts from the view of the programmer. Let's assume that we are interested in installing software which is available with CMake script. In that situation we only need working compiler, installed CMake and source code with valid script.
 
 Usual installation contains three typical steps:
 \begin{enumerate}
 	\item Open command line, navigate to unpacked source code root directory and check if\fdocinlinecode{text}{!}{CMakeLists.txt} file exists.
 	\item Create new subdirectory \enquote{build}, this directory will contain compiled files when compilation ends. Run this code in command line:
 \begin{lstlisting}[language=text,numbers=none]
-cmake ./build -DCMAKE_INSTALL_PREFIX=<path-to-installed-application> -DCMAKE_BUILD_TYPE=release
+cd build && cmake ../ -DCMAKE_INSTALL_PREFIX=<path-to-installed-application> -DCMAKE_BUILD_TYPE=release
 \end{lstlisting}
-	\item Run \enquote{make} and \enquote{make install} in command line.
+	\item Run \enquote{make install} in command line.
 \end{enumerate}
 
 Qonverter uses the same approach. User has to do just one thing, provide correect target installation path. So on Windows,\fdocinlinecode{text}{!}{cmake} call could look like this:
 \begin{lstlisting}[language=text,numbers=none]
-cmake ./build -DCMAKE_INSTALL_PREFIX="C:/Program Files/Qonverter" -DCMAKE_BUILD_TYPE=release
+cd build && cmake ../ -DCMAKE_INSTALL_PREFIX="C:/Program Files/Qonverter" -DCMAKE_BUILD_TYPE=release
 \end{lstlisting}
 
 \subsection{Publishing Qonverter for GNU/Linux}
-Linux-based operating systems differ from Windows operating systems in many things. One of them is the way of managing installed applications and libraries. Each Linux distribution contains sophisticated package manager -- the software which handles installation and management of all software.
+Linux-based operating systems differ from Windows operating systems in many things. One of them is the way of managing installed applications and libraries. Each Linux distribution contains sophisticated package manager\,--\,the software which handles installation and management of all software.
 
 \subsubsection{Publishing Qonverter for Archlinux}
 \fdocabbrevdeclare{AUR}{AUR}{Arch User Repository}
-Archlinux is Linux-based operating system. It uses package manager called Pacman. Software packages are available online vie so called \enquote{repositories}. Each repository offers specific software. For example \enquote{core} repository offers critical software needed by every Archlinux instance. There exists special community-managed repository called \fdocabbrevref{AUR}. Each and every user of Archlinux can store software packages in this repository and offer it to the community.
+Archlinux is Linux-based operating system. It uses package manager called Pacman. Software packages are available online via so called \enquote{repositories}. Each repository offers specific software. For example \enquote{core} repository offers critical software needed by every Archlinux instance. There exists special community-managed repository called \fdocabbrevref{AUR}. Each and every user of Archlinux can store software packages in this repository and offer it to the community.
 
 Each package for \fdocabbrevref{AUR} needs to provide special script. This script specifies steps needed for successful compilation of the software \citep{arch:aur}.
 
@@ -339,14 +339,15 @@ package() {
 
 Script contains two basic parts:
 \begin{enumerate}
-	\item Lines 1--14 specify information about the software, including its name, version number and url. This section specifies build and run dependecies too. \enquote{Dependency} is another software which is needed to run software from this script, Qonverter in this case. Obviously, Qonverter needs Qt 5 for its run. \fdocabbrevref{GCC} is needed for compilation. Variables \enquote{\_gitname} and \enquote{\_gitroot} are special. They specify name and url of used Git repository which contains the actualy source code of our software.
-	\item Rest of script contains two functions which are called when software package is installed. These functions needs to do everything needed for compilation. It downloads source code from remote Git repository, compiles it with CMake and prints out informative messages.
+	\item Lines 1\,--\,14 specify information about the software, including its name, version number and url. This section specifies build and run dependencies too. \enquote{Dependency} is another software which is needed to run software from this script, Qonverter in this case. Obviously, Qonverter needs Qt 5 for its run. \fdocabbrevref{GCC} is needed for compilation. Variables \enquote{\_gitname} and \enquote{\_gitroot} are special. They specify name and url of used Git repository which contains the actual source code of our software.
+	
+	\item Rest of script contains two functions which are called when software package is installed. These functions do everything needed for compilation and packaging of target software. It downloads source code from remote Git repository, compiles it with CMake and prints out informative messages.
 \end{enumerate}
 
 Let's assume we have this script finished. We need to create the actual package. \enquote{PKGBUILD} file is the only file contained in this package. Package can be created by\fdocinlinecode{text}{!}{makepkg --source} command, which is available on every Archlinux instance.
 
 User needs to upload generated archive to \fdocabbrevref{AUR} by going to \url{https://aur.archlinux.org/}, logging in and submitting it.
- Other users then download this packages manually from Archlinux website or use special tool (see \url{https://wiki.archlinux.org/index.php/Yaourt}) to obtain it. We can see that yaourt utility makes selection of packages very simple ( \autoref{figure:aur1}).
+ Other users then download this packages manually from Archlinux website or use special tool (see \url{https://wiki.archlinux.org/index.php/Yaourt}) to obtain it. We can see that yaourt utility makes selection of packages very simple (\autoref{figure:aur1}).
  
 \begin{figure}[ht]
 \begin{center}

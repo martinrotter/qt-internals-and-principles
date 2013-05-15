@@ -1,11 +1,11 @@
 \chapter{Foreword}
 
-\section{What is covered in this part?}
+\section{What is covered by this part?}
 This part is different from the previous one. In this part, you will be guided through development of more complex Qt-based application. Important parts of development process will be discovered, including initial ideas, solving dependencies, licensing, programming the application, translating or publishing.
 
-Someone could state that licensing issues or publishing the application is not important. Programmer's main task is to program the application correctly.\ That's true but programmer needs to take advantage of other tasks too because all of them provide him with chance of producing event better software.
+Someone could state that licensing issues or publishing the application are not important topics. Programmer's main task is to program the application correctly. That's true but programmer needs to take advantage of other tasks too because only if he/she deals well with all of them, good application can emerge.
 
-There is quite good documentation \citep{various:qtdoc} available for Qt but it lacks some parts which are covered in this part of the book. We will see how to automatically build our software with needed customizations or how to make our software available to users.
+There is quite good documentation \citep{various:qtdoc} available for Qt but it lacks some parts which are covered by this part of the book. We will see how to automatically build our software with needed customizations or how to make our software available to users.
 
 \section{Lifecycle of typical application}
 Development of typical application starts if someone needs something. Photographer wants special photo-editing software which doesn't seem to be available. Or perhaps teacher needs to have specific agenda application for his particular needs. Programmers often program new software for themselves. So applications are born due to various (and usually rational) reasons.
@@ -13,16 +13,20 @@ Development of typical application starts if someone needs something. Photograph
 Before the application is actually written, there must be certain research done by the programmer. See \autoref{chap:new} for more about this topic. Special \enquote{50:50} rule applies here. It's unwritten rule that you (as the programmer) should spent at least $50\%$ of your time (dedicated for development of particular software) for research. You should think about problems and choose right algorithms. The other $50\%$ is meant to be time for writing your ideas in programming language. Most huge failures roots in shoddy research.
 
 \chapter{Creating new applications}\label{chap:new}
-There is usually need for something useful in the beginning. Sample application for this book is the same case. It is called Qonverter and it is supposed to be very simple calculator with some unusual functions and features.
+There is usually need for something useful in the beginning. Sample application for this book is the same case. It is called Qonverter and it is supposed to be the simple calculator with some unusual features.
 
-Some time ago, i needed calculator with ability to do some more advanced (but still simple) operations. I needed to compute factorials or medians. I also needed to do bitwise operations on numbers such as shifting or logical conjunctions and disjunctions along with usual mathematical operations. Moreover, I needed to do unit and currency conversions sometimes.
+\begin{fdocextra}
+Obtain the source code of Qonverter from \citep{various:qonrepo}.
+\end{fdocextra}
 
-I searched for calculator application which could offer such a functionality to me. No satisfying results were found. Unit (currency) converter was usually missing. Many calculators doesn't offer specific mathematical functions I like to use from time to time.
+Some time ago, I needed calculator with ability to do some more advanced (but still simple) operations. I needed to compute factorials or medians. I also needed to do bitwise operations on numbers such as shifting or logical conjunction and disjunction along with usual mathematical operations. Moreover, I needed to do unit and currency conversions sometimes.
+
+I searched for calculator application which could offer such a functionality to me. No satisfying application was found. Unit (currency) converter was usually missing. Many calculators don't offer specific mathematical functions I like to use from time to time.
 
 So I decided to write my own calculator which provides function I need.
 
 \section{Choosing programming language}
-I am not skilled programmer but i know \cpp{} programming language, so it was easy to choose. Anyway, choice of programming language is extremely important. You may take a look at section \nameref{subsection:cpp} to see \cpp{} features. \cpp{} is fairly fast so it is good choice for this kind of application.
+I am not skilled programmer but I know \cpp{} programming language. Choice of programming language is extremely important. You may take a look at chapter \nameref{subsection:cpp} to see \cpp{} features. \cpp{} is fairly fast so it is a good choice for this kind of application.
 
 I decided to use newest (as of January 2013) \cpp{} version called \cpp{} 11. It offers many features (some already mentioned in this book) which can bring me many advantages:
 \begin{itemize}
@@ -38,7 +42,9 @@ Many disadvantages can arise:
 \end{itemize}
 
 \fdocabbrevdeclare{MinGW}{MinGW}{Minimalistic GNU for Windows}
-There are many \cpp{} compilers to choose from. I want to keep my Qonverter multiplatform because I use both Linux and Windows operating systems. \fdocabbrevref{GCC} is main compiler for Linux, so there is clear situation. Latest \fdocabbrevref{GCC} (version 4.8.0, as of March 2013) is known to support all major features of \cpp{} 11. Several great compilers are available for Windows platform. I could use \fdocabbrevref{MSVC} 2010 compiler but it lacks some \cpp{} 11 features so latest \fdocabbrevref{MinGW} compiler was chosen instead. \fdocabbrevref{MinGW} is \fdocabbrevref{GCC}-based compiler. Mac OS X operating system uses Clang compiler which is known to support \cpp{} 11 too \citep{various:clang}. So hypothetically, these operating systems might be supported:
+There are many \cpp{} compilers to choose from. I want to keep my Qonverter multiplatform because I use both Linux and Windows operating systems. \fdocabbrevref{GCC} is main compiler for Linux. Latest \fdocabbrevref{GCC} (version 4.8.0, as of March 2013) is known to support all major features of \cpp{} 11.
+
+Several great compilers are available for Windows platform. I could use \fdocabbrevref{MSVC} 2010 compiler but it lacks some \cpp{} 11 features so latest \fdocabbrevref{MinGW} compiler was chosen instead. \fdocabbrevref{MinGW} is \fdocabbrevref{GCC}-based compiler. Mac OS X operating system uses Clang compiler which is known to support \cpp{} 11 too \citep{various:clang}. So hypothetically, these operating systems might be supported:
 \begin{itemize}
 \item Windows,
 \item GNU/Linux,
@@ -48,6 +54,6 @@ In fact, even more operating systems can be supported in the future, because Qt 
 
 
 \section{Choosing libraries}
-I picked compilers and programming language in five minutes. It wasn't the big deal. I had to choose libraries too and that was the big deal. I knew just few libraries but only one which provides me with ability to build \fdocabbrevref{GUI}. It was Qt. Latest Qt (Qt 5) is known to work with \cpp{} 11. It just came out when i decided to create Qonverter (spring of 2012) so I decided to use it.
+I had picked compilers and programming language in five minutes. It wasn't the big deal. I had to choose libraries too and that was the big deal. I knew just few libraries but only one which provides me with ability to build \fdocabbrevref{GUI}. It was Qt. Latest Qt (Qt 5) is known to work with \cpp{} 11. It just came out when i decided to create Qonverter (spring of 2012) so I decided to use it.
 
-One last piece of puzzle needed to be found. Library for mathematical core of the application. I was searching for the right one for one week and nothing great appeared. Eventually, I discovered muParserX library \citep{various:muparserx}.
+One last piece of puzzle needed to be found\,--\, a library for mathematical core of the application. I was searching for the right one for one week and nothing great appeared. Eventually, I discovered muParserX library \citep{various:muparserx} which is developed by Ingo Berg.

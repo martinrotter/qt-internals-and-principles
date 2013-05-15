@@ -1,21 +1,21 @@
 \chapter{Threading}\label{section:thread}
-Every modern and flawless application needs to superimpose its functionality into several layers. One layer often represents \fdocabbrevref{GUI}, while another can care about storing application data in a database or perhaps provide some kind of extensive mathematical computations. Dividing application functionality into separated blocks is good approach. Paramount technique for this approach is called \textit{threading}\index{threading}.
+Every modern and flawless application needs to superimpose its functionality into several layers. One layer often represents \fdocabbrevref{GUI}, while another takes care of storing application data in a database or provides some kind of extensive mathematical computations. Dividing application functionality into separated blocks is a good approach. Paramount technique for this approach is called \textit{threading}\index{threading}.
 
 \section{What is thread?}
-Operating system has only one duty -- allow client programs to run. But programs cannot run simultaneously, so only one program is run at a time and other programs are forced to wait until it's their turn. They are patiently waiting in the queue for their chance to become active and do the job they are asked to do. 
+Operating system has only one duty\,--\,it must allow client programs to run. But programs cannot run simultaneously, so only one program is run at a time and other programs are forced to wait until it's their turn. They are patiently waiting in the queue for their chance to become active and do the job they are asked to do. 
 
-Operating system allocates very tiny amount of time for each program and switches among them very swiftly. Each program usually lives for several milliseconds in one round. This circling between programs (sometimes called \textit{processes}\index{process}) is called \textit{multitasking}\index{multitasking}.
+Operating system allocates very tiny amount of time for each program and switches among them very swiftly. Each program usually lives for several milliseconds in one round. This circling among programs (sometimes called \textit{processes}\index{process}) is called \textit{multitasking}\index{multitasking}.
 
-Moreover, every program can be divided into several parts which can run independently. Operating system, in fact, cycles among these program parts instead of whole programs. Independently-runnable part of the program can be called \textit{thread of execution}\index{thread}. Each and every computer program contains at least one thread. Important thing about threads is that all threads of one process share its resources. They share joint data. This allows you to make your threads cooperate with each other. Threads are used for many purposes:
+Moreover, every program can be divided into several parts which can run independently. Operating system, in fact, cycles among these program parts instead of whole programs. Independently-runnable part of the program can be called \textit{thread of execution}\index{thread}. Each and every computer program contains at least one thread. Important thing about threads is that all threads of one process share its resources\,--\,joint data. Shared data allows you to make your threads cooperate with each other. Threads are used for many purposes:
 \begin{description}
 \item[COMMUNICATION] \hfill \\
 Threads are used to handle communication among entities like web servers or other remote devices.
 \item[INTERFACE LATENCY] \hfill \\
-If you do not separate extensive computations from your \fdocabbrevref{GUI} then \fdocabbrevref{GUI} may be blocked when those computations are performed. Thread are used to separate computations from GUI. Interface thread is no longer blocked by computations and no freezing occurs.
+If you do not separate extensive computations from your \fdocabbrevref{GUI} then \fdocabbrevref{GUI} may be blocked when those computations are performed. Threads are used to separate computations from GUI. Interface thread is no longer blocked by computations and no freezing occurs.
 \item[PARALLEL COMPUTING] \hfill \\
 Certain formulas are very difficult to solve in reasonable time and the only way to make computations faster is to make them running collaterally.
 \item[GOOD HABIT] \hfill \\
-Experienced programmer always tries to divide application functionality into well-formed and rationally-build parts. Threading is great and powerful technique to achieve that.
+Experienced programmer always tries to divide application functionality into well-formed and rationally-built parts. Threading is great and powerful technique to achieve that.
 \end{description}
 
 \fdocabbrevdeclare{PThreads}{PThreads}{POSIX Threads}
@@ -23,16 +23,16 @@ Experienced programmer always tries to divide application functionality into wel
 Threading was added to some operating systems additionally. The only way to do that was via library. This was the case of \fdocabbrevref{PThreads} on Linux. Threads were not part of the official Linux concept and became available later.
 
 \section{Threading in Qt}
-\fdocabbrevref{PThreads} is used as the backend for Qt threading support on Linux. Windows native threading facilities are used on Windows and, in fact, Qt uses native threading machinery on almost every supported platform. Threading is very complicated and complex subject but at least basic usage (which is fine for most users) can be introduced.
+\fdocabbrevref{PThreads} library is used as the backend for Qt threading support on Linux and Windows. Threading is very complicated and complex subject but at least basic usage (which is fine for most users) can be introduced.
 
 Base class for working with threads is\fdocinlinecode{cpp}{!}{QThread}. \citep[QThread class]{various:qtdoc}  \fdocinlinecode{cpp}{!}{QThread} should \textbf{never} be subclassed. If you want to run code of any class in separated thread, then you need to:
 \begin{enumerate}
 \item Derive your class from\fdocinlinecode{cpp}{!}{QObject} and add signals/slots of your desire to it.
 \item Create new\fdocinlinecode{cpp}{!}{QThread} instance.
-\item Call\fdocinlinecode{cpp}{!}{void QObject::moveToThread(QThread *targetThread)} with your class as\fdocinlinecode{cpp}{!}{this}.
+\item Call\fdocinlinecode{cpp}{!}{void QObject::moveToThread(QThread *targetThread)} with your class as\fdocinlinecode{cpp}{!}{this} pointer.
 \end{enumerate}
 
-There is no need to do this procedure for static methods or global functions. You can use\fdocinlinecode{cpp}{!}{QFuture<T> QtConcurrent::run(void *function)} to run these. \citep[QtConcurrent]{various:qtdoc} See \autoref{listing:qtconc} (example\fdocinlinecode{text}{!}{sources/laboratory/14-threading}) for more.
+There is no need to do this procedure for static methods or global functions. You can use\fdocinlinecode{cpp}{!}{QFuture<T> QtConcurrent::run(void *function)} to run those. \citep[QtConcurrent]{various:qtdoc} See \autoref{listing:qtconc} (example\fdocinlinecode{text}{!}{sources/laboratory/14-threading}) for more.
 
 \begin{fdoccode}{cpp}{listing:qtconc}{QtConcurrent usage for global or static functions}
 void faktorial(int input) {

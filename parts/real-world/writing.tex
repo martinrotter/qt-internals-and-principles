@@ -9,16 +9,16 @@ Qonverter should be translated to English (as it is globally spoken language) an
 \begin{itemize}
 \item use muParserX as mathematical core,
 \item offer unit and currency converters,
-\item on-line currency rates synchronization for currency converter,
-\item conversions of mathematical formulas for unit converter (This means that for example formula $5+7$ is computed first and result is then converted as needed.),
-\item simple calculator with many functions,
-\item most used functions accessible via calculator keypad,
-\item big input text box for mathematical formulas (no single lines as in classic calculators),
-\item manual language switching,
-\item free software licensed,
-\item possibility to define variables,
+\item support on-line currency rates synchronization for currency converter,
+\item allow conversions of mathematical formulas for unit converter (This means that for example formula $5+7$ is computed first and result is then converted as needed.),
+\item calculator is simple,
+\item most used functions are accessible via calculator keypad,
+\item input text box for mathematical formulas in calculator is multi-line,
+\item language of the application can be switched manually,
+\item free software license is used,
+\item user can define variables,
 \item many built-in constants,
-\item depends only on Qt and muParserX.
+\item application depends only on Qt and muParserX.
 \end{itemize}
 
 These are primary goals. Optional goals appear during the course of development.
@@ -27,13 +27,13 @@ These are primary goals. Optional goals appear during the course of development.
 Qonverter application consists of two main parts:
 \begin{description}
 \item[CORE] \hfill \\
-Is based on muParserX and is responsible for providing results of input formulas. Logic of currency (unit) converter is separated into core too. Core doesn't depend on graphical interface of the application.
+Is based on muParserX library and is responsible for providing results of input formulas. Logic of currency (unit) converter is separated into core too. Core doesn't depend on graphical interface of the application.
 \item[\fdocabbrevref{GUI}] \hfill \\
 Forms visual part of the application and provides user with main application window and switchable tray icon.
 \end{description}
 
 \section{Programming application core}
-Calculator core does one and only thing. It wraps muParserX and offers some portion of its functionality. Main task is to wrap\fdocinlinecode{cpp}{!}{ParserX} class instance which provides computations. Usage of this class is simple (\autoref{listing:parser}).
+We need to wrap muParserX library and make reasonable subset of its functionality available through Qt-friendly interface. This is done by\fdocinlinecode{cpp}{!}{Calculator} class. One of its main goals is to provide tools for numerical computations. muParserX library originally does computations via\fdocinlinecode{cpp}{!}{ParserX} class. Its typical usage is shown in \autoref{listing:parser}. We see that we created\fdocinlinecode{cpp}{!}{ParserX} instance and set the expression. Then we tried to evaluate it. Any exception is caught and error description is written to the standard output.
 
 \begin{fdoccode}{cpp}{listing:parser}{Basic ParserX class usage}
 ParserX m_parser;
@@ -41,45 +41,59 @@ m_parser.SetExpr("5+7");
 
 Value result;
 try {
+	// Evaluate the expression.
 	result = m_parser.Eval();
 }
 catch (ParserError &e) {
 	qDebug("Error occurred.");
 }
-// The result variable contains result of computation.
+// The 'result' variable contains result of computation.
 \end{fdoccode}
 
-Wrapper of muParserX is called \enquote{Calculator} and is represented by the class with the same name. Calculator offers method\fdocinlinecode{cpp}{!}{void calculateExpression(Calculator::CallerFunction function, QString expression)} which takes any mathematical expression in textual form and identification of target function. This method is used by calculator and unit converter as these entities may want to do computations.
+\indent\fdocinlinecode{cpp}{!}{Calculator} class should provide enhanced approach for numerical computations and it does as it offers method\fdocinlinecode{cpp}{!}{void calculateExpression(Calculator::CallerFunction function, QString expression)} method. This method takes any mathematical expression in textual form and identification of target function.
 
-\indent \fdocinlinecode{cpp}{!}{Calculator} class will be used in the \textit{singleton} pattern and will be separated into its own thread by\fdocinlinecode{cpp}{!}{CalculatorWrapper} class which manages\fdocinlinecode{cpp}{!}{Calculator} singleton instance. This class basically just starts the thread with calculator and quits the thread if needed (\autoref{listing:thrq}).
+Note that numerical computations may take some time. Thus, we need to calculate expressions asynchronously.
+
+\indent\fdocinlinecode{cpp}{!}{Calculator} class will be used in the \textit{singleton} pattern and will be separated in its own thread by\fdocinlinecode{cpp}{!}{CalculatorWrapper} class which manages\fdocinlinecode{cpp}{!}{Calculator} singleton instance. This class basically just starts the thread with calculator and quits it if needed (\autoref{listing:thrq}).
 
 \begin{fdoccode}{cpp}{listing:thrq}{Running calculator in separated thread}
-// CalculatorWrapper constructor
+// CalculatorWrapper constructor.
 CalculatorWrapper::CalculatorWrapper(QObject *parent) : QObject(parent) {
-    // Create calculator.
-    m_calculator = new Calculator();
+  // Create calculator.
+  m_calculator = new Calculator();
 
-    // Create separate thread for calculator.
-    m_thread = new QThread();
+  // Create separate thread for calculator.
+  m_thread = new QThread();
 
-    // Prepare calculator for usage in separate thread.
-    m_calculator->moveToThread(m_thread);
-    connect(m_thread, &QThread::started, m_calculator, &Calculator::initialize);
-    connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
+  // Prepare calculator for usage in separate thread.
+  m_calculator->moveToThread(m_thread);
+
+  // Connect thread to calculator.
+  connect(m_thread, &QThread::started, m_calculator, &Calculator::initialize);
+  connect(m_thread, &QThread::finished, m_thread, &QThread::deleteLater);
 }
 
-// CalculatorWrapper destructor
+// CalculatorWrapper destructor.
 CalculatorWrapper::~CalculatorWrapper() {
-    qDebug("Deleting calculator wrapper.");
+  qDebug("Deleting calculator wrapper.");
 
-    m_thread->quit();
-    m_thread->wait(1000);
+  m_thread->quit();
+  m_thread->wait(1000);
 
-    delete m_calculator;
+  delete m_calculator;
+}
+
+CalculatorWrapper &CalculatorWrapper::getInstance() {
+  if (s_instance.isNull()) {
+    s_instance.reset(new CalculatorWrapper());
+    s_instance.data()->m_thread->start();
+  }
+
+  return *s_instance;
 }
 \end{fdoccode}
 
-Qonverter builds on muParserX in aspect of variables, functions and constants. Qonverter wraps all these entities by single structure called\fdocinlinecode{cpp}{!}{MemoryPlace}. This structure holds information about the actual type of underlying entity.
+Qonverter builds on muParserX in aspect of variables, functions and constants. Qonverter wraps all these entities in single structure called\fdocinlinecode{cpp}{!}{MemoryPlace}. It holds information about the actual type of underlying entity.
 \begin{lstlisting}[firstnumber=1,language=cpp]
 enum Type {
   CONSTANT = 0,
@@ -89,7 +103,23 @@ enum Type {
   FUNCTION = 4
 };
 \end{lstlisting}
-Structure\fdocinlinecode{cpp}{!}{MemoryPlace} defines properties used for constants, variables or functions, including name and description. Special variables are variables which cannot be deleted. Implicit variables are declared implicitly ba calculator engine and explicit variables are declared explicitly by user.
+Structure\fdocinlinecode{cpp}{!}{MemoryPlace} (\autoref{listing:memoryplaceh}) defines properties used for constants, variables or functions, including name and description.\fdocinlinecode{cpp}{!}{MemoryPlace} can encapsulate these kinds of entities:
+\begin{description}
+\item[CONSTANTS] \hfill \\
+Constants are named values. Values of constants do not change. Constants are special numbers which are interesting in some way and are used extensively in mathematical computations.
+\item[FUNCTIONS] \hfill \\
+Functions are stored as\fdocinlinecode{cpp}{!}{MemoryPlace} instances too. Each function is described by its name and description.
+\item[VARIABLES] \hfill \\
+We can divide variables into three categories:
+\begin{enumerate}
+\item IMPLICITLY-CREATED VARIABLES \\[3px]
+Those are created during evaluation of mathematical expression by calculator engine.
+\item EXPLICITLY-CREATED VARIABLES \\[3px]
+Explicitly-created variables are defined manually by application user.
+\item CRITICAL VARIABLES \\[3px]
+Critical variables are just ordinary variables with one exception\,--\,they cannot be deleted. They are used for storing last two successfully calculated results (variables\fdocinlinecode{cpp}{!}{ans} and\fdocinlinecode{cpp}{!}{ansx}) and for main memory variable\fdocinlinecode{cpp}{!}{m}.
+\end{enumerate}
+\end{description}
 
 \begin{fdoccode}{cpp}{listing:memoryplaceh}{Declaration of MemoryPlace class}
 // Represents entity which as able to hold value.
@@ -117,7 +147,7 @@ struct MemoryPlace {
     ~MemoryPlace();
 };
 \end{fdoccode}
-Declaration of this class is straighforward but let's take a look at destructor implementation.
+Declaration of this class is straighforward but let's take a look at destructor implementation (\autoref{listing:memoryplaceh2}).
 
 \begin{fdoccode}{cpp}{listing:memoryplaceh2}{MemoryPlace class destructor}
 MemoryPlace::~MemoryPlace() {
@@ -136,12 +166,41 @@ MemoryPlace::~MemoryPlace() {
   }
 }
 \end{fdoccode}
-We see that destructor looks complicated is freeing of\fdocinlinecode{cpp}{!}{m_value} and\fdocinlinecode{cpp}{!}{m_variable} properties is conditional. In fact, constants and functions do not use\fdocinlinecode{cpp}{!}{m_variable} property so it's not deleted in that case. Also note that nothing is freed from the memory in case of implicit variables. Properties\fdocinlinecode{cpp}{!}{m_value} and\fdocinlinecode{cpp}{!}{m_variable} of implicit variables are controlled and freed by automatic pointers.\footnote{Automatic pointer is clever object which encapsulates ordinary pointer in \cpp. Instance of automatic pointer calls\fdocinlinecode{cpp}{!}{delete} operator with the underlying pointer if that particular instance goes out of the execution scope. \citep[p.~969-978]{prata:cprimer}}
+We see that destructor looks complicated because freeing of\fdocinlinecode{cpp}{!}{m_value} and\fdocinlinecode{cpp}{!}{m_variable} properties is conditional. In fact, constants and functions do not use\fdocinlinecode{cpp}{!}{m_variable} property which is not freed in those cases. Also note that nothing is freed from the memory in case of implicit variables. Properties\fdocinlinecode{cpp}{!}{m_value} and\fdocinlinecode{cpp}{!}{m_variable} of implicit variables are controlled and freed by automatic pointers.\footnote{Automatic pointer is clever object which encapsulates ordinary pointer in \cpp. Instance of automatic pointer calls\fdocinlinecode{cpp}{!}{delete} operator with the underlying pointer if that particular instance goes out of the execution scope. \citep[p.~969-978]{prata:cprimer}}
+
+\subsection{Discovering implicitly-created variables}
+New variables can be defined during evaluation of any mathematical expression. This variable is stored in calculator engine and is automatically deleted when engine gets freed from the memory. We need to track these implicitly-variables down too because we want to work with them. The only way to discover new variables is to go through all variables from muParserX engine when any computation finishes.
+
+\fdocinlinecode{cpp}{!}{Calculator} class uses method\fdocinlinecode{cpp}{!}{calculateExpression(...)} to do computations. This method computes input formula and then scans for new variables. It calls method shown in \autoref{listing:scanv} to do the job. So, implicitly-created variables are not lost and user can interact with them.
+
+\begin{fdoccode}{cpp}{listing:scanv}{Scanning for implicitly-created variables}
+void Calculator::consolidateMemoryPlaces() {
+  var_maptype vmap = m_parser->GetVar();
+  QString variable_name;
+
+  // Go through all defined variables.
+  for (var_maptype::iterator item = vmap.begin(); item!=vmap.end(); ++item) {
+    Variable &var = (Variable&) *(item->second);
+
+    variable_name = QString::fromStdWString(item->first);
+
+    if (!m_memoryPlaces.contains(variable_name)) {
+      // We found variable which exists in calculator engine,
+      // but is not in external calculator list, ergo, this variable was
+      // implicitly created during calculator engine lifetime.
+      m_memoryPlaces.insert(variable_name, new MemoryPlace(variable_name));
+      m_memoryPlaces[variable_name]->m_value = (Value*) var.GetPtr();
+      m_memoryPlaces[variable_name]->m_variable = &var;
+      m_memoryPlaces[variable_name]->m_type = MemoryPlace::IMPLICIT_VARIABLE;
+    }
+  }
+}
+\end{fdoccode}
 
 \subsection{Model for collection of constants, variables and functions}
 \fdocinlinecode{cpp}{!}{Calculator} class keeps track of all constants, variables and functions and offers this collection through custom \textit{model}. Take a look at \citep[keyword Model/View Programming]{various:qtdoc} before you proceed.
 
-Model is contained within the class\fdocinlinecode{cpp}{!}{ConstantsModel}. Name of the model is misleading, it contains variables and constants too. This model implements standard interface from\fdocinlinecode{cpp}{!}{QAbstractListModel} which contains following methods:
+Model is contained within the class\fdocinlinecode{cpp}{!}{ConstantsModel}. Name of the model is misleading, it contains variables, functions and constants. This model implements standard interface from\fdocinlinecode{cpp}{!}{QAbstractListModel} which contains following methods:
 \begin{lstlisting}[language=cpp,firstnumber=1]
 int rowCount(const QModelIndex &parent) const;
 int columnCount(const QModelIndex &parent) const;
@@ -149,13 +208,46 @@ QVariant data(const QModelIndex &index, int role) const;
 QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 QModelIndex index(int row, int column = 0, const QModelIndex &parent = QModelIndex()) const;
 \end{lstlisting}
-Row count equals to sum of all variables, constants and functions. Column count equals to 4 because model provides name, description, value and value type for each\fdocinlinecode{cpp}{!}{MemoryPlace} instance. This model forms the only interface which can be used by other Qonverter components to gather information about variables, constants or functions. It is used by auto-completion feature and by overview dialog as you will see in \autoref{chap:guii}.
+Row count equals to sum of counts all variables, constants and functions. Column count equals to 4 because model provides name, description, value and value type for each\fdocinlinecode{cpp}{!}{MemoryPlace} instance. This model forms the only interface which can be used by other Qonverter components to gather information about variables, constants or functions. It is used by auto-completion feature and by overview dialog as you will see in \autoref{chap:guii}.
+
+The most important part of this model is the\fdocinlinecode{cpp}{!}{data(...)} method. This method (\autoref{listing:datam}) returns data elements for each column/row.
+
+\begin{fdoccode}{cpp}{listing:datam}{Implementation of data provider in ConstantsModel}
+QVariant ConstantsModel::data(const QModelIndex &index, int role) const {
+  switch (role) {
+    case Qt::ToolTipRole:
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+      switch (index.column()) {
+        case (int) ConstantsModel::DESCRIPTION: {
+          // Return description.
+        }
+        case (int) ConstantsModel::VALUE_TYPE : {
+          // Return type of variable/constant value.
+        }
+        case (int) ConstantsModel::VALUE: {
+          // Return value of variable/constant.
+        }
+        default:
+          // Return other needed data.
+      }
+      break;
+    // This role is used to return raw variable/constant/function information.
+    case Qt::UserRole:
+      // Return raw (unmodified) data of variable/constant/function.
+    default:
+      return QVariant();
+  }
+}
+\end{fdoccode}
+
+We can see that method is divided into several parts. All roles are used to return human-readable representations of a variable/constant/function.\fdocinlinecode{cpp}{!}{Qt::UserRole} is different. It is used to return original raw data which are not formatted.
 
 \subsection{Programming unit/currency converter}
-Unit converter and currency converter use very similar approach with one exception. They are not separated into threads. It's not needed because calculations done in converters are very simple and fast. Both classes just store list of coefficients for each currency/unit and then do various multiplications to produce desired results. Check out classes\fdocinlinecode{cpp}{!}{UnitConverter} and\fdocinlinecode{cpp}{!}{UnitConverter} for more information.
+Unit converter and currency converters use very similar approach with one exception. Logic of converters is not separated in threads. It is not needed because calculations done in them are very simple and fast. Currency converter is represented by\fdocinlinecode{cpp}{!}{CurrencyConverter} class and unit converter is represented by\fdocinlinecode{cpp}{!}{UnitConverter} class. Both classes encapsulate list of coefficients for currencies/units and then do various multiplications to produce desired results. Check out the source code for more information.
 
-\section{Programming user interface}
-Let's focus on \fdocabbrevref{GUI} of Qonverter in high detail. Everyone agrees that calculator application requires quite specific user interface. Many calculators offers skinnable look with \enquote{different} user experience but most of those calculator applications don't offer native look on each and every supported platform.
+\section{Programming GUI}
+Let's focus on \fdocabbrevref{GUI} of Qonverter in high detail. Everyone agrees that calculator application requires quite specific user interface. Many calculators offers skinnable look with \enquote{better} user experience but most of those calculator applications don't offer native look on each and every supported platform.
 
 \fdocabbrevdeclare{CSS}{CSS}{Cascading Style Sheets}
 There was one simple task to be done in the area of skins and styles. Qonverter should support some ways of skinning but native looks \& feels should be available too.
@@ -203,7 +295,7 @@ QCheckBox::indicator:checked {
 ...
 \end{fdoccode}
 
-\enquote{\#\#} is special mark which represents absolute path to global Qonverter skins storage which is set in compile time and is platform-dependent as seen in \autoref{listing:sk}. For more inspiration, check collection of skins included in Qonverter.
+\enquote{\#\#} is special mark which represents absolute path to global Qonverter skins storage which is set in compile time and is platform-dependent as seen in \autoref{listing:sk}. For more inspiration, check collection of skins included in Qonverter source code.
 
 \begin{fdoccode}{cpp}{listing:sk}{Paths to global skins storage}
 #if defined(Q_OS_LINUX)
@@ -215,17 +307,20 @@ QCheckBox::indicator:checked {
 #endif
 \end{fdoccode}
 
-Qonverter supports dynamic loading of external Qt plug-ins. They can be loaded from platform-dependent directory path. On Windows, this path consists of path to executable file and \enquote{plugins} subdirectory. Searched path addition is provided by call displayed next source code fragment.
-\begin{fdoccode}{cpp}{}{Settings up path for dynamic plug-ins loading}
-// Add 3rd party plugin directory to application PATH variable.
-// This is useful for styles, encoders, ...
-QApplication::addLibraryPath(APP_PLUGIN_PATH);
+Qonverter supports dynamic loading of external Qt plug-ins. They can be loaded from platform-dependent directory path. On Windows, this path equals to executable file path. Linux uses default system paths for finding Qt plug-ins. On Mac OS X, however, extra path is provided (\autoref{listing:pathm}).
+\begin{fdoccode}{cpp}{listing:pathm}{Settings up path for dynamic plug-ins loading}
+  // Add 3rd party plugin directory to application PATH variable.
+  // This is useful for styles, encoders, ...
+  // This is probably not needed on Windows or Linux, not sure about Mac OS X.
+#if defined(Q_OS_MAC)
+  QApplication::addLibraryPath(APP_PLUGIN_PATH);
+#endif
 \end{fdoccode}
 
 \subsection{Calculator button layout}
-User interface layout represents critical point of calculator user interface. Many calculators support so-called \enquote{modes}. One calculator layout is mode. Calculators do include \enquote{scientific} mode or perhaps \enquote{basic} mode. Each mode display different set of buttons in the calculator window which is not good. I prefer static interfaces, so that user memorizes exactly one mode. All buttons have fixed position. The only thing, that changes, is appearance of buttons. And this is the great part.
+User interface layout represents critical point of calculator user interface. Many calculators support so-called \enquote{modes}. Calculators do include \enquote{scientific} mode or perhaps \enquote{basic} mode. Each mode display different set of buttons in the calculator window which is not good. I prefer static interfaces, so that user memorizes exactly one mode. All buttons have fixed position. The only thing, that changes, is appearance of buttons.
 
-As we know, Qonverter supports skins. Some skins represent pure native look \& feel. Other ones may tweak user interface to bring new features and one of the best ones is graphical distinction of calculator buttons. Each button provides specific functionality but some buttons offer similar functionality. For example calculator button \enquote{5} and \enquote{6} do almost the same thing, thus, they are related to each other. On the other hand, \enquote{max} button does completely different job than the \enquote{$=$} button does.
+As we know, Qonverter supports skins. Some skins represent pure native look \& feel. Other ones may tweak user interface to bring new features and one of them is graphical distinction of calculator buttons. Each button provides specific functionality but some buttons do very similar jobs. For example calculator buttons \enquote{5} and \enquote{6} do almost the same thing, thus, they are related to each other. On the other hand, \enquote{max} button does completely different job than does the \enquote{$=$} button.
 
 Buttons can be separated into groups and they really are in Qonverter. Each calculator button carries special flag, which exposes purpose of the button (\autoref{listing:typesbtn}). Type of button is available via dynamic property.
 \begin{fdoccode}{cpp}{listing:typesbtn}{Types of calculator buttons}
@@ -249,6 +344,7 @@ but_numbers <<	m_ui->m_btnOne << m_ui->m_btnTwo <<
 				m_ui->m_btnNine << m_ui->m_btnZero <<
 				m_ui->m_btnDot;
 
+// Setting property for each button in "numeric" button group.
 foreach (CalculatorButton *btn, but_numbers) {
 	btn->setProperty("type", (int) CalculatorButton::NUMBER);
 }
@@ -277,7 +373,7 @@ CalculatorButton[type="3"]:hover {
 .....
 \end{fdoccode}
 
-We see that each group of buttons can be highlighted differently in user interface. \autoref{figure:skinsq} display Qonverter application with native skin applied and with Modern skin applied. There is noticeable difference between these two skins. Left one looks natively while right one is perhaps too wild. It's matter of taste. Anyone with basic knowledge of \fdocabbrevref{CSS} can write own skins.
+We see that each group of buttons can be highlighted differently in user interface. \autoref{figure:skinsq} display Qonverter application with native (Windows 7) skin applied and with Modern skin applied. There is noticeable difference between these two skins. Left one looks natively while right one does not. It's matter of taste. Anyone with basic knowledge of \fdocabbrevref{CSS} can write custom skins.
 
 \begin{figure}[ht]
 \centering
@@ -299,18 +395,18 @@ We see that each group of buttons can be highlighted differently in user interfa
 Desktop applications can be divided into two groups:
 \begin{enumerate}
 \item Applications which are executed manually if needed. They are closed after usage.
-\item Applications which run constantly. They can be hidden (typically) into notification area of desktop environment.
+\item Applications which run constantly. They can be hidden (typically) into notification area of a desktop environment.
 \end{enumerate}
 
 We probably use some applications very rarely, so they don't need to run all the time. We simply open them, do needed job and then close them. It's sometimes better to keep certain applications in main memory and hidden so that they don't disturb us. Tray icon is amazing tool to achieve that. This is typical for applications which are used regularly.
 
-Qonverter supports both modes. If we want to use it irregularly and not too often, then Qonverter can run in single-window mode and it quits if window gets closed. But if we are advanced users who use calculator often, then Qonverter can be hidden to tray area and only tray icon remains visible. Interaction with tray icon is critical because its the only user interface element visible if application windows are hidden.
+Qonverter supports both modes. If we want to use it irregularly and not too often, then Qonverter can run in single-window mode and quit if window gets closed. But if we are advanced users who use calculator often, then Qonverter can be hidden to a tray area and only a tray icon remains visible. Interaction with a tray icon is critical because its the only user interface element visible if application windows are hidden.
 
 \subsubsection{Single-window mode}
 This is the default mode for Qonverter. It is also used in desktop environments which don't support tray icon mode. This mode offers standard windows and dialogs. Qonverter exits when last window is closed by a user.
 
 \subsubsection{Tray icon mode}
-Tray icon mode (\autoref{figure:opttray}) offers greater functionality. We can use windows and dialogs again. But Qonverter doesn't have to (but can) quit if last window is close. It can minimize itself into notification area, resulting in last visible element - the tray icon. User can switch between modes freely via configuration dialog (\autoref{figure:settingsgui}).
+Tray icon mode (\autoref{figure:opttray}) offers greater functionality. We can use windows and dialogs again. But Qonverter doesn't have to (but can) quit if last window is closed. It can minimize itself into notification area, resulting in last visible element\,--\,the tray icon. User can switch between modes freely via configuration dialog (\autoref{figure:settingsgui}).
 
 \begin{figure}[ht]
 \begin{center}
@@ -327,16 +423,16 @@ Tray icon mode (\autoref{figure:opttray}) offers greater functionality. We can u
 \end{figure}
 
 \subsection{Displaying available functions, constants and variables}\label{chap:guii}
-\fdocinlinecode{cpp}{!}{Calculator} class offers information about constats, variables and functions via\fdocinlinecode{cpp}{!}{ConstantsModel} class. It is used by functions/variables/constants overview dialog (see \autoref{figure:model1}). Model provides table-like data. Dialog uses\fdocinlinecode{cpp}{!}{ConstantsView} class to display these data.
+\fdocinlinecode{cpp}{!}{Calculator} class offers information about constats, variables and functions via\fdocinlinecode{cpp}{!}{ConstantsModel} class. It is used by functions/variables/constants overview dialog (see \autoref{figure:model1}). Model provides table-like data. Dialog uses\fdocinlinecode{cpp}{!}{ConstantsView} class to display those data.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=11cm]{graphics/real-world/07-model1.png}
-\caption{Classic \cpp{} code compilation process}\label{figure:model1}
+\includegraphics[width=13cm]{graphics/real-world/07-model1.png}
+\caption{Dialog with overview of variables, constants and functions}\label{figure:model1}
 \end{figure}
 
 \subsection{Auto-completion}
-Auto-completion (see \autoref{figure:autoq}) is known from advanced text editors or integrated development environments. It is usually displayed as \enquote{floating} panel. User writes some text and auto-completion panel offers him available completions. This mechanism has use cases in calculator applications too. User doesn't have to remember names of built-in functions. Moreover, auto-completer can offer names of variables and constants.
+Auto-completion (see \autoref{figure:autoq}) is known from advanced text editors or integrated development environments. It is usually displayed as a \enquote{floating} panel. User writes some text and auto-completion panel offers him available completions. This mechanism has use cases in calculator applications too. User doesn't have to remember names of built-in functions. Moreover, auto-completer can offer names of variables and constants.
 
 \begin{figure}[ht]
 \centering
@@ -355,7 +451,7 @@ Auto-completion (see \autoref{figure:autoq}) is known from advanced text editors
 \end{figure}
 
 \subsection{Unit and currency converter}
-Unit converter doesn't contain special elements, except one thing. It doesn't contain single button. All calculations are done on-the-fly. User gets hints about what to do via placeholder texts of input controls (\autoref{figure:unit}).
+Unit converter doesn't contain special elements, except one thing. It doesn't contain single button for triggering a conversion. All conversions are done on-the-fly. User gets hints about what to do via placeholder texts of input controls (\autoref{figure:unit}).
 
 \begin{figure}[ht]
 \centering
