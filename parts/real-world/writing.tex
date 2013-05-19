@@ -391,6 +391,21 @@ We see that each group of buttons can be highlighted differently in user interfa
 \caption{Skinned Qonverter}\label{figure:skinsq}
 \end{figure}
 
+\subsection{Advanced text boxes}
+There exists one Qt class called\fdocinlinecode{cpp}{!}{QLineEdit}. It is used for single-line text boxes. However, I needed two new categories of advanced text boxes in Qonverter:
+\begin{description}
+\item[TEXT BOX WITH CLEAR BUTTON] \hfill \\
+This text box provides additional button. Contents of a text box is cleared when that button is pressed.
+\item[TEXT BOX WITH STATUS REPORTING] \hfill \\
+This text box offers extra icon. This icon indicates if contents of text box is valid.
+\end{description}
+
+\subsubsection{Creating the text box with clear button}
+My custom text box component is called\fdocinlinecode{cpp}{!}{LineEdit} and is based on \citep{various:qclear}. Nonetheless, my version is more robust, clear button is switchable and read-only/disabled mode is supported. Take a look at Qonverter source code, class\fdocinlinecode{cpp}{!}{LineEdit} for more information.
+
+\subsubsection{Creating the text box with status reporting}
+This type of text box builds on\fdocinlinecode{cpp}{!}{LineEdit}. It is contained in the class called\fdocinlinecode{cpp}{!}{MarkedLineEdit}. This component displays custom status icon which can be switched programmatically. See source code of the class for more information. You can see this component in action in unit converter function of Qonverter.
+
 \subsection{Tray icon and desktop integration}
 Desktop applications can be divided into two groups:
 \begin{enumerate}
